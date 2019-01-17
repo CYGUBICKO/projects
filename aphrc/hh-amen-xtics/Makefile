@@ -10,7 +10,7 @@ current: target
 
 # stuff
 
-Sources += Makefile .ignore .gitignore
+Sources += Makefile
 
 msrepo = https://github.com/dushoff
 ms = makestuff
@@ -29,6 +29,7 @@ $(ms):
 ######################################################################
 
 ## Loading data and defining some important functions
+## ln -s ~/Dropbox/aphrc/hh_amen_xtics/data/ data ##
 
 # Define all important R-functions in one file
 globalFunctions.Rout: globalFunctions.R
@@ -71,7 +72,6 @@ clean:
 	rm *Rout.*  *.Rout .*.RData .*.Rout.* .*.wrapR.* .*.Rlog *.RData *.wrapR.* *.Rlog
 
 ######################################################################
-
 
 ### Makestuff
 
