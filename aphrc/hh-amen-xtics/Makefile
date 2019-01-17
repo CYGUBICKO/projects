@@ -10,7 +10,7 @@ current: target
 
 # stuff
 
-Sources += Makefile 
+Sources += Makefile
 
 msrepo = https://github.com/dushoff
 ms = makestuff
@@ -29,6 +29,7 @@ $(ms):
 ######################################################################
 
 ## Loading data and defining some important functions
+## ln -s ~/Dropbox/aphrc/hh_amen_xtics/data/ data ##
 
 Sources += $(wildcard *.R *.Rmd)
 
@@ -73,7 +74,6 @@ clean:
 	rm *Rout.*  *.Rout .*.RData .*.Rout.* .*.wrapR.* .*.Rlog *.RData *.wrapR.* *.Rlog
 
 ######################################################################
-
 
 ### Makestuff
 
