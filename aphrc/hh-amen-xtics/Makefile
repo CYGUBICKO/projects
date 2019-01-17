@@ -30,6 +30,8 @@ $(ms):
 
 ## Loading data and defining some important functions
 
+Sources += $(wildcard *.R *.Rmd)
+
 # Define all important R-functions in one file
 globalFunctions.Rout: globalFunctions.R
 outputNames.Rout: outputNames.R
