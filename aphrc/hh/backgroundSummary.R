@@ -9,6 +9,7 @@ library(DT)
 #theme_set(theme_minimal())
 theme_set(theme_bw())
 
+issueText <= "other|refuse|NIU|missi"
 
 ### Background information
 # 1.7. Number of rooms used
@@ -19,6 +20,14 @@ hha_sleeprooms_total_issues <- grep("other|refuse|NIU|missi"
 hha_sleeprooms_total_issues_df <- (working_df
 	%>% filter(hha_sleeprooms_total %in% c(hha_sleeprooms_total_issues, 0))
 )
+
+sleeprooms_issues <- (working_df
+	%>% filter(
+		(grepl(issueText, hha_sleeprooms_total))
+		| (hha_sleeprooms_total==0)
+	)
+)
+
 vars <- c("hha_intvwyear", "hha_slumarea", "hha_sleeprooms_total")
 hha_sleeprooms_total_issues_tab <- (hha_sleeprooms_total_issues_df
 	%>% tabsFunc(vars = vars)

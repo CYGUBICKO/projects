@@ -30,6 +30,8 @@ $(ms):
 
 ## Loading data and defining some important functions
 ## ln -s ~/Dropbox/aphrc/hh_amen_xtics/data/ data ##
+## ln -s ~/Dropbox/aphrc/hh_amen_xtics/docs/ docs ##
+Ignore += data docs
 
 Sources += $(wildcard *.R *.Rmd)
 
@@ -59,7 +61,7 @@ missPlot.Rout: missingProp.Rout missPlot.R
 idVars.Rout: workingDF.Rout idVars.R
 
 # background Information
-backgroundSummary.Rout:idVars.Rout backgroundSummary.R
+backgroundSummary.Rout: idVars.Rout backgroundSummary.R
 
 # Household ammenities
 hhamenitiesFunc.Rout: backgroundSummary.Rout hhamenitiesFunc.R
