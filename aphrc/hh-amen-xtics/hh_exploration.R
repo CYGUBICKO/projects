@@ -1,6 +1,7 @@
 #### ---- Project: NUHDSS - Household Amenities Characteristics Study ----
+#### ---- Cygu et al., see https://github...
 #### ---- Task: Data cleaning 
-#### ---- Date: 09/01/2019
+#### ---- Date: 2019 Jan 17 (Thu)
 
 library(haven)
 library(reshape2)
@@ -8,7 +9,6 @@ library(dplyr)
 library(tibble)
 library(ggplot2)
 library(tidyr)
-library(ztable)
 library(ggthemes)
 library(scales)
 library(DT)

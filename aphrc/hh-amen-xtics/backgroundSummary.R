@@ -2,7 +2,6 @@ library(dplyr)
 library(tibble)
 library(ggplot2)
 library(tidyr)
-library(ztable)
 library(ggthemes)
 library(DT)
 
