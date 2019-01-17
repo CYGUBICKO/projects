@@ -22,10 +22,6 @@ knitr::opts_chunk$set(echo = FALSE
 	, results = "asis")
 options(width = 10)
 
-
-library(ztable)
-options(ztable.type="html")
-
 ```
 
 
