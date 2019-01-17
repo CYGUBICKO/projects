@@ -1,30 +1,157 @@
 ---
-title: "HH Data Summary"
-author: "Steve"
-date: "January 10, 2019"
-output: html_document
+title: 'APHRC HH Survey Data'
+author: "Steve and Jonathan"
+date: " `r as.Date(Sys.time())` "
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+
+
+
+```{r setup, include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(echo = FALSE
+	, warning = FALSE
+	, message = FALSE
+	, fig.width = 10
+	, fig.height = 10
+	, results = "asis")
+options(width = 10)
+
+
+library(ztable)
+options(ztable.type="html")
+
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+load(".hhamenitiesSummary.RData")
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+# Data Exploration
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+## Missingness
+
+```{r}
+miss_prop_df_html
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+* A total of `r no_vars_droped` which $100\%$ missingness were dropped
+
+## Duplicated IDs
+
+```{r}
+id_dup_dis
+```
+
+## Background
+
+### Total number of rooms used by household for sleeping.
+
+#### Probably missing
+
+```{r}
+hha_sleeprooms_total_issues_counts_html
+```
+
+```{r}
+# Plot of the above
+hha_sleeprooms_total_count_plot 
+```
+
+#### Average
+
+```{r}
+hha_sleeprooms_total_mean_plot 
+```
+
+
+### Total number of rentable rooms available.
+
+#### Probably missing cases
+
+```{r}
+hha_rentablerooms_total_issues_counts_html
+```
+
+```{r}
+# Plot of the above
+hha_rentablerooms_total_count_plot 
+```
+
+#### Average
+
+```{r}
+hha_rentablerooms_total_mean_plot 
+```
+
+### Total number of people living in this household.
+
+#### Probably missing cases
+
+```{r}
+hha_numpeople_total_issues_counts_html
+```
+
+```{r}
+# Plot of the above
+hha_numpeople_total_count_plot
+```
+
+#### Average
+
+```{r}
+hha_numpeople_total_mean_plot
+```
+
+## Household amenities
+
+### Total number of people living in this household.
+
+#### Probably missing cases
+
+```{r}
+hha_drinkwatersource_issues_count
+```
+
+```{r}
+# Plot of the above
+hha_drinkwatersource_issues_plot
+```
+
+#### Proportions
+
+```{r}
+hha_drinkwatersource_clean_prop_plot
+```
+
+
+### Kind of toilet facility (2-4 years)
+
+#### Probably missing cases
+
+```{r}
+hha_toilet_2to4yrs_issues_count
+```
+
+```{r}
+hha_toilet_2to4yrs_issues_plot
+```
+
+#### Proportions
+
+```{r}
+hha_toilet_2to4yrs_clean_prop_plot
+``` 
+
+
+
+
+
+

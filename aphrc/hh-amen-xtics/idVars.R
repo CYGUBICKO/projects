@@ -1,5 +1,6 @@
 library(dplyr)
 library(tibble)
+library(DT)
 
 # Duplicate IDs
 id_vars <- grep("id", names(working_df), value = TRUE, ignore.case = TRUE)
@@ -12,5 +13,10 @@ id_df <- (working_df
   	%>% rename(dup_count = value)
 )
 
-id_dup_dis <- varLabs(id_df)
-id_dup_dis
+id_dup_dis <- (id_df
+	%>% varLabs()
+	%>% as.data.frame()
+)
+
+id_dup_dis <- datatable(id_dup_dis)
+

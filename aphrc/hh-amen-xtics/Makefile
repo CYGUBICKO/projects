@@ -1,4 +1,4 @@
-# WDBC-Codes
+# hh-amen-xtics
 ### Hooks for the editor to set the default target
 
 current: target
@@ -47,8 +47,8 @@ hh_codebook.xlsx: hh_codebook.Rout ;
 workingDF.Rout: codebook.Rout workingDF.R
 
 ## Proportion of missingness 
-missingProp.Rout: workingDF.Rout missingProp.R
-hh_miss_prop_summary.xlsx: missingProp.Rout ;
+#missingProp.Rout: workingDF.Rout missingProp.R
+hh_miss_prop_summary.xlsx: workingDF.Rout ;
 missPlot.Rout: missingProp.Rout missPlot.R
 
 ## Data Exploration
@@ -56,11 +56,14 @@ missPlot.Rout: missingProp.Rout missPlot.R
 idVars.Rout: workingDF.Rout idVars.R
 
 # background Information
-backgroundSummary.Rout: workingDF.Rout backgroundSummary.R
+backgroundSummary.Rout:idVars.Rout backgroundSummary.R
 
+# Household ammenities
+hhamenitiesFunc.Rout: backgroundSummary.Rout hhamenitiesFunc.R
+hhamenitiesSummary.Rout: hhamenitiesFunc.Rout hhamenitiesSummary.R
 
 ## Report
-hh_data_cleaning_report.html: hh_data_cleaning_report.Rmd
+hh_data_cleaning_report.html: hhamenitiesSummary.Rout hh_data_cleaning_report.Rmd
 
 ######################################################################
 

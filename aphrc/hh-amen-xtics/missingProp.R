@@ -1,6 +1,7 @@
 library(dplyr)
 library(tibble)
 library(openxlsx)
+library(DT)
 
 #### ---- Missingness -----
 
@@ -11,6 +12,9 @@ miss_prop_df <- (working_df
   	%>% select(variable, description, miss_count, miss_prop)
   	%>% arrange(desc(miss_prop))
 )
+
+miss_prop_df_html <- datatable(miss_prop_df)
+miss_prop_df_html
 
 # Save the output
 target_name <- paste0(file_prefix, "miss_prop_summary", ".xlsx")

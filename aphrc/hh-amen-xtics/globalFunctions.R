@@ -19,8 +19,8 @@ AtribLst <- function(df, attrC, isNullC){
 missPropFunc <- function(df){
 	n <- nrow(df)
   	df <- as.data.frame(df)
-  	miss_count <- apply(df, 2
-		, function(x) sum(is.na(x)|as.factor(x)==""))
+	miss_count <- apply(df, 2
+		, function(x) sum(is.na(x)|x == ""|grepl("refuse|NIU|missi", x, ignore.case = TRUE)))
   	miss_df <- (miss_count
    	%>% as_tibble(rownames = NA)
     	%>% rownames_to_column("variable")
@@ -112,30 +112,65 @@ tabsFunc <- function(df = data.frame(), vars = NULL, no_digits = 2, ...){
 }
 
 ### Format tabs and print 'nice' html tables
-formatTabs <- function(tabin, unit = "%", levs, no_digits = 2, col_label = NULL, cap = NULL){
-	# levs object is from the tab function
-	if (!unit %in% c("%", "n")){
-	stop("Unit is either % or n")
+#formatTabs <- function(tabin, unit = "%", levs, no_digits = 2, col_label = NULL, cap = NULL){
+#	# levs object is from the tab function
+#	if (!unit %in% c("%", "n")){
+#	stop("Unit is either % or n")
+#	}
+#	ztab <- (tabin
+#		%>% as.data.frame()
+#		%>% ztable(digits = no_digits
+#			, caption = cap
+#		)
+#	)
+#	if (unit %in% "%"){
+#		ztab <- (ztab
+#			%>% addcgroup(cgroup = c('', paste0(col_label, " (%)"))
+#				, n.cgroup = c(length(levs), length(levs))
+#			)
+#		)
+#	}
+#	if (unit %in% "n"){
+#		ztab <- (ztab
+#			%>% addcgroup(cgroup = c('', paste0(col_label, " (n)"))
+#			, n.cgroup = c(length(levs), length(levs))
+#			)
+#		)
+#	}
+#	ztable2flextable(ztab)
+#}
+#
+
+# Recode the categories to fewer ones
+
+recodeLabs <- function(df, var, pattern, replacement, insert = TRUE){
+	if (insert){
+		new_var <- paste0(var, "_new")
+		df[, new_var] <- df[, var]
+		for (p in 1:length(patterns)){
+			df[, new_var] <- apply(df[, new_var], 2
+			, function(x){ifelse(grepl(patterns[[p]], x), replacements[[p]], x)})
+		}
+	} else{
+		for (p in 1:length(patterns)){
+			df[, var] <- apply(df[, var], 2
+			  , function(x){ifelse(grepl(patterns[[p]], x), replacements[[p]], x)})
+		}
 	}
-	ztab <- (tabin
-		%>% as.data.frame()
-		%>% ztable(digits = no_digits
-			, caption = cap
-		)
+	return(df)
+}
+
+## Extract issues function
+extractIssues <- function(df, var, pattern, tab_vars){
+	vals <- pull(df, var)
+	issues <- grep(pattern, vals, value = TRUE, ignore.case = TRUE)
+	issues_df <- (df
+		%>% filter(.data[[var]] %in% issues)
 	)
-	if (unit %in% "%"){
-		ztab <- (ztab
-			%>% addcgroup(cgroup = c('', paste0(col_label, " (%)"))
-				, n.cgroup = c(length(levs), length(levs))
-			)
-		)
-	}
-	if (unit %in% "n"){
-		ztab <- (ztab
-			%>% addcgroup(cgroup = c('', paste0(col_label, " (n)"))
-			, n.cgroup = c(length(levs), length(levs))
-			)
-		)
-	}
-	ztab
+	issues_tab <- (issues_df
+		%>% tabsFunc(vars = tab_vars)
+	)
+	return(
+		list(issues_df = issues_df, issues_tab = issues_tab)
+	)
 }
