@@ -53,6 +53,7 @@ workingDF.Rout: codebook.Rout workingDF.R
 
 ## Proportion of missingness 
 #missingProp.Rout: workingDF.Rout missingProp.R
+Ignore += *.xlsx
 hh_miss_prop_summary.xlsx: workingDF.Rout ;
 missPlot.Rout: missingProp.Rout missPlot.R
 
