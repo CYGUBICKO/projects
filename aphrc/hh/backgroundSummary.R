@@ -9,7 +9,7 @@ library(DT)
 #theme_set(theme_minimal())
 theme_set(theme_bw())
 
-issueText <= "other|refuse|NIU|missi"
+issueText <- "other|refuse|NIU|missi"
 
 ### Background information
 # 1.7. Number of rooms used
