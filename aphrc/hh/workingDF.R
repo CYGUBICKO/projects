@@ -40,5 +40,7 @@ working_df <- (working_df
   %>% select(-c(vars_droped))
 )
 
-
+## Objects to report
+# miss_prop_df_html
+# no_vars_droped
 

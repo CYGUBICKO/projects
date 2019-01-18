@@ -67,6 +67,8 @@ backgroundSummary.Rout: idVars.Rout backgroundSummary.R
 # Household ammenities
 hhamenitiesFunc.Rout: backgroundSummary.Rout hhamenitiesFunc.R
 hhamenitiesSummary.Rout: hhamenitiesFunc.Rout hhamenitiesSummary.R
+#hhamenitiesObjc.Rout: hhamenitiesSummary.Rout hhamenitiesObjc.R
+
 
 ## Report
 hh_data_cleaning_report.html: hhamenitiesSummary.Rout hh_data_cleaning_report.Rmd

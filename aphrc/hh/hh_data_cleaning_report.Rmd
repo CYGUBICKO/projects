@@ -20,8 +20,8 @@ knitr::opts_chunk$set(echo = FALSE
 	, fig.width = 10
 	, fig.height = 10
 	, results = "asis")
-options(width = 10)
-
+options(width = 12)
+library("rmarkdown")
 ```
 
 
