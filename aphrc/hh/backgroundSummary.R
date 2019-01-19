@@ -281,3 +281,35 @@ hha_rentablerooms_total_mean_plot
 #hha_numpeople_total_count_plot
 hha_numpeople_total_mean_plot
 
+
+rm(list = ls()[!ls() %in% c(
+			"working_df_updated"
+			, "codebook"
+			# Functions
+			, "missPropFunc"
+			, "saveXlsx"
+			, "varLabs"
+			, "extractLabs"
+			, "propFunc"
+			, "tabsFunc"
+			, "recodeLabs"
+			, "extractIssues"
+			# missProp.Rout
+			, "miss_prop_df_html"
+			, "no_vars_droped"
+			, "file_prefix"
+			# idVars.Rout
+			, "id_dup_dis"
+			# backgroundSummary
+			, "hha_sleeprooms_total_issues_counts_html"
+			, "hha_sleeprooms_total_count_plot"
+			, "hha_sleeprooms_total_mean_plot"
+			, "hha_rentablerooms_total_issues_counts_html"
+			, "hha_rentablerooms_total_count_plot"
+			, "hha_rentablerooms_total_mean_plot"
+			, "hha_numpeople_total_issues_counts_html"
+			, "hha_numpeople_total_count_plot"
+			, "hha_numpeople_total_mean_plot"
+		)
+	]
+)

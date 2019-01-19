@@ -40,16 +40,15 @@ globalFunctions.Rout: globalFunctions.R
 outputNames.Rout: outputNames.R
 
 # Read data
-loadData.Rout: loadData.R
+loadData.Rout: globalFunctions.Rout loadData.R
 
-# Generate a codebook
-codebook.Rout: outputNames.Rout globalFunctions.Rout loadData.Rout codebook.R
-hh_codebook.Rout: codebook.Rout hh_codebook.R
+# Save .xlsx copy of codebook
+hh_codebook.Rout: loadData.Rout hh_codebook.R
 hh_codebook.xlsx: hh_codebook.Rout ;
 
 # Working dataset:
-# *Stata dataset is loaded as values instead of labels
-workingDF.Rout: codebook.Rout workingDF.R
+# Drop variables with 100% missingness
+workingDF.Rout: outputNames.Rout loadData.Rout workingDF.R
 
 ## Proportion of missingness 
 #missingProp.Rout: workingDF.Rout missingProp.R
@@ -69,9 +68,11 @@ hhamenitiesFunc.Rout: backgroundSummary.Rout hhamenitiesFunc.R
 hhamenitiesSummary.Rout: hhamenitiesFunc.Rout hhamenitiesSummary.R
 #hhamenitiesObjc.Rout: hhamenitiesSummary.Rout hhamenitiesObjc.R
 
+# Objects to report. This should be last script
+objectsReport.Rout: hhamenitiesSummary.Rout objectsReport.R 
 
 ## Report
-hh_data_cleaning_report.html: hhamenitiesSummary.Rout hh_data_cleaning_report.Rmd
+hh_data_cleaning_report.html: objectsReport.Rout hh_data_cleaning_report.Rmd
 
 ######################################################################
 
