@@ -24,9 +24,9 @@ hha_drinkwatersource_issues <- hhaissuesFunc(working_df_updated
 	, tab_vars
 	, "Sources of drinking water"
 )
+
 hha_drinkwatersource_issues_count <- hha_drinkwatersource_issues$issues_counts_html
 hha_drinkwatersource_issues_plot <- hha_drinkwatersource_issues$issues_count_plot
-
 
 ## Summary of cleaned variable
 ## Collapse sources of drinking water to fewer categories
@@ -52,8 +52,6 @@ hha_drinkwatersource_clean <- hhcleanedFunc(working_df_updated
 	, y_limits = c(0, 1)
 )
 
-working_df_updated <- hha_drinkwatersource_clean$working_df_updated
-codebook <- hha_drinkwatersource_clean$codebook
 hha_drinkwatersource_clean_prop_plot <- hha_drinkwatersource_clean$prop_plot
 
 ##################################################################
@@ -99,6 +97,57 @@ hha_toilet_2to4yrs_clean <- hhcleanedFunc(working_df_updated
 	, y_limits = c(0, 0.15)
 )
 
-working_df_updated <- hha_toilet_2to4yrs_clean$working_df_updated
-codebook <- hha_toilet_2to4yrs_clean$codebook
 hha_toilet_2to4yrs_clean_prop_plot <- hha_toilet_2to4yrs_clean$prop_plot
+
+## Objects to report
+#hha_drinkwatersource_issues_count
+hha_drinkwatersource_issues_plot
+hha_drinkwatersource_clean_prop_plot
+
+#hha_toilet_2to4yrs_issues_count
+hha_toilet_2to4yrs_issues_plot
+hha_toilet_2to4yrs_clean_prop_plot
+
+
+rm(list = ls()[!ls() %in% c(
+			"working_df_updated"
+			, "codebook"
+			# Functions
+			, "missPropFunc"
+			, "saveXlsx"
+			, "varLabs"
+			, "extractLabs"
+			, "propFunc"
+			, "tabsFunc"
+			, "recodeLabs"
+			, "extractIssues"
+			, "hhaissuesFunc"
+			, "hhcleanedFunc"
+			# missProp.Rout
+			, "miss_prop_df_html"
+			, "no_vars_droped"
+			, "file_prefix"
+			# idVars.Rout
+			, "id_dup_dis"
+			# backgroundSummary
+			, "hha_sleeprooms_total_issues_counts_html"
+			, "hha_sleeprooms_total_count_plot"
+			, "hha_sleeprooms_total_mean_plot"
+			, "hha_rentablerooms_total_issues_counts_html"
+			, "hha_rentablerooms_total_count_plot"
+			, "hha_rentablerooms_total_mean_plot"
+			, "hha_numpeople_total_issues_counts_html"
+			, "hha_numpeople_total_count_plot"
+			, "hha_numpeople_total_mean_plot"
+			# hhamenitiesSummary
+			, "hha_drinkwatersource_issues_count"
+			, "hha_drinkwatersource_issues_plot"
+			, "hha_drinkwatersource_clean_prop_plot"
+			, "hha_toilet_2to4yrs_issues_count"
+			, "hha_toilet_2to4yrs_issues_plot"
+			, "hha_toilet_2to4yrs_clean_prop_plot"
+		)
+	]
+)
+
+

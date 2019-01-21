@@ -6,7 +6,7 @@ miss_dist <- (miss_prop_df
   %>% filter(miss_prop>0)
 )
 
-print(
+miss_dist_plot <- (
 	ggplot(miss_dist, aes(x = reorder(description, -miss_prop)
 		, y = miss_prop, label = miss_prop))
 		+ geom_point(stat = "identity"
@@ -26,3 +26,5 @@ print(
 			)
 )
 
+## Objects to report
+# miss_dist_plot

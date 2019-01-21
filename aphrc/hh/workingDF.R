@@ -1,14 +1,10 @@
+# This script uses missPropFunc to summarize the missingness for every variable. The output is saved as a .xlsx and also passed for reporting.
+
 library(haven)
 library(dplyr)
 library(tibble)
 library(openxlsx)
 library(DT)
-
-## Convert values to labels
-working_df <- (df
-          %>% as_factor()
-          %>% as_tibble()
-)
 
 #### ---- Missingness -----
 
@@ -41,4 +37,27 @@ working_df <- (working_df
 )
 
 
+## Objects to report
+# miss_prop_df_html
+# no_vars_droped
 
+## Remove uncessary objects
+rm(list = ls()[!ls() %in% c(
+			"working_df"
+			, "codebook"
+			# Functions
+			, "missPropFunc"
+			, "saveXlsx"
+			, "varLabs"
+			, "extractLabs"
+			, "propFunc"
+			, "tabsFunc"
+			, "recodeLabs"
+			, "extractIssues"
+			# workingDf and missProp
+			, "miss_prop_df_html"
+			, "no_vars_droped"
+			, "file_prefix"
+		)
+	]
+)
