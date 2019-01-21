@@ -74,6 +74,14 @@ objectsReport.Rout: hhamenitiesSummary.Rout objectsReport.R
 ## Report
 hh_data_cleaning_report.html: objectsReport.Rout hh_data_cleaning_report.Rmd
 
+Sources += test.md
+Ignore += test.html
+test.html.pages: test.md
+%.html: %.md
+	pandoc -s -S -o $@ $<
+
+
+
 ######################################################################
 
 clean: 
