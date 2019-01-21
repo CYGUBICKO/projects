@@ -59,6 +59,7 @@ loadData <- function(df_name = df_name
     	working_df <- (hh_df
       	%>% as_factor()
          %>% as_tibble()
+			%>% droplevels()
 		)
     	# Save a copy of the converted datset and the codebook
     	df_outname <- paste0(
