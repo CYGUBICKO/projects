@@ -1,6 +1,8 @@
 # hh-amen-xtics
 ### Hooks for the editor to set the default target
 
+## https:cygubicko.github.io/projects
+
 current: target
 -include target.mk
 
@@ -79,8 +81,6 @@ Ignore += test.html
 test.html.pages: test.md
 %.html: %.md
 	pandoc -s -S -o $@ $<
-
-
 
 ######################################################################
 
