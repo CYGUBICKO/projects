@@ -77,7 +77,7 @@ hh_data_cleaning_report.html: objectsReport.Rout hh_data_cleaning_report.Rmd
 ######################################################################
 
 clean: 
-	rm *Rout.*  *.Rout .*.RData .*.Rout.* .*.wrapR.* .*.Rlog *.RData *.wrapR.* *.Rlog
+	rm -f *Rout.*  *.Rout .*.RData .*.Rout.* .*.wrapR.* .*.Rlog *.RData *.wrapR.* *.Rlog
 
 ######################################################################
 
