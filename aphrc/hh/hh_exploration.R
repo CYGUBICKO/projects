@@ -6,7 +6,7 @@
 rm(list = ls())
 
 #library(RcmdrMisc)
-#library(memisc)
+library(memisc)
 library(haven)
 library(reshape2)
 library(dplyr)
@@ -23,6 +23,7 @@ theme_set(theme_bw())
 ##### ---- Load the functions ----
 source("globalFunctions.R")
 source("hhamenitiesFunc.R")
+source("tabFunctions.R")
 
 #### ---- Load dataset ----
 # Uses loadData function (loadData.R)
@@ -108,6 +109,7 @@ rm(list = ls()[!ls() %in% c(
          "working_df"
          , "codebook"
          # Functions
+         , "groupSummary"
          , "hhmeanFunc"
          , "missPropFunc"
          , "saveXlsx"
@@ -155,6 +157,7 @@ id_dup_dis <- datatable(id_dup_dis)
 rm(list = ls()[!ls() %in% c("working_df"
          , "codebook"
          # Functions
+         , "groupSummary"
          , "hhmeanFunc"
          , "missPropFunc"
          , "saveXlsx"
@@ -204,6 +207,7 @@ id_dup_dis <- datatable(id_dup_dis)
 rm(list = ls()[!ls() %in% c("working_df"
          , "codebook"
          # Functions
+         , "groupSummary"
          , "hhmeanFunc"
          , "missPropFunc"
          , "saveXlsx"
@@ -501,6 +505,7 @@ rm(list = ls()[!ls() %in% c(
          "working_df_updated"
          , "codebook"
          # Functions
+         , "groupSummary"
          , "hhmeanFunc"
          , "missPropFunc"
          , "saveXlsx"
@@ -631,6 +636,7 @@ rm(list = ls()[!ls() %in% c(
          "working_df_updated"
          , "codebook"
          # Functions
+         , "groupSummary"
          , "hhmeanFunc"
          , "missPropFunc"
          , "saveXlsx"
@@ -1293,9 +1299,9 @@ working_df_updated <- hha_numsmokers_clean[["working_df_updated"]]
 
 #### ---- 2.19 What type of tobacco did/do the members of your household smoke ----
 
-## Count the number tobacco smoked
-
+## Group rekated variables
 smoked_vars <- grep("_smoke_", names(working_df_updated), value = T)
+labs1 <- c("Filtered", "Unfiltered", "Roll", "Pipe", "Other")
 
 patterns <- c(
    "don't know|refuse|NIU|missi"
@@ -1305,81 +1311,26 @@ replacements <- c(
    NA
 )
 
-for (var in smoked_vars){
-  working_df_updated <- recodeLabs(working_df_updated
-    , var
-    , patterns
-    , replacements
-  )
-  # Update codebook
-  issue_labs <- extractLabs(var)
-  codebook_update <- data.frame(variable = var
-		, description = paste0(issue_labs, "(new)")
-	)
-	codebook <- rbind(codebook, codebook_update)
-}
-
-## Summarize the variables
-smoked_vars_new <- paste0(smoked_vars, "_new")
 tab_vars <- c("hha_intvwyear", "hha_slumarea")
+labs2 <- c("Year", "Slum")
+labels <- c(labs1, labs2)
+## Summary - Count
+hha_smoke_clean <- groupSummary(df = working_df_updated
+  , grouped_vars = smoked_vars
+  , tab_vars = tab_vars
+  , patterns = patterns
+  , replacements = replacements
+  , labels = labels
+)
+working_df_updated <- hha_smoke_clean[["working_df_updated"]]
+hha_smoke_show_html <- hha_smoke_clean[["tabs"]]
+codebook <- hha_smoke_clean[["codebook"]]
+#show_html(hha_smoke_show_html)
 
-d1 <- table(working_df_updated[, c("hha_intvwyear", "hha_slumarea", "hha_smoke_cigfilt_new")]) %>% as.data.frame() %>% filter(Freq>0)
-d3 <- xtabs(Freq ~ ., drop.unused.levels = TRUE, d1)
-d4 <- RcmdrMisc::colPercents(d3)
-d5 <- ftable(d4)
-
-
-
-
-mess.vars2 <- names(final_dataframe2[, grep("C6_4_", names(final_dataframe2))])
-mult.resp <- data.frame()
-for (vars in mess.vars2){
-  mult.tab <- as.data.frame(table(final_dataframe2[, vars], useNA = "no"))
-  mult.resp <- rbind(mult.resp, mult.tab)
-}
-
-mult.freqs <- as.data.frame(tapply(mult.resp[, "Freq"], mult.resp[, "Var1"], sum))
-colnames(mult.freqs) <- "Frequency"
-
-knitr::kable(mult.freqs)
-
-multResFreqOne <- function(dat, vars){
-  mult.resp <- data.frame()
-  for (var in vars){
-    mult.tab <- as.data.frame(table(dat[, var], useNA = "no"))
-    mult.resp <- rbind(mult.resp, mult.tab)
-  }
-  mult.freqs <- as.data.frame(tapply(mult.resp[, "Freq"], mult.resp[, "Var1"], sum))
-  colnames(mult.freqs) <- "Frequency"
-  return(mult.freqs)
-}
-
-multResFreqTwo(as.data.frame(working_df_updated), tab_vars, smoked_vars_new)
-
-multResFreqTwo <- function(dat,ind_var, dep_vars){
-  mult.resp <- data.frame()
-  for (var in dep_vars){
-    mult.tab <- as.data.frame(table(dat[, ind_var], dat[, var], useNA = "no"))
-    mult.resp <- rbind(mult.resp, mult.tab)
-  }
-  mult.freqs <- aggregate(Freq ~ Var1+Var2, data=mult.resp, FUN = sum) %>% spread(Var2, Freq)
-  colnames(mult.freqs)[1] <- ind_var
-  return(mult.freqs)
-}
-
-
-tt <- sapply(smoked_vars_new, function(x){ftable(working_df_updated[, c(tab_vars, x)], row.vars = 1:2)}, simplify = FALSE)
-tt2 <- pander::pandoc.table(tt$hha_smoke_cigfilt_new)
-t2 <- plyr::join_all(tt, type = "full")
-
-india_df$msg_services_count <-apply(india_df,1,
-                                             function(x) sum(!is.na(x[mess.vars]) & x[mess.vars]!="None"))
-
-
-xtabs(hha_smoke_cigfilt_new~hha_intvwyear+hha_slumarea, data = working_df_updated)
-# Add  this variable to codebook
-dat <- data.frame(Vars="msg_services_count", Labels="Count of all messaging services used by each respondent - From C6.4 Messaging services used")
-india_codebook <- rbind(india_codebook, dat)
+## Count the number tobacco smoked
+smoked_vars_new <- paste0(smoked_vars, "_new")
+msg_services_count <-apply(working_df_updated,1,
+                                             function(x) sum(!is.na(x[smoked_vars_new]) & x[smoked_vars_new]=="yes"))
 
 
 # Distribution
