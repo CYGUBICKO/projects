@@ -38,4 +38,5 @@ save(file=rdaname
 	, no_vars_droped
 	, file_prefix
 	, id_dup_dis
+	, working_df
 )
