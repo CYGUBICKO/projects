@@ -484,6 +484,6 @@ hha_cookingfuel_clean <- hhcleanedFunc(working_df_updated
 hha_cookingfuel_clean_prop_plot <- hha_cookingfuel_clean[["prop_plot"]]
 ## Objects to report
 #hha_cookingfuel_issues_count
-#hha_cookingfuel_issues_plot
-#hha_cookingfuel_clean_prop_plot
+hha_cookingfuel_issues_plot
+hha_cookingfuel_clean_prop_plot
 

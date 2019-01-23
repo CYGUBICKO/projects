@@ -71,10 +71,10 @@ hhamenitiesSummary.Rout: hhamenitiesFunc.Rout hhamenitiesSummary.R
 #hhamenitiesObjc.Rout: hhamenitiesSummary.Rout hhamenitiesObjc.R
 
 # Objects to report. This should be last script
-objectsReport.Rout: hhamenitiesSummary.Rout objectsReport.R 
+#objectsReport.Rout: hhamenitiesSummary.Rout objectsReport.R 
 
 ## Report
-hh_data_cleaning_report.html: objectsReport.Rout hh_data_cleaning_report.Rmd
+hh_data_cleaning_report.html: hhamenitiesSummary.Rout hh_data_cleaning_report.Rmd
 
 Sources += test.md
 Ignore += test.html
