@@ -24,23 +24,19 @@ id_dup_dis <- datatable(id_dup_dis)
 
 # Keep necessary files only
 
-rm(list = ls()[!ls() %in% c("working_df"
-			, "codebook"
-			# Functions
-			, "missPropFunc"
-			, "saveXlsx"
-			, "varLabs"
-			, "extractLabs"
-			, "propFunc"
-			, "tabsFunc"
-			, "recodeLabs"
-			, "extractIssues"
-			# missProp.Rout
-			, "miss_prop_df_html"
-			, "no_vars_droped"
-			, "file_prefix"
-			# idVars.Rout
-			, "id_dup_dis"
-		)
-	]
+# rdnosave()
+save(file=rdaname
+	, codebook
+	, missPropFunc
+	, saveXlsx
+	, varLabs
+	, extractLabs
+	, propFunc
+	, tabsFunc
+	, recodeLabs
+	, extractIssues
+	, no_vars_droped
+	, file_prefix
+	, id_dup_dis
+	, working_df
 )
