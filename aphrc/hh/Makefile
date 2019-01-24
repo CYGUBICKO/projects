@@ -77,6 +77,7 @@ hhamenitiesSummary.Rout: hhamenitiesFunc.Rout hhamenitiesSummary.R
 #objectsReport.Rout: hhamenitiesSummary.Rout objectsReport.R 
 
 ## Report
+Ignore += hh_data_cleaning_report.html
 hh_data_cleaning_report.html: hhamenitiesSummary.Rout hh_data_cleaning_report.Rmd
 
 Sources += test.md
