@@ -26,17 +26,24 @@ id_dup_dis <- datatable(id_dup_dis)
 
 # rdnosave()
 save(file=rdaname
-	, codebook
-	, missPropFunc
+   , working_df
+   , codebook
+   , missPropFunc
+	# Global functions
 	, saveXlsx
-	, varLabs
-	, extractLabs
-	, propFunc
-	, tabsFunc
-	, recodeLabs
-	, extractIssues
-	, no_vars_droped
-	, file_prefix
+   , varLabs
+   , extractLabs
+   , propFunc
+   , tabsFunc
+   , recodeLabs
+   , extractIssues
+   , file_prefix
+	# Working df chunk
+   , miss_prop_df
+   , miss_prop_df_html
+   , no_vars_droped
+	# Missing values chunk
+	, miss_dist_plot
+	# ID variables
 	, id_dup_dis
-	, working_df
 )

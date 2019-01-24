@@ -20,6 +20,19 @@ load_df <- loadData(df_name
 
 working_df <- load_df[["working_df"]]
 codebook <- load_df[["codebook"]]
-rm("load_df", "df_name", "file_extension", "df_folder", "df_outname")
 
+# rdnosave
+save(file=rdaname
+	, working_df
+   , codebook
+   , missPropFunc
+   , saveXlsx
+   , varLabs
+   , extractLabs
+   , propFunc
+   , tabsFunc
+   , recodeLabs
+   , extractIssues
+   , file_prefix
+)
 

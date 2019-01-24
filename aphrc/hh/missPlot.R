@@ -27,4 +27,8 @@ miss_dist_plot <- (
 )
 
 ## Objects to report
-# miss_dist_plot
+#miss_dist_plot
+save(file=rdaname
+   , miss_dist_plot
+)
+

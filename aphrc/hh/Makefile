@@ -42,7 +42,7 @@ globalFunctions.Rout: globalFunctions.R
 outputNames.Rout: outputNames.R
 
 # Read data
-loadData.Rout: globalFunctions.Rout loadData.R
+loadData.Rout: outputNames.Rout globalFunctions.Rout loadData.R
 
 # Save .xlsx copy of codebook
 hh_codebook.Rout: loadData.Rout hh_codebook.R
@@ -50,17 +50,17 @@ hh_codebook.xlsx: hh_codebook.Rout ;
 
 # Working dataset:
 # Drop variables with 100% missingness
-workingDF.Rout: outputNames.Rout loadData.Rout workingDF.R
+workingDF.Rout: hh_codebook.Rout workingDF.R
 
 ## Proportion of missingness 
 #missingProp.Rout: workingDF.Rout missingProp.R
 Ignore += *.xlsx
 hh_miss_prop_summary.xlsx: workingDF.Rout ;
-missPlot.Rout: missingProp.Rout missPlot.R
+missPlot.Rout: workingDF.Rout missPlot.R
 
 ## Data Exploration
 # 1. ID variables
-idVars.Rout: workingDF.Rout idVars.R
+idVars.Rout: missPlot.Rout idVars.R
 
 # background Information
 backgroundSummary.Rout: idVars.Rout backgroundSummary.R

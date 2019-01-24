@@ -29,7 +29,7 @@ miss_vars <- (miss_prop_df
   %>% select(variable)
 )
 
-vars_droped <- as.character(miss_vars$variable)
+vars_droped <- as.character(miss_vars[["variable"]])
 no_vars_droped <- length(vars_droped)
 
 working_df <- (working_df
@@ -41,23 +41,11 @@ working_df <- (working_df
 # miss_prop_df_html
 # no_vars_droped
 
-## Remove uncessary objects
-rm(list = ls()[!ls() %in% c(
-			"working_df"
-			, "codebook"
-			# Functions
-			, "missPropFunc"
-			, "saveXlsx"
-			, "varLabs"
-			, "extractLabs"
-			, "propFunc"
-			, "tabsFunc"
-			, "recodeLabs"
-			, "extractIssues"
-			# workingDf and missProp
-			, "miss_prop_df_html"
-			, "no_vars_droped"
-			, "file_prefix"
-		)
-	]
+save(file=rdaname
+	, working_df
+	, miss_prop_df
+	, miss_prop_df_html
+	, no_vars_droped
 )
+
+

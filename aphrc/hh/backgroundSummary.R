@@ -14,7 +14,7 @@ issueText <- "other|refuse|NIU|missi"
 ### Background information
 # 1.7. Number of rooms used
 hha_sleeprooms_total_issues <- grep("other|refuse|NIU|missi"
-	, working_df$hha_sleeprooms_total
+	, working_df[["hha_sleeprooms_total"]]
 	, value = TRUE
 )
 hha_sleeprooms_total_issues_df <- (working_df
@@ -34,7 +34,7 @@ hha_sleeprooms_total_issues_tab <- (hha_sleeprooms_total_issues_df
 )
 
 hha_sleeprooms_total_labs <- extractLabs("hha_sleeprooms_total")
-hha_sleeprooms_total_issues_counts <- hha_sleeprooms_total_issues_tab$count_df
+hha_sleeprooms_total_issues_counts <- hha_sleeprooms_total_issues_tab[["count_df"]]
 hha_sleeprooms_total_issues_counts_html <- datatable(hha_sleeprooms_total_issues_counts
 	, caption = hha_sleeprooms_total_labs
 )
@@ -282,34 +282,71 @@ hha_rentablerooms_total_mean_plot
 hha_numpeople_total_mean_plot
 
 
-rm(list = ls()[!ls() %in% c(
-			"working_df_updated"
-			, "codebook"
-			# Functions
-			, "missPropFunc"
-			, "saveXlsx"
-			, "varLabs"
-			, "extractLabs"
-			, "propFunc"
-			, "tabsFunc"
-			, "recodeLabs"
-			, "extractIssues"
-			# missProp.Rout
-			, "miss_prop_df_html"
-			, "no_vars_droped"
-			, "file_prefix"
-			# idVars.Rout
-			, "id_dup_dis"
-			# backgroundSummary
-			, "hha_sleeprooms_total_issues_counts_html"
-			, "hha_sleeprooms_total_count_plot"
-			, "hha_sleeprooms_total_mean_plot"
-			, "hha_rentablerooms_total_issues_counts_html"
-			, "hha_rentablerooms_total_count_plot"
-			, "hha_rentablerooms_total_mean_plot"
-			, "hha_numpeople_total_issues_counts_html"
-			, "hha_numpeople_total_count_plot"
-			, "hha_numpeople_total_mean_plot"
-		)
-	]
+
+save(file=rdaname
+   , working_df_updated
+#   , codebook
+#   , missPropFunc
+#   # Global functions
+#   , saveXlsx
+#   , varLabs
+#   , extractLabs
+#   , propFunc
+#   , tabsFunc
+#   , recodeLabs
+#   , extractIssues
+#   , file_prefix
+#   # Working df chunk
+#   , miss_prop_df
+#   , miss_prop_df_html
+#   , no_vars_droped
+#   # Missing values chunk
+#   , miss_dist_plot
+#   # ID variables
+#   , id_dup_dis
+	# Background information
+	, hha_sleeprooms_total_issues_counts_html
+	, hha_sleeprooms_total_count_plot
+	, hha_sleeprooms_total_mean_plot
+	, hha_rentablerooms_total_issues_counts_html
+	, hha_rentablerooms_total_count_plot
+	, hha_rentablerooms_total_mean_plot
+	, hha_numpeople_total_issues_counts_html
+	, hha_numpeople_total_count_plot
+	, hha_numpeople_total_mean_plot
 )
+
+
+
+
+#rm(list = ls()[!ls() %in% c(
+#			"working_df_updated"
+#			, "codebook"
+#			# Functions
+#			, "missPropFunc"
+#			, "saveXlsx"
+#			, "varLabs"
+#			, "extractLabs"
+#			, "propFunc"
+#			, "tabsFunc"
+#			, "recodeLabs"
+#			, "extractIssues"
+#			# missProp.Rout
+#			, "miss_prop_df_html"
+#			, "no_vars_droped"
+#			, "file_prefix"
+#			# idVars.Rout
+#			, "id_dup_dis"
+#			# backgroundSummary
+#			, "hha_sleeprooms_total_issues_counts_html"
+#			, "hha_sleeprooms_total_count_plot"
+#			, "hha_sleeprooms_total_mean_plot"
+#			, "hha_rentablerooms_total_issues_counts_html"
+#			, "hha_rentablerooms_total_count_plot"
+#			, "hha_rentablerooms_total_mean_plot"
+#			, "hha_numpeople_total_issues_counts_html"
+#			, "hha_numpeople_total_count_plot"
+#			, "hha_numpeople_total_mean_plot"
+#		)
+#	]
+#)
