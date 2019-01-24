@@ -1,4 +1,5 @@
 
+
 # This script uses the loadData function to generate .rds file.
 
 library(haven)

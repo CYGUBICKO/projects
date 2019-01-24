@@ -41,16 +41,19 @@ Sources += $(wildcard *.R *.Rmd)
 globalFunctions.Rout: globalFunctions.R
 outputNames.Rout: outputNames.R
 
+# View data
+viewData.Rout: globalFunctions.Rout viewData.R
+
 # Read data
-loadData.Rout: outputNames.Rout globalFunctions.Rout loadData.R
+loadData.Rout: globalFunctions.Rout loadData.R
 
 # Save .xlsx copy of codebook
-hh_codebook.Rout: loadData.Rout hh_codebook.R
+hh_codebook.Rout: outputNames.Rout globalFunctions.Rout loadData.Rout hh_codebook.R
 hh_codebook.xlsx: hh_codebook.Rout ;
 
 # Working dataset:
 # Drop variables with 100% missingness
-workingDF.Rout: hh_codebook.Rout workingDF.R
+workingDF.Rout: outputNames.Rout globalFunctions.Rout loadData.Rout workingDF.R
 
 ## Proportion of missingness 
 #missingProp.Rout: workingDF.Rout missingProp.R
