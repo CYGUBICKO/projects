@@ -1,4 +1,3 @@
-# hh-amen-xtics
 ### Hooks for the editor to set the default target
 
 ## https:cygubicko.github.io/projects
@@ -31,8 +30,6 @@ $(ms):
 ######################################################################
 
 ## Loading data and defining some important functions
-## ln -s ~/Dropbox/aphrc/hh_amen_xtics/data/ data ##
-## ln -s ~/Dropbox/aphrc/hh_amen_xtics/docs/ docs ##
 Ignore += data docs
 
 Sources += $(wildcard *.R *.Rmd)
