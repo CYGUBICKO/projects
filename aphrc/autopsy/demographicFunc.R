@@ -7,45 +7,48 @@ demographTabs <- function(df
   	, tab_vars
   	, legend_title
   	, y_limits = c(0,1)
+	, xaxis_order
 	){
-	all_vars <- c(var, tab_vars)
+	
 	df_updated <- (df
-   		%>% recodeLabs(all_vars, patterns, replacements)
+		%>% recodeLabs(var, patterns, replacements)
 	)
-	# Update codebook
-  	issue_labs <- extractLabs(var)
-  	codebook_update <- data.frame(variable = var
+	issue_labs <- extractLabs(var)
+	codebook_update <- data.frame(variable = var
 		, description = paste0(issue_labs, "(new)")
 	)
-  codebook <- rbind(codebook, codebook_update)
+	codebook <- rbind(codebook, codebook_update)
 	summary_df <- (df_updated
-   	%>% propFunc(all_vars)
-   	%>% drop_na()
-   	%>% rename_(new_var = paste0(var, "_new"))
+	   %>% propFunc(tab_vars)
+	   %>% drop_na()
+	   %>% rename_(new_var = paste0(var, "_new"))
 	)
+	
+	
 	prop_plot <- (ggplot(summary_df
-   	, aes(x = hha_intvwyear
-			, y = prop
-        	, group = new_var
-        	, color = new_var
-			)
+	   , aes_string(x = "new_var"
+			, y = "prop"
+	  		, group = tab_vars[1]
+	   	, color = tab_vars[1]
 		)
-   	+ geom_line(linetype = 2
-  		 	, size = 1
 		)
-   	+ geom_point(aes(y = prop))
-   	+ labs(title = issue_labs
-   		, x = "Years"
-      	, y = "Proportion"
+	   + geom_line(linetype = 2
+	   	, size = 1
 		)
-   	+ scale_y_continuous(labels = percent, limits = y_limits)
-   	+ guides(color = guide_legend(title = legend_title))
-   	+ theme(plot.title = element_text(hjust = 0.5)
-			, legend.position = 'bottom'
-      	, axis.ticks = element_blank()
+	   + geom_point(aes(y = prop))
+	   + labs(title = issue_labs
+	   	, x = "Years"
+	   	, y = "Proportion"
 		)
-   	#+ facet_wrap(~hha_slumarea)
+	   + scale_y_continuous(labels = percent, limits = y_limits)
+		+ scale_x_discrete(limits =  xaxis_order)
+	   + guides(color = guide_legend(title = legend_title))
+	   + theme(plot.title = element_text(hjust = 0.5)
+			, legend.position = 'right'
+	      , axis.ticks = element_blank()
+		)
 	)
+
 	return(
 		list(
       	working_df_updated = df_updated
