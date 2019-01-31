@@ -8,6 +8,8 @@ library(dplyr)
 library(tibble)
 library(tidyr)
 
+source("../hh/globalFunctions.R")
+
 df_name <- "verbalautopsy_2002-2015"
 file_extension <- "dta"
 df_folder <- "data"
@@ -36,4 +38,6 @@ codebook <- (codebook
 	%>% mutate(variable = gsub("vau_*", "", variable))
 )
 
-# rdsave(working_df, codebook)
+save(file="loadData.rda"
+	, working_df, codebook
+)

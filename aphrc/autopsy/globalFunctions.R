@@ -252,3 +252,5 @@ extractIssues <- function(df, var, pattern, tab_vars){
 		list(issues_df = issues_df, issues_tab = issues_tab)
 	)
 }
+
+save.image("globalFunctions.rda")

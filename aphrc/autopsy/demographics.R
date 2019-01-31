@@ -10,6 +10,10 @@ library(expss)
 library(ggplot2)
 library(scales)
 
+load("demographicFunc.rda")
+load("globalFunctions.rda")
+load("underfiveVA.rda")
+
 #### ---- 1. Age ----
 
 var <- "agegroupdeath"

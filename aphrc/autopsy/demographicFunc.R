@@ -58,3 +58,4 @@ demographTabs <- function(df
 	)
 }
 
+save.image("demographicFunc.rda")

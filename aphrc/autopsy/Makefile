@@ -14,7 +14,7 @@ current: target
 Sources += Makefile
 
 msrepo = https://github.com/dushoff
-ms = ../makestuff
+ms = makestuff
 Ignore += local.mk
 -include local.mk
 -include $(ms)/os.mk
@@ -23,38 +23,41 @@ Ignore += local.mk
 
 Ignore += $(ms)
 ## Sources += $(ms)
-Makefile: $(ms) $(ms)/Makefile
-$(ms):
-	git clone $(msrepo)/$(ms)
+Makefile: $(ms)/Makefile
+	touch $@
+$(ms)/Makefile:
+	ls ../makestuff/Makefile && /bin/ln -s ../makestuff 
 
 ######################################################################
 
 ## Loading data and defining some important functions
+## ln -s ~/Dropbox/aphrc/verbal_autopsy/data 
+
 Ignore += data docs
 
 Sources += $(wildcard *.R *.Rmd)
 
 # Define all important R-functions in one file
-globalFunctions.Rout: globalFunctions.R
+# globalFunctions.Rout: globalFunctions.R
 
 # Read data
-loadData.Rout: globalFunctions.Rout loadData.R
+loadData.Rout: data/verbalautopsy_2002-2015.dta loadData.R
 
 # Drop cases: No VA result and VA not performed
-completeVA.Rout: loadData.Rout completeVA.R
+# completeVA.Rout: completeVA.R
+# va_codebook.csv: completeVA.Rout ;
 
 # Under 5 dataset
-underfiveVA.Rout: globalFunctions.Rout completeVA.Rout underfiveVA.R
+underfiveVA.Rout: underfiveVA.R
 
 # Save .csv copy of codebook
-vaCodebook.Rout: underfiveVA.Rout vaCodebook.R
-va_codebook.csv: vaCodebook.Rout ;
+vaCodebook.Rout: vaCodebook.R
 
 # Descrirapptives
 
 ## 1. Demographics
 demographicFunc.Rout: demographicFunc.R
-demographics.Rout: demographicFunc.Rout underfiveVA.Rout demographics.R
+demographics.Rout: demographics.R
 
 ## Report
 
@@ -71,4 +74,4 @@ clean:
 -include $(ms)/pandoc.mk
 -include $(ms)/git.mk
 -include $(ms)/visual.mk
--include $(ms)/wrapR.mk
+-include $(ms)/stepR.mk
