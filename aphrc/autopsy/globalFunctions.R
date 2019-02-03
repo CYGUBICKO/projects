@@ -135,12 +135,27 @@ extractLabs <- function(variable){
 ## Data summary functions
 
 # Crosstab function
-propFunc <- function(df = data.frame(), dots = NULL, ...){
+propFunc <- function(df = data.frame(), dots = NULL, coltotal = FALSE,...){
 	prop_df <- (df
 		%>% group_by_(.dots = dots)
 		%>% summarise_(n = ~n())
 		%>% mutate(prop = prop.table(n))
 	)
+	if (coltotal){
+		temp_var <- dots
+		prop_df <- (prop_df
+			%>% rename_("new_var" = temp_var)
+			%>% mutate(new_var = as.character(new_var))
+			%>% bind_rows(list(new_var = "Total"
+				, "n" = sum(.$n)
+				, "prop" = sum(.$prop)
+				)		
+			)
+			%>% mutate(Percent = percent(prop))
+			%>% select(-prop)
+			%>% rename_(.dots = setNames("new_var", temp_var))
+		)
+	}
 	prop_df
 }
 
@@ -221,7 +236,7 @@ tabsFunc <- function(df = data.frame(), vars = NULL, no_digits = 2, ...){
 
 # Recode the categories to fewer ones
 
-recodeLabs <- function(df, var, pattern, replacement, insert = TRUE){
+recodeLabs <- function(df, var, patterns, replacements, insert = TRUE){
 	if (insert){
 		new_var <- paste0(var, "_new")
 		df[, new_var] <- df[, var]
@@ -251,6 +266,14 @@ extractIssues <- function(df, var, pattern, tab_vars){
 	return(
 		list(issues_df = issues_df, issues_tab = issues_tab)
 	)
+}
+
+updateCodebook <- function(var, lab){
+	codebook_update <- data.frame(variable = var
+   	, description = paste0(lab, "(new)")
+   )
+   codebook <- rbind(codebook, codebook_update)
+	return(codebook)
 }
 
 save.image("globalFunctions.rda")

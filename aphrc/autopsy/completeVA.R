@@ -6,8 +6,6 @@
 library(data.table)
 library(dplyr)
 
-load("loadData.rda")
-
 #### ---- 1. Complete cases ------
 # Cases were droped based on the following variables. 
 # * vadone - Was VA done?
@@ -22,7 +20,6 @@ incomplete_df <- (working_df
 	%>% filter(vadone != "yes" | (!intvwresult %in% va_result))
 )
 
-print(summary(working_df))
 
 working_df <- complete_df
 

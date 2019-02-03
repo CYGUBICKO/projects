@@ -43,8 +43,11 @@ Sources += $(wildcard *.R *.Rmd)
 # Read data
 loadData.Rout: data/verbalautopsy_2002-2015.dta loadData.R
 
+# Some cleaning
+cleaningVA.Rout: cleaningVA.R
+
 # Drop cases: No VA result and VA not performed
-# completeVA.Rout: completeVA.R
+completeVA.Rout: completeVA.R
 # va_codebook.csv: completeVA.Rout ;
 
 # Under 5 dataset
