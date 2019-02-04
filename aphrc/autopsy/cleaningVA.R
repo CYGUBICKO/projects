@@ -361,7 +361,7 @@ working_df <- (working_df
 	%>% mutate(total_va5_had = rowSums(working_df[, va5_had_var], na.rm = TRUE))
 )
 codebook <- updateCodebook(var = "total_va5_had"
-	, lab = "Total number of other desceases (adults)"
+	, lab = "Total number of other diseases (adults)"
 )
 
 total_va5_had_tab <- (working_df
@@ -521,28 +521,272 @@ working_df <- (working_df
 	%>% mutate_at("vafem_diedin6weeks", as.numeric)
 )
 
-#### ---- Deseases the female had before death ----
 
-vafem_a5mths_var <- grep("^(carefrom_)(?!.*first)", colnames(working_df), value = TRUE, perl = TRUE)
-patterns <- c("^yes", "^no", "NIU|miss|don")
+#### ---- female (12-49 years, 1-5 mths pregnant) had...? ----
+
+## Convert yes and no to 1 and 0, and NA otherwise
+
+vafem_u5mths_var <- grep("^vafem_u5mths_", colnames(working_df), value = TRUE)
+patterns <- c("^yes|^conti", "^no", "^NIU|^miss|^don")
 replacements <- c(1, 0, NA)
 working_df <- (working_df
-	%>% recodeLabs(carefrom_var, patterns, replacements, insert = FALSE)
-	%>% mutate_at(carefrom_var, as.numeric)
+	%>% recodeLabs(vafem_u5mths_var, patterns, replacements, insert = FALSE)
+	%>% mutate_at(vafem_u5mths_var, as.numeric)
 )
 
-## Compute the total number of general symptoms exprienced by each respondent
+## Compute the total
 
 working_df <- (working_df
-	%>% mutate(total_carefrom = rowSums(working_df[, carefrom_var], na.rm = TRUE))
+	%>% mutate(total_vafem_u5mths = rowSums(working_df[, vafem_u5mths_var], na.rm = TRUE))
 )
-codebook <- updateCodebook(var = "total_carefrom"
-	, lab = "Total number of facilities the respondent sought care from."
+codebook <- updateCodebook(var = "total_vafem_u5mths"
+	, lab = "Total number of conditions experienced by female (1-5 months pregnant) "
 )
 
-total_carefrom_tab <- (working_df
-	%>% propFunc("total_carefrom", coltotal = TRUE)
-	%>% datatable(caption = extractLabs("total_carefrom"), rownames = FALSE)
+total_vafem_u5mths_tab <- (working_df
+	%>% propFunc("total_vafem_u5mths", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("total_vafem_u5mths"), rownames = FALSE)
+)
+
+#### ---- female (12-49 years, 6+ mths pregnant) had: ----
+
+## Convert yes and no to 1 and 0, and NA otherwise
+
+vafem_a5mths_var <- grep("^vafem_a5mths_", colnames(working_df), value = TRUE)
+patterns <- c("^yes|^conti", "^no", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs(vafem_a5mths_var, patterns, replacements, insert = FALSE)
+	%>% mutate_at(vafem_a5mths_var, as.numeric)
+)
+
+## Compute the total
+
+working_df <- (working_df
+	%>% mutate(total_vafem_a5mths = rowSums(working_df[, vafem_a5mths_var], na.rm = TRUE))
+)
+codebook <- updateCodebook(var = "total_vafem_a5mths"
+	, lab = "Total number of conditions experienced by female (6+ months pregnant) "
+)
+
+total_vafem_a5mths_tab <- (working_df
+	%>% propFunc("total_vafem_a5mths", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("total_vafem_a5mths"), rownames = FALSE)
+)
+
+
+#### ---- female (12-49 years, 6 wks pst delivery) had: ----
+
+## Convert yes and no to 1 and 0, and NA otherwise
+
+vafem_6wks_var <- grep("^(vafem_6wks_)(?!.*preg|.*b4de|.*deliv)|delivplacenta", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^yes|^conti", "^no", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs(vafem_6wks_var, patterns, replacements, insert = FALSE)
+	%>% mutate_at(vafem_6wks_var, as.numeric)
+)
+
+## Compute the total
+
+working_df <- (working_df
+	%>% mutate(total_vafem_6wks = rowSums(working_df[, vafem_6wks_var], na.rm = TRUE))
+)
+codebook <- updateCodebook(var = "total_vafem_6wks"
+	, lab = "Total number of conditions experienced by female (6 weeks post delivery) "
+)
+
+total_vafem_6wks_tab <- (working_df
+	%>% propFunc("total_vafem_6wks", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("total_vafem_6wks"), rownames = FALSE)
+)
+
+#### ---- Pregnancy outcome ----
+
+vafem_6wks_pregoutcome_tab <- (working_df
+	%>% propFunc("vafem_6wks_pregoutcome", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vafem_6wks_pregoutcome"), rownames = FALSE)
+)
+
+## Recode missing to NA
+
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs("vafem_6wks_pregoutcome", patterns, replacements, insert = FALSE)
+)
+
+
+#### ---- Duration (days) btwn deliv & death ----
+
+vafem_6wks_dur_b4death_tab <- (working_df
+	%>% propFunc("vafem_6wks_dur_b4death", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vafem_6wks_dur_b4death"), rownames = FALSE)
+)
+
+## Recode missing to NA
+patterns <- c("^less", "^NIU|^miss|^don")
+replacements <- c(0, NA)
+working_df <- (working_df
+	%>% recodeLabs("vafem_6wks_dur_b4death", patterns, replacements, insert = FALSE)
+	%>% mutate_at("vafem_6wks_dur_b4death", as.numeric)
+)
+
+
+#### ---- Place of delivery ----
+
+vafem_6wks_where_deliv_tab <- (working_df
+	%>% propFunc("vafem_6wks_where_deliv", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vafem_6wks_where_deliv"), rownames = FALSE)
+)
+
+## Recode missing to NA
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs("vafem_6wks_where_deliv", patterns, replacements, insert = FALSE)
+)
+
+
+#### ---- Mode of delivery ----
+
+vafem_6wks_delivmode_tab <- (working_df
+	%>% propFunc("vafem_6wks_delivmode", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vafem_6wks_delivmode"), rownames = FALSE)
+)
+
+## Recode missing to NA
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs("vafem_6wks_delivmode", patterns, replacements, insert = FALSE)
+)
+
+#### ---- THE CHILD DIED BETWEEN 28 DAYS AND ONE YEAR OF AGE ----
+
+#### ---- Infant (0-11 mths) was part of multiple birth ----
+
+vainf_multibirth_tab <- (working_df
+	%>% propFunc("vainf_multibirth", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vainf_multibirth"), rownames = FALSE)
+)
+
+## Recode missing to NA
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs("vainf_multibirth", patterns, replacements, insert = FALSE)
+)
+
+#### ---- Infant (0-11 mths) was born premature/on time/late ----
+
+vainf_pregendtimely_tab <- (working_df
+	%>% propFunc("vainf_pregendtimely", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vainf_pregendtimely"), rownames = FALSE)
+)
+
+## Recode missing to NA
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs("vainf_pregendtimely", patterns, replacements, insert = FALSE)
+)
+
+#### ----  Infant (0-11 mths) complicated pregnancy ----
+
+vainf_pregcomp_tab <- (working_df
+	%>% propFunc("vainf_pregcomp", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vainf_pregcomp"), rownames = FALSE)
+)
+
+## Recode missing to NA
+patterns <- c("^yes", "^no", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs("vainf_pregcomp", patterns, replacements, insert = FALSE)
+	%>% mutate_at("vainf_pregcomp", as.numeric)
+)
+
+#### ---- Infant (0-11 mths) pregnancy complication: stage ----
+
+vainf_pregcomp_stage_tab <- (working_df
+	%>% propFunc("vainf_pregcomp_stage", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vainf_pregcomp_stage"), rownames = FALSE)
+)
+
+## Recode missing to NA
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs("vainf_pregcomp_stage", patterns, replacements, insert = FALSE)
+)
+
+
+#### ---- Other pregnacy complications ----
+
+## Convert yes and no to 1 and 0, and NA otherwise
+
+vainf_pregcomp_var <- grep("^(vainf_pregcomp_)(?!.*stage)", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^yes|^conti", "^no", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs(vainf_pregcomp_var, patterns, replacements, insert = FALSE)
+	%>% mutate_at(vainf_pregcomp_var, as.numeric)
+)
+
+## Compute the total
+
+working_df <- (working_df
+	%>% mutate(total_vainf_pregcomp = rowSums(working_df[, vainf_pregcomp_var], na.rm = TRUE))
+)
+codebook <- updateCodebook(var = "total_vainf_pregcomp"
+	, lab = "Total number of other pregnancy related complications "
+)
+
+total_vainf_pregcomp_tab <- (working_df
+	%>% propFunc("total_vainf_pregcomp", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("total_vainf_pregcomp"), rownames = FALSE)
+)
+
+#### ---- Birth related complications ----
+
+## Convert yes and no to 1 and 0, and NA otherwise
+
+vainf_birthcomp_var <- grep("^(vainf_birthcomp_)(?!.*size)", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^yes|^conti", "^no", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs(vainf_birthcomp_var, patterns, replacements, insert = FALSE)
+	%>% mutate_at(vainf_birthcomp_var, as.numeric)
+)
+
+## Compute the total
+
+working_df <- (working_df
+	%>% mutate(total_vainf_birthcomp = rowSums(working_df[, vainf_birthcomp_var], na.rm = TRUE))
+)
+codebook <- updateCodebook(var = "total_vainf_birthcomp"
+	, lab = "Total number of birth related complications "
+)
+
+total_vainf_birthcomp_tab <- (working_df
+	%>% propFunc("total_vainf_birthcomp", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("total_vainf_birthcomp"), rownames = FALSE)
+)
+
+
+#### ---- Infant (0-11 mths) birth complication: size at birth ----
+
+vainf_birthcomp_size_tab <- (working_df
+	%>% propFunc("vainf_birthcomp_size", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vainf_birthcomp_size"), rownames = FALSE)
+)
+
+## Recode missing to NA
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs("vainf_birthcomp_size", patterns, replacements, insert = FALSE)
 )
 
 
