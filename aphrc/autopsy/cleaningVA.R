@@ -178,10 +178,11 @@ soughthealthcare_tab <- (working_df
 )
 
 ## Recode missing and NIU to NA
-patterns <- c("NIU|miss|don")
-replacements <- c(NA)
+patterns <- c("^yes", "^no", "NIU|miss|don")
+replacements <- c(1, 0, NA)
 working_df <- (working_df
 	%>% recodeLabs("soughthealthcare", patterns, replacements, insert = FALSE)
+	%>% mutate_at("soughthealthcare", as.numeric)
 )
 
 #### ---- Sought health care from? -----
@@ -280,8 +281,8 @@ injuryintended_tab <- (working_df
 )
 
 ## Recode missing and NIU to NA
-patterns <- c("NIU|miss|don")
-replacements <- c(NA)
+patterns <- c("^yes", "^no", "NIU|miss|don")
+replacements <- c(1, 0, NA)
 working_df <- (working_df
 	%>% recodeLabs("injuryintended", patterns, replacements, insert = FALSE)
 	%>% mutate_at("injuryintended", as.numeric)
@@ -366,6 +367,182 @@ codebook <- updateCodebook(var = "total_va5_had"
 total_va5_had_tab <- (working_df
 	%>% propFunc("total_va5_had", coltotal = TRUE)
 	%>% datatable(caption = extractLabs("total_va5_had"), rownames = FALSE)
+)
+
+#### ---- Duration of illness for the adults ----
+
+va5_dur_var <- grep("^va5_dur_", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("21+", "NIU|miss|don")
+replacements <- c(21, NA)
+working_df <- (working_df
+	%>% recodeLabs(va5_dur_var, patterns, replacements, insert = FALSE)
+	%>% mutate_at(va5_dur_var, as.numeric)
+)
+
+## Compute the summary 
+
+working_df <- (working_df
+	%>% mutate(average_va5_dur = rowMeans(working_df[, va5_dur_var], na.rm = TRUE))
+)
+codebook <- updateCodebook(var = "average_va5_dur"
+	, lab = "Summary of duration of illness (adults)"
+)
+
+average_va5_dur_tab <- (working_df
+	%>% summarise(min = min(average_va5_dur, na.rm = TRUE) 
+		, mean = mean(average_va5_dur, na.rm = TRUE)
+		, max = max(average_va5_dur, na.rm = TRUE)
+	)
+	%>% datatable(caption = extractLabs("average_va5_dur"), rownames = FALSE)
+)
+
+#### ---- Was the illness severe? ----
+
+va5_severe_var <- grep("^va5_severe_", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs(va5_severe_var, patterns, replacements, insert = FALSE)
+)
+
+#### ---- Was the illness constant? ----
+
+va5_constant_var <- grep("^va5_constant_", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^yes", "^no", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs(va5_constant_var, patterns, replacements, insert = FALSE)
+)
+
+#### ---- Was illness painfull? ----
+
+va5_painwith_var <- grep("^va5_painwith_", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^yes", "^no", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs(va5_painwith_var, patterns, replacements, insert = FALSE)
+)
+
+#### ---- Type of illness ----
+
+va5_type_var <- grep("^va5_type_", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs(va5_type_var, patterns, replacements, insert = FALSE)
+)
+
+#### ---- Location of illness ----
+
+va5_where_var <- grep("^va5_where_", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs(va5_where_var, patterns, replacements, insert = FALSE)
+)
+
+#### ---- Frequency of illness ----
+
+va5_freq_var <- grep("^va5_freq_", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs(va5_freq_var, patterns, replacements, insert = FALSE)
+)
+
+#### ---- Developing the condtion ----
+
+va5_develop_var <- grep("^va5_develop_|^va5_state_|^va5_amount_", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs(va5_develop_var, patterns, replacements, insert = FALSE)
+)
+
+#### ---- Recode other remaining illness at once ----
+
+other_illness <- "va5_soreeyes|va5_itchyskin|va5_swelling|va5_pale|va5_sputumwith|va5_bloodwith|va5_cvd|va5_persis"
+other_illness_var <- grep(other_illness, colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^no", "^yes", "^NIU|^miss|^don")
+replacements <- c(0, 1, NA)
+working_df <- (working_df
+	%>% recodeLabs(other_illness_var, patterns, replacements, insert = FALSE)
+	%>% mutate_at(other_illness_var, as.numeric)
+)
+
+
+#### ---- SECTION 4: FOR DECEASED FEMALES WITHIN THE 12-49 AGE RANGE -----
+
+#### ---- Was the desceased pregnant at the time of death? ----
+
+vafem_was_pregnant_tab <- (working_df
+	%>% propFunc("vafem_was_pregnant", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vafem_was_pregnant"), rownames = FALSE)
+)
+
+## Recode missing and NIU to NA
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs("vafem_was_pregnant", patterns, replacements, insert = FALSE)
+)
+
+#### ---- Duration of pregnancy ----
+
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs("vafem_dur_pregnant", patterns, replacements, insert = FALSE)
+	%>% mutate_at("vafem_dur_pregnant", as.numeric)
+)
+
+## Compute the summary 
+vafem_dur_pregnant_tab <- (working_df
+	%>% summarise(min = min(vafem_dur_pregnant, na.rm = TRUE) 
+		, mean = mean(vafem_dur_pregnant, na.rm = TRUE)
+		, max = max(vafem_dur_pregnant, na.rm = TRUE)
+	)
+	%>% datatable(caption = extractLabs("vafem_dur_pregnant"), rownames = FALSE)
+)
+
+#### ---- Woman died within 6 weeks of pregnancy termination ----
+
+vafem_diedin6weeks_tab <- (working_df
+	%>% propFunc("vafem_diedin6weeks", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vafem_diedin6weeks"), rownames = FALSE)
+)
+
+## Recode missing to NA
+
+patterns <- c("yes", "no", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs("vafem_diedin6weeks", patterns, replacements, insert = FALSE)
+	%>% mutate_at("vafem_diedin6weeks", as.numeric)
+)
+
+#### ---- Deseases the female had before death ----
+
+vafem_a5mths_var <- grep("^(carefrom_)(?!.*first)", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^yes", "^no", "NIU|miss|don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs(carefrom_var, patterns, replacements, insert = FALSE)
+	%>% mutate_at(carefrom_var, as.numeric)
+)
+
+## Compute the total number of general symptoms exprienced by each respondent
+
+working_df <- (working_df
+	%>% mutate(total_carefrom = rowSums(working_df[, carefrom_var], na.rm = TRUE))
+)
+codebook <- updateCodebook(var = "total_carefrom"
+	, lab = "Total number of facilities the respondent sought care from."
+)
+
+total_carefrom_tab <- (working_df
+	%>% propFunc("total_carefrom", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("total_carefrom"), rownames = FALSE)
 )
 
 
