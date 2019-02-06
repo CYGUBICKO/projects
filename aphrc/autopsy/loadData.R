@@ -26,7 +26,7 @@ codebook <- load_df[["codebook"]]
 
 
 #### ---- 1. Shorten variable names ----
-# Remove vau_*
+## Remove vau_*
 
 old_names <- colnames(working_df)
 new_names <- gsub("vau_*", "", old_names)

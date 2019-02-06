@@ -134,7 +134,7 @@ working_df <- (working_df
 ## Compute the total number of general symptoms exprienced by each respondent
 
 working_df <- (working_df
-	%>% mutate(total_symptoms = rowSums(working_df[, sec1_var], na.rm = TRUE))
+  %>% rowsumFunc(sec1_var, "total_symptoms")
 )
 codebook <- updateCodebook(var = "total_symptoms"
 	, lab = "Total number of general symptoms"
@@ -198,7 +198,7 @@ working_df <- (working_df
 ## Compute the total number of general symptoms exprienced by each respondent
 
 working_df <- (working_df
-	%>% mutate(total_carefrom = rowSums(working_df[, carefrom_var], na.rm = TRUE))
+	%>% rowsumFunc(carefrom_var, "total_carefrom")
 )
 codebook <- updateCodebook(var = "total_carefrom"
 	, lab = "Total number of facilities the respondent sought care from."
@@ -236,7 +236,7 @@ working_df <- (working_df
 ## Compute the total number of illness that caused the death
 
 working_df <- (working_df
-	%>% mutate(total_illwith = rowSums(working_df[, illwith_var], na.rm = TRUE))
+	%>% rowsumFunc(illwith_var, "total_illwith")
 )
 codebook <- updateCodebook(var = "total_illwith"
 	, lab = "Total number of illness that caused death"
@@ -261,7 +261,7 @@ working_df <- (working_df
 ## Compute the total number of injuries that caused the death
 
 working_df <- (working_df
-	%>% mutate(total_injury = rowSums(working_df[, injury_var], na.rm = TRUE))
+	%>% rowsumFunc(injury_var, "total_injury")
 )
 codebook <- updateCodebook(var = "total_injury"
 	, lab = "Total number of injuries that caused death"
@@ -334,7 +334,7 @@ working_df <- (working_df
 ## Compute the total number of illness that caused death
 
 working_df <- (working_df
-	%>% mutate(total_va5_illwith = rowSums(working_df[, va5_illwith_var], na.rm = TRUE))
+	%>% rowsumFunc(va5_illwith_var, "total_va5_illwith")
 )
 codebook <- updateCodebook(var = "total_va5_illwith"
 	, lab = "Total number of illness which caused death (adults)"
@@ -358,7 +358,7 @@ working_df <- (working_df
 ## Compute the total number of illness that caused death
 
 working_df <- (working_df
-	%>% mutate(total_va5_had = rowSums(working_df[, va5_had_var], na.rm = TRUE))
+	%>% rowsumFunc(va5_had_var, "total_va5_had")
 )
 codebook <- updateCodebook(var = "total_va5_had"
 	, lab = "Total number of other diseases (adults)"
@@ -537,7 +537,7 @@ working_df <- (working_df
 ## Compute the total
 
 working_df <- (working_df
-	%>% mutate(total_vafem_u5mths = rowSums(working_df[, vafem_u5mths_var], na.rm = TRUE))
+	%>% rowsumFunc(vafem_u5mths_var, "total_vafem_u5mths")
 )
 codebook <- updateCodebook(var = "total_vafem_u5mths"
 	, lab = "Total number of conditions experienced by female (1-5 months pregnant) "
@@ -563,7 +563,7 @@ working_df <- (working_df
 ## Compute the total
 
 working_df <- (working_df
-	%>% mutate(total_vafem_a5mths = rowSums(working_df[, vafem_a5mths_var], na.rm = TRUE))
+	%>% rowsumFunc(vafem_a5mths_var, "total_vafem_a5mths")
 )
 codebook <- updateCodebook(var = "total_vafem_a5mths"
 	, lab = "Total number of conditions experienced by female (6+ months pregnant) "
@@ -590,7 +590,7 @@ working_df <- (working_df
 ## Compute the total
 
 working_df <- (working_df
-	%>% mutate(total_vafem_6wks = rowSums(working_df[, vafem_6wks_var], na.rm = TRUE))
+	%>% rowsumFunc(vafem_6wks_var, "total_vafem_6wks")
 )
 codebook <- updateCodebook(var = "total_vafem_6wks"
 	, lab = "Total number of conditions experienced by female (6 weeks post delivery) "
@@ -737,7 +737,7 @@ working_df <- (working_df
 ## Compute the total
 
 working_df <- (working_df
-	%>% mutate(total_vainf_pregcomp = rowSums(working_df[, vainf_pregcomp_var], na.rm = TRUE))
+	%>% rowsumFunc(vainf_pregcomp_var, "total_vainf_pregcomp")
 )
 codebook <- updateCodebook(var = "total_vainf_pregcomp"
 	, lab = "Total number of other pregnancy related complications "
@@ -763,7 +763,7 @@ working_df <- (working_df
 ## Compute the total
 
 working_df <- (working_df
-	%>% mutate(total_vainf_birthcomp = rowSums(working_df[, vainf_birthcomp_var], na.rm = TRUE))
+	%>% rowsumFunc(vainf_birthcomp_var, "total_vainf_birthcomp")
 )
 codebook <- updateCodebook(var = "total_vainf_birthcomp"
 	, lab = "Total number of birth related complications "
@@ -790,6 +790,107 @@ working_df <- (working_df
 )
 
 
+#### ---- NEONATAL DEATHS ----
+
+#### ---- neonate (0-28 days) stopped suckling before death ----
+
+vaneo_stopsuckle_tab <- (working_df
+	%>% propFunc("vaneo_stopsuckle", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vaneo_stopsuckle"), rownames = FALSE)
+)
+
+## Recode missing to NA and never to 0
+patterns <- c("^yes", "^no|^never", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs("vaneo_stopsuckle", patterns, replacements, insert = FALSE)
+	%>% mutate_at("vaneo_stopsuckle", as.numeric)
+)
+
+#### ---- neonate's (0-28 days) age at suckling cessation ----
+
+vaneo_age_stopsuckle_tab <- (working_df
+	%>% propFunc("vaneo_age_stopsuckle", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vaneo_age_stopsuckle"), rownames = FALSE)
+)
+
+## Recode missing to NA and 21+ days to 21 
+patterns <- c("21+", "^NIU|^miss|^don")
+replacements <- c(21, NA)
+working_df <- (working_df
+	%>% recodeLabs("vaneo_age_stopsuckle", patterns, replacements, insert = FALSE)
+	%>% mutate_at("vaneo_age_stopsuckle", as.numeric)
+)
+
+#### ---- neonate (0-28 days) how long survived after suckling cessation ----
+
+vaneo_surv_stopsuckle_tab <- (working_df
+	%>% propFunc("vaneo_surv_stopsuckle", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vaneo_surv_stopsuckle"), rownames = FALSE)
+)
+
+## Recode missing to NA 
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs("vaneo_surv_stopsuckle", patterns, replacements, insert = FALSE)
+)
+
+
+#### ---- neonate (0-28 days) stopped suckling before death ----
+
+vaneo_stopcry_tab <- (working_df
+	%>% propFunc("vaneo_stopcry", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vaneo_stopcry"), rownames = FALSE)
+)
+
+## Recode missing to NA and never to 0
+patterns <- c("^yes", "^no|^never", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs("vaneo_stopcry", patterns, replacements, insert = FALSE)
+	%>% mutate_at("vaneo_stopcry", as.numeric)
+)
+
+#### ---- neonate (0-28 days) how long survived after crying cessation ----
+
+vaneo_surv_stopcry_tab <- (working_df
+	%>% propFunc("vaneo_surv_stopcry", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("vaneo_surv_stopcry"), rownames = FALSE)
+)
+
+## Recode missing to NA and never to 0
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs("vaneo_surv_stopcry", patterns, replacements, insert = FALSE)
+)
+
+#### ---- Other complications expereinced by the neonates ----
+
+## Convert yes and no to 1 and 0, and NA otherwise
+
+other_vaneo_diseases_var <- c("vaneo_redumbilicus", "vaneo_tetanus", "vaneo_yelloweyes")
+patterns <- c("^yes", "^no", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs(other_vaneo_diseases_var, patterns, replacements, insert = FALSE)
+	%>% mutate_at(other_vaneo_diseases_var, as.numeric)
+)
+
+## Compute the total
+
+working_df <- (working_df
+	%>% rowsumFunc(other_vaneo_diseases_var, "total_other_vaneo_diseases")
+)
+codebook <- updateCodebook(var = "total_other_vaneo_diseases"
+	, lab = "Total number of other neonatal related diseases  "
+)
+
+total_other_vaneo_diseases_tab <- (working_df
+	%>% propFunc("total_other_vaneo_diseases", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("total_other_vaneo_diseases"), rownames = FALSE)
+)
 #### ---- Cases to completely drop ----
 
 indicators <- grep("_keepcase", colnames(working_df), value = TRUE)

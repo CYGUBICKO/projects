@@ -136,13 +136,14 @@ extractLabs <- function(variable){
 
 # Crosstab function
 propFunc <- function(df = data.frame(), dots = NULL, coltotal = FALSE,...){
+	temp_var <- dots
 	prop_df <- (df
 		%>% group_by_(.dots = dots)
+		%>% filter_at(temp_var, all_vars(!is.na(.)))
 		%>% summarise_(n = ~n())
 		%>% mutate(prop = prop.table(n))
 	)
 	if (coltotal){
-		temp_var <- dots
 		prop_df <- (prop_df
 			%>% rename_("new_var" = temp_var)
 			%>% mutate(new_var = as.character(new_var))
@@ -274,6 +275,19 @@ updateCodebook <- function(var, lab){
    )
    codebook <- rbind(codebook, codebook_update)
 	return(codebook)
+}
+
+## Compute rowsums and ignore rows which have all NAs
+
+rowsumFunc <- function(df, variables, new_varname){
+	df[, new_varname] <- apply(df[, variables], 1
+   			, function(x){ifelse(all(is.na(x))
+      		, NA
+      		, sum(x, na.rm = TRUE)
+			)
+		}
+	)
+	return(df)
 }
 
 save.image("globalFunctions.rda")
