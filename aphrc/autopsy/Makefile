@@ -61,7 +61,7 @@ multiresFuncs.Rout: multiresFuncs.R
 generalsymptoms.Rout: generalsymptoms.R
 
 ## Report
-autopsy_descriptive_report.html: autopsy_descriptive_report.Rmd
+autopsy_descriptive_report.html: cleanVarlabs.rda autopsy_descriptive_report.Rmd
 
 ######################################################################
 
