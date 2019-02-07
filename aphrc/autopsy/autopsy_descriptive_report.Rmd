@@ -67,6 +67,27 @@ datatable(tab1, caption = "A summary of symptoms by EA")
 ```
 
 ### Summary plots
+
+
 ```{r}
-symptoms_saved_plots
+symptoms_saved_plots[["abs_symptoms_plot"]]
+```
+
+```{r}
+symptoms_saved_plots[["symptoms_plot"]]
+```
+
+
+## Other symptoms before death
+
+### Summary tables
+
+```{r}
+tab2 <- symptoms_saved_tabs[["b4dth_count_tab"]]
+datatable(tab2, caption = "A summary of other symptoms by EA")
+```
+
+### Summary plots
+```{r}
+symptoms_saved_plots[["b4dth_plot"]]
 ```
