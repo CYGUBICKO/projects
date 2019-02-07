@@ -55,6 +55,7 @@ cleaningVA.Rout: cleaningVA.R
 
 # Drop cases: No VA result and VA not performed
 completeVA.Rout: completeVA.R
+Ignore += va_codebook.csv
 # va_codebook.csv: completeVA.Rout ;
 
 # Descriptives
@@ -67,7 +68,10 @@ demographics.Rout: demographics.R
 multiresFuncs.Rout: multiresFuncs.R
 generalsymptoms.Rout: generalsymptoms.R
 
+Ignore += *.rda
+
 ## Report
+Ignore += autopsy_descriptive_report.html
 autopsy_descriptive_report.html: demographics.rda generalsymptoms.rda cleaningVA.rda autopsy_descriptive_report.Rmd
 
 ######################################################################
