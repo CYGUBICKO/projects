@@ -8,7 +8,7 @@ library(dplyr)
 library(tibble)
 library(tidyr)
 
-source("../hh/globalFunctions.R")
+source("globalFunctions.R")
 
 df_name <- "verbalautopsy_2002-2015"
 file_extension <- "dta"

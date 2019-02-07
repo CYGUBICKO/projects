@@ -290,4 +290,47 @@ rowsumFunc <- function(df, variables, new_varname){
 	return(df)
 }
 
+# Shorten the variable labels based on some pattern the label string
+cleanVarlabs <- function(variables = variables, pattern = pattern){
+   cleanvar_df <- (codebook
+      %>% filter(variable %in% variables)
+      %>% mutate(description = gsub(pattern, "", description))
+   )
+}
+
+# Convert some variable labels to variables
+# The function picks labels from the codebook file
+# Depends on library(dplyr)
+# vars_vec: Variables to extract their labels
+
+vartoLabs <- function(vars_vec = vars_vec){
+   new_vars <- (codebook
+		%>% filter(variable %in% vars_vec)
+   	%>% mutate(description = gsub(".*: ", "", description)
+         	, description = gsub(" |/", "_", description)
+      	)
+   	%>% pull(description)
+	)
+}
+
+
+# The function depends on:
+## library(expss)
+## library(dplyr)
+## cleanVarlabs()
+
+addVarlabs <- function(df = df
+	, cleanlabs_df = cleanlabs_df){
+	variables <- pull(cleanlabs_df, variable)
+	df <- select(df, variables)
+   for (var in variables){
+      temp_df <- (cleanlabs_df
+         %>% filter(variable %in% var)
+      )
+      temp_lab <- pull(temp_df, description)
+      var_lab(df[, var]) <- temp_lab
+   }
+	return(df)
+}
+
 save.image("globalFunctions.rda")

@@ -50,16 +50,11 @@ cleaningVA.Rout: cleaningVA.R
 completeVA.Rout: completeVA.R
 # va_codebook.csv: completeVA.Rout ;
 
-# Under 5 dataset
-underfiveVA.Rout: underfiveVA.R
-
-# Save .csv copy of codebook
-vaCodebook.Rout: vaCodebook.R
-
 # Descrirapptives
 
 ## 1. Demographics
 demographicFunc.Rout: demographicFunc.R
+multiresFuncs.Rout: multiresFuncs.R
 demographics.Rout: demographics.R
 
 ## Report

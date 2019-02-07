@@ -866,6 +866,7 @@ working_df <- (working_df
 	%>% recodeLabs("vaneo_surv_stopcry", patterns, replacements, insert = FALSE)
 )
 
+
 #### ---- Other complications expereinced by the neonates ----
 
 ## Convert yes and no to 1 and 0, and NA otherwise
@@ -891,6 +892,141 @@ total_other_vaneo_diseases_tab <- (working_df
 	%>% propFunc("total_other_vaneo_diseases", coltotal = TRUE)
 	%>% datatable(caption = extractLabs("total_other_vaneo_diseases"), rownames = FALSE)
 )
+
+
+#### ---- POST-NEONATAL AND UNDER-FIVE DEATHS ----
+
+#### ---- Child (29 days-59 mths) ----
+
+## Convert yes and no to 1 and 0, and NA otherwise
+
+vu5_sx_had_var <- grep("^(vu5_)(?!.*dur_|surv_)", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^yes", "^no", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs(vu5_sx_had_var, patterns, replacements, insert = FALSE)
+	%>% mutate_at(vu5_sx_had_var, as.numeric)
+)
+
+## Compute the total
+
+working_df <- (working_df
+	%>% rowsumFunc(vu5_sx_had_var, "total_vu5_sx_had")
+)
+codebook <- updateCodebook(var = "total_vu5_sx_had"
+	, lab = "Total number of illness for children (29 days-59 mths)  "
+)
+
+total_vu5_sx_had_tab <- (working_df
+	%>% propFunc("total_vu5_sx_had", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("total_vu5_sx_had"), rownames = FALSE)
+)
+
+
+#### ---- Duration of illness ----
+
+vu5_sx_dur_var <- grep("^(.*vu5_dur_)", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("21+", "^NIU|^miss|^don")
+replacements <- c(21, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs(vu5_sx_dur_var, patterns, replacements, insert = FALSE)
+	%>% mutate_at(vu5_sx_dur_var, as.numeric)
+)
+
+#### ---- Survival ----
+
+vu5_sx_surv_var <- grep("^(.*vu5_surv_)", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^NIU|^miss|^don")
+replacements <- c(NA)
+working_df <- (working_df
+	%>% recodeLabs(vu5_sx_surv_var, patterns, replacements, insert = FALSE)
+)
+
+
+#### ---- TREATMENT HISTORY ----
+
+#### ---- Drugs received ----
+
+## Convert yes and no to 1 and 0, and NA otherwise
+
+prescribe_var <- grep("^prescribe_", colnames(working_df), value = TRUE, perl = TRUE)
+patterns <- c("^yes", "^no", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs(prescribe_var, patterns, replacements, insert = FALSE)
+	%>% mutate_at(prescribe_var, as.numeric)
+)
+
+## Compute the total
+
+working_df <- (working_df
+	%>% rowsumFunc(prescribe_var, "total_prescribe")
+)
+codebook <- updateCodebook(var = "total_prescribe"
+	, lab = "Total number of prescriptions "
+)
+
+total_prescribe_tab <- (working_df
+	%>% propFunc("total_prescribe", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("total_prescribe"), rownames = FALSE)
+)
+
+
+#### ---- Health Records Present ----
+
+hashealthrecord_tab <- (working_df
+	%>% propFunc("hashealthrecord", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("hashealthrecord"), rownames = FALSE)
+)
+
+## Recode missing to NA and never to 0
+patterns <- c("^yes", "^no", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs("hashealthrecord", patterns, replacements, insert = FALSE)
+)
+
+#### ---- Death certificate issued ----
+
+deathcertissued_tab <- (working_df
+	%>% propFunc("deathcertissued", coltotal = TRUE)
+	%>% datatable(caption = extractLabs("deathcertissued"), rownames = FALSE)
+)
+
+## Recode missing to NA and never to 0
+patterns <- c("^yes", "^no", "^NIU|^miss|^don")
+replacements <- c(1, 0, NA)
+working_df <- (working_df
+	%>% recodeLabs("deathcertissued", patterns, replacements, insert = FALSE)
+)
+
+#### ---- Missingness -----
+
+## Proportion per variable merged with codebook
+miss_prop_df <- (working_df
+   %>% missPropFunc()
+   %>% left_join(codebook, by = "variable")
+   %>% select(variable, description, miss_count, miss_prop)
+   %>% arrange(desc(miss_prop))
+)
+
+## Formated output
+miss_prop_df_tab <- datatable(miss_prop_df, caption = "Missingness per variable")
+
+## Drop variables with no data
+miss_vars <- (miss_prop_df
+  %>% filter(miss_prop==100)
+  %>% select(variable)
+)
+
+vars_droped <- pull(miss_vars, variable)
+no_vars_droped <- length(vars_droped)
+
+working_df <- (working_df
+  %>% select(-c(vars_droped))
+)
+
+
 #### ---- Cases to completely drop ----
 
 indicators <- grep("_keepcase", colnames(working_df), value = TRUE)
@@ -899,4 +1035,15 @@ working_df <- (working_df
 	%>% select(-c(indicators))
 )
 
-vars_drop <- c("injuryintended")
+#### ---- Save ------
+
+grouped_vars <- sapply(grep("_var$", ls(), value = TRUE), get)
+
+save(file = "cleaningVA.rda"
+	, working_df
+	, codebook
+	, grouped_vars
+	, miss_prop_df_tab
+	, no_vars_droped
+)
+
