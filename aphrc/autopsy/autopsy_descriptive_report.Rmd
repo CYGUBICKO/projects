@@ -1,0 +1,72 @@
+---
+title: 'APHRC Verbal Autopsy Data'
+author: "Steve and Jonathan"
+date: " `r as.Date(Sys.time())` "
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
+---
+
+
+
+
+```{r setup, include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(echo = FALSE
+	, warning = FALSE
+	, message = FALSE
+	, fig.width = 10
+	, fig.height = 10
+	, results = "asis")
+options(width = 12)
+library(ggplot2)
+library(DT)
+
+theme_set(theme_bw() +
+	theme(panel.spacing=grid::unit(0,"lines")))
+```
+
+
+```{r}
+load("cleaningVA.rda")
+load("generalsymptoms.rda")
+load("demographics.rda")
+```
+
+# Codebook
+
+```{r}
+datatable(codebook, caption = "Codebook")
+```
+
+# Data Exploration
+
+## Missingness
+
+```{r}
+miss_prop_df_tab
+```
+
+* A total of `r no_vars_droped` variables which had $100\%$ missingness were dropped.
+
+## Demographics
+
+```{r}
+demographic_saved_plots
+```
+
+## General Symptoms
+
+### Summary tables
+
+```{r}
+tab1 <- symptoms_saved_tabs[["symptoms_count_tab"]]
+datatable(tab1, caption = "A summary of symptoms by EA")
+```
+
+### Summary plots
+```{r}
+symptoms_saved_plots
+```

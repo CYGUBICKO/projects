@@ -54,11 +54,14 @@ completeVA.Rout: completeVA.R
 
 ## 1. Demographics
 demographicFunc.Rout: demographicFunc.R
-multiresFuncs.Rout: multiresFuncs.R
 demographics.Rout: demographics.R
 
-## Report
+## 2. General symptoms
+multiresFuncs.Rout: multiresFuncs.R
+generalsymptoms.Rout: generalsymptoms.R
 
+## Report
+autopsy_descriptive_report.html: autopsy_descriptive_report.Rmd
 
 ######################################################################
 
