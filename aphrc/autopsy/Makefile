@@ -11,7 +11,7 @@ current: target
 
 # stuff
 
-Sources += Makefile
+Sources += Makefile notes.md
 
 msrepo = https://github.com/dushoff
 ms = makestuff
@@ -41,7 +41,14 @@ Sources += $(wildcard *.R *.Rmd)
 # globalFunctions.Rout: globalFunctions.R
 
 # Read data
+# This is a dependency line with no recipe
+# Make will look for an implicit rule with a recipe
 loadData.Rout: data/verbalautopsy_2002-2015.dta loadData.R
+
+steve.out: steve.in
+	cat steve.in > steve.out
+	cat $< >> $@ ## First dependency
+	cat $^ >> $@ ## All dependencies
 
 # Some cleaning
 cleaningVA.Rout: cleaningVA.R
@@ -50,7 +57,7 @@ cleaningVA.Rout: cleaningVA.R
 completeVA.Rout: completeVA.R
 # va_codebook.csv: completeVA.Rout ;
 
-# Descrirapptives
+# Descriptives
 
 ## 1. Demographics
 demographicFunc.Rout: demographicFunc.R
@@ -61,7 +68,7 @@ multiresFuncs.Rout: multiresFuncs.R
 generalsymptoms.Rout: generalsymptoms.R
 
 ## Report
-autopsy_descriptive_report.html: cleanVarlabs.rda autopsy_descriptive_report.Rmd
+autopsy_descriptive_report.html: demographics.rda generalsymptoms.rda cleaningVA.rda autopsy_descriptive_report.Rmd
 
 ######################################################################
 
