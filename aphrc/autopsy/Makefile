@@ -45,6 +45,8 @@ Sources += $(wildcard *.R *.Rmd)
 # Make will look for an implicit rule with a recipe
 loadData.Rout: data/verbalautopsy_2002-2015.dta loadData.R
 
+Ignore += steve.out
+Sources += steve.in
 steve.out: steve.in
 	cat steve.in > steve.out
 	cat $< >> $@ ## First dependency
