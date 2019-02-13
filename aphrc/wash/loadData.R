@@ -29,13 +29,13 @@ codebook <- load_df[["codebook"]]
 ## Remove hha_*
 
 old_names <- colnames(working_df)
-new_names <- gsub("(?!.^hhid.$)(hhh_*|hha_*|)", "", old_names, perl = TRUE)
+new_names <- gsub("(?!.^hhid.$)(hhh_*|hha_*)", "", old_names, perl = TRUE)
 working_df <- (working_df
 	%>% setnames(old_names, new_names)
 )
 
 codebook <- (codebook
-	%>% mutate(variable = gsub("(?!.^hhid.$)(hhh_*|hha_*|hh*)", "", variable, perl = TRUE))
+	%>% mutate(variable = gsub("(?!.^hhid.$)(hhh_*|hha_*)", "", variable, perl = TRUE))
 )
 
 save(file="loadData.rda"

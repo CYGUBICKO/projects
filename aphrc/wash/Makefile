@@ -57,16 +57,13 @@ logisticpca.Rout: logisticpca.R
 descriptivePlots.Rout: descriptivePlots.R
 descriptives.Rout: descriptives.R
 
-## 1. Demographics
-demographicFunc.Rout: demographicFunc.R
-demographics.Rout: demographics.R
+# Analysis
+## 1. Generalized Linear Mixed-effects Model (GLMM)
+glmmmModel.Rout: glmmmModel.R
 
-## 2. General symptoms
-multiresFuncs.Rout: multiresFuncs.R
-generalsymptoms.Rout: generalsymptoms.R
 
 ## Report
-autopsy_descriptive_report.html: autopsy_descriptive_report.Rmd
+wash_report.html: wash_report.Rmd
 
 ######################################################################
 

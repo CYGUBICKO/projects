@@ -6,6 +6,7 @@
 library(dplyr)
 
 load("cleaning.rda")
+load("globalFunctions.rda")
 
 #### ---- 1. Complete cases ------
 # Cases were droped based on indicator variable (dropcase) which was generated from. 
@@ -19,6 +20,7 @@ incomplete_df <- (working_df
 	%>% filter(dropcase == 1)
 )
 
+codebook <- updateCodebook("dropcase", "Cases to drop (TRUE - Drop) - New")
 
 working_df <- complete_df
 

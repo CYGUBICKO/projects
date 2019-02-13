@@ -25,8 +25,12 @@ factors <- function(x){
 
 working_df <- (working_df
 	%>% mutate_at(c(wash_vars, "cat_wash"), funs(factors))
+	%>% mutate(expend_total_USD_per_centered = scale(as.numeric(expend_total_USD_per), scale = FALSE))
+	%>% mutate(cat_wash_num = ifelse(cat_wash=="Improved", 1, 0))
 )
 
+codebook <- updateCodebook("expend_total_USD_per_centered", "Centered total HH expenditure - New")
+codebook <- updateCodebook("cat_wash_num", "0/1 Categorized composite WASH variable - New")
 
 #### ---- 1. Water sources ----
 
@@ -120,25 +124,8 @@ prop_wash_plot
 
 #### ---- 6. Overall WASH indicator and socio-demo ----
 
-#### ---- 6.1 Wealth index ----
 
-tab_vars <- c("intvwyear", "slumarea", "wealthquintile", "cat_wash")
-legend_title <- "WASH Indicators"
-wash_wealthquintile_plot <- (working_df
-	%>% propPlot(tab_vars, legend_title)
-)
-wash_wealthquintile_plot <- (wash_wealthquintile_plot[["prop_plot"]] 
-	+ facet_grid(wealthquintile ~ slumarea)
-	+ theme(axis.text.x=element_text(angle=90))
-	+ scale_colour_brewer(palette="Dark2")
-	+ labs(x = "Years"
-		, title = "WASH and wealth"
-	)
-	+ theme(legend.position = "bottom")
-)
-wash_wealthquintile_plot
-
-#### ---- 6.2 Gender ----
+#### ---- 6.1 Gender ----
 
 tab_vars <- c("intvwyear", "slumarea", "gender", "cat_wash")
 legend_title <- "WASH Indicators"
@@ -156,7 +143,7 @@ wash_gender_plot <- (wash_gender_plot[["prop_plot"]]
 )
 wash_gender_plot
 
-#### ---- 6.3 Age ----
+#### ---- 6.2 Age ----
 
 xvar <- "slumarea"
 yvar <- "ageyears"
@@ -174,7 +161,7 @@ wash_age_plot <- (wash_age_plot[["mean_plot"]]
 )
 wash_age_plot
 
-#### ---- 6.4 Ethnicity ----
+#### ---- 6.3 Ethnicity ----
 
 tab_vars <- c("intvwyear", "slumarea", "ethnicity", "cat_wash")
 legend_title <- "WASH Indicators"
@@ -192,7 +179,7 @@ wash_ethnicity_plot <- (wash_ethnicity_plot[["prop_plot"]]
 )
 wash_ethnicity_plot
 
-#### ---- 6.5 Total number of people in the HH ----
+#### ---- 6.4 Total number of people in the HH ----
 
 numpeople_totalplot <- (ggplot(working_df, aes(numpeople_total, colour = cat_wash))
 	+ geom_density()
@@ -209,3 +196,88 @@ numpeople_totalplot <- (ggplot(working_df, aes(numpeople_total, colour = cat_was
 )
 numpeople_totalplot
 
+
+#### ---- 6.5 Wealth index ----
+
+tab_vars <- c("intvwyear", "slumarea", "wealthquintile", "cat_wash")
+legend_title <- "WASH Indicators"
+wash_wealthquintile_plot <- (working_df
+	%>% propPlot(tab_vars, legend_title)
+)
+wash_wealthquintile_plot <- (wash_wealthquintile_plot[["prop_plot"]] 
+	+ facet_grid(wealthquintile ~ slumarea)
+	+ theme(axis.text.x=element_text(angle=90))
+	+ scale_colour_brewer(palette="Dark2")
+	+ labs(x = "Years"
+		, title = "WASH and wealth"
+	)
+	+ theme(legend.position = "bottom")
+)
+wash_wealthquintile_plot
+
+
+#### ---- 6.6 Poverty line ----
+
+tab_vars <- c("intvwyear", "slumarea", "isbelowpovertyline", "cat_wash")
+legend_title <- "WASH Indicators"
+wash_isbelowpovertyline_plot <- (working_df
+	%>% propPlot(tab_vars, legend_title)
+)
+wash_isbelowpovertyline_plot <- (wash_isbelowpovertyline_plot[["prop_plot"]] 
+	+ facet_grid(isbelowpovertyline ~ slumarea)
+	+ theme(axis.text.x=element_text(angle=90))
+	+ scale_colour_brewer(palette="Dark2")
+	+ labs(x = "Years"
+		, title = "WASH and Poverty line"
+	)
+	+ theme(legend.position = "bottom")
+)
+wash_isbelowpovertyline_plot
+
+#### ---- 6.7 Hunger scale ----
+
+tab_vars <- c("intvwyear", "slumarea", "hhdhungerscale", "cat_wash")
+legend_title <- "WASH Indicators"
+wash_hhdhungerscale_plot <- (working_df
+	%>% propPlot(tab_vars, legend_title)
+)
+wash_hhdhungerscale_plot <- (wash_hhdhungerscale_plot[["prop_plot"]] 
+	+ facet_grid(hhdhungerscale ~ slumarea)
+	+ theme(axis.text.x=element_text(angle=90))
+	+ scale_colour_brewer(palette="Dark2")
+	+ labs(x = "Years"
+		, title = "WASH and hunger scale"
+	)
+	+ theme(legend.position = "bottom")
+)
+wash_hhdhungerscale_plot
+
+#### ---- 6.8 Household Expenditure ----
+
+expend_total_USD_per_centered_plot <- (ggplot(working_df, aes(x = expend_total_USD_per_centered, y = cat_wash_num, colour = slumarea))
+	+ stat_sum(alpha = 0.25, na.rm = TRUE)
+	+ facet_wrap(~intvwyear)
+	+ geom_smooth(aes(lty = slumarea)
+		, method = "gam"
+		, method.args = list(family = "binomial")
+		, formula = y~s(x, k = 20)
+		, alpha = 0.1
+		, na.rm = TRUE
+	)
+	+ labs(title = "WASH and HH Expenditure"
+		, x = "Centered Expenditure (USSD)"
+		, y = "WASH Indicator"
+	)
+	+ theme(plot.title = element_text(hjust = 0.5)
+		, legend.position = "bottom"
+	)
+)
+print(expend_total_USD_per_centered_plot)
+
+descriptive_saved_plots <- sapply(grep("_plot$", ls(), value = TRUE), get)
+
+save(file = "descriptives.rda"
+	, working_df
+	, codebook
+	, descriptive_saved_plots
+)

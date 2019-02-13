@@ -49,11 +49,14 @@ working_df <- (working_df
 			, breaks = cats
 			, include.lowest = TRUE
 			, labels = c(0, 1)
-			, ordered_result = TRUE
+#			, ordered_result = TRUE
 		)
 	)
 )
 
+
+codebook <- updateCodebook("wash_score", "Composite PC score for WASH variables - New")
+codebook <- updateCodebook("cat_wash", "Catogorized composite WASH variable - New")
 
 save(file = "logisticpca.rda"
 	, working_df
