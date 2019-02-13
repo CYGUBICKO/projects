@@ -27,6 +27,7 @@ library(ggplot2)
 #library("papeR")
 library(DT)
 library(dplyr)
+library(pander)
 
 theme_set(theme_bw() +
 	theme(panel.spacing=grid::unit(0,"lines")))
@@ -36,7 +37,7 @@ theme_set(theme_bw() +
 ```{r}
 load("cleaning.rda")
 load("descriptives.rda")
-load("glmmmModel.rda")
+load("glmmModel.rda")
 ```
 
 <br><br>
@@ -207,19 +208,28 @@ descriptive_saved_plots[["prop_wash_plot"]]
 
 ## Generalized Linear Mixed Models
 
+### Model 1
+
+The specification for this model was as follows:
+
+$$wash = demographs + social + economics + slum + year + \mathbf{(1 + year|hh\_id)}$$
+
+
 ```{r}
 gmler_summary <- summary(wash_gmler_model)
+#print(gmler_summary)
 ```
 
-Random intercepts:
+Random Effect:
 
 ```{r}
-random_intercepts <- (as.data.frame(gmler_summary[["varcor"]])
-  %>% select(-c("var1", "var2"))
-  %>% mutate(vcov = round(vcov, 5))
-  %>% mutate(sdcor = round(sdcor, 5))
-)
-DT::datatable(random_intercepts, rownames = FALSE)
+# random_intercepts <- (as.data.frame(gmler_summary[["varcor"]])
+#   %>% select(-c("var1", "var2"))
+#   %>% mutate(vcov = round(vcov, 5))
+#   %>% mutate(sdcor = round(sdcor, 5))
+# )
+#DT::datatable(random_intercepts, rownames = FALSE)
+pander(gmler_summary[["varcor"]])
 ```
 
 Fixed effects:
@@ -230,3 +240,8 @@ DT::datatable(fixed_effects)
 ```
 
 
+### Model 2
+
+Mike and Morgan suggest another way to kind of to multi-variate GLMM by reshaping the dataset to long format (along WASH variables) and then treating the new 'WASH indicator' as one of the fixed efffects.
+
+$$wash = (demographs + social + economics + slum + year)*wash\_indicator + \mathbf{(1 + year|hh\_id:wash\_indicator)}$$

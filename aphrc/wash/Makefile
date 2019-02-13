@@ -59,8 +59,9 @@ descriptives.Rout: descriptives.R
 
 # Analysis
 ## 1. Generalized Linear Mixed-effects Model (GLMM)
-glmmmModel.Rout: glmmmModel.R
+glmmModel.Rout: glmmModel.R
 
+# Unsupervised learning (Clustering)
 
 ## Report
 wash_report.html: wash_report.Rmd
@@ -68,7 +69,7 @@ wash_report.html: wash_report.Rmd
 ######################################################################
 
 clean: 
-	rm -f *Rout.*  *.Rout .*.RData .*.Rout.* .*.wrapR.* .*.Rlog *.RData *.wrapR.* *.Rlog
+	rm -f *Rout.*  *.Rout .*.RData .*.Rout.* .*.wrapR.* .*.Rlog *.RData *.wrapR.* *.Rlog *.rdeps *.rda .*.rdeps .*.rda
 
 ######################################################################
 
