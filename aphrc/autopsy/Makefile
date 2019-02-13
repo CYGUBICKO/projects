@@ -79,7 +79,7 @@ autopsy_descriptive_report.html: demographics.rda generalsymptoms.rda cleaningVA
 ######################################################################
 
 clean: 
-	rm -f *Rout.*  *.Rout .*.RData .*.Rout.* .*.wrapR.* .*.Rlog *.RData *.wrapR.* *.Rlog
+	rm -f *Rout.*  *.Rout .*.RData .*.Rout.* .*.wrapR.* .*.Rlog *.RData *.wrapR.* *.Rlog *.rdeps .*.rdeps .*.rda *.rda
 
 ######################################################################
 
