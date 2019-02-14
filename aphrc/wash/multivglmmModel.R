@@ -26,6 +26,7 @@ working_df <- (working_df
 	%>% mutate_at("wash_variable", factor)
 	%>% mutate(wash_variable_value = ifelse(wash_variable=="Improved", 1, 0))
 	%>% mutate_at("wash_variable_value", as.numeric)
+	%>% mutate_at("intvwyear", as.numeric)
 )
 
 # Multi-variate GLMM
