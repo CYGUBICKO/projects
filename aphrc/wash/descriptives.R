@@ -17,21 +17,6 @@ load("descriptivePlots.rda")
 theme_set(theme_bw()+
 theme(panel.spacing=grid::unit(0,"lines")))
 
-# Some cleaning
-
-factors <- function(x){
-	factor(x, levels = c(1, 0), labels = c( "Improved", "Unimproved"))
-}
-
-working_df <- (working_df
-	%>% mutate_at(c(wash_vars, "cat_wash"), funs(factors))
-	%>% mutate(expend_total_USD_per_centered = scale(as.numeric(expend_total_USD_per), scale = FALSE))
-	%>% mutate(cat_wash_num = ifelse(cat_wash=="Improved", 1, 0))
-)
-
-codebook <- updateCodebook("expend_total_USD_per_centered", "Centered total HH expenditure - New")
-codebook <- updateCodebook("cat_wash_num", "0/1 Categorized composite WASH variable - New")
-
 #### ---- 1. Water sources ----
 
 tab_vars <- c("intvwyear", "slumarea", "cat_hhwatersource")

@@ -24,8 +24,13 @@ slumarea_tab <- (working_df
 )
 
 # Drop imputed cases
+patterns <- c("^korogo", "^viwanda", "NIU|miss|don")
+replacements <- c("Korogocho", "Viwandani", NA)
 working_df <- (working_df
 	%>% mutate(slumarea_keepcase = ifelse(grepl("korogocho|viwandani", slumarea), 1, 0))
+	%>% recodeLabs("slumarea", patterns, replacements, insert = FALSE)
+	%>% mutate_at("slumarea", factor)
+	%>% mutate_at("hhid_anon", factor)
 )
 
 #### ---- 2. Gender -----
@@ -42,10 +47,11 @@ working_df <- (working_df
 
 ## Convert yes and no to 1 and 0, and NA otherwise
 
-patterns <- c("NIU|miss|don")
-replacements <- c(NA)
+patterns <- c("^female", "^male", "NIU|miss|don")
+replacements <- c("Female", "Male", NA)
 working_df <- (working_df
 	%>% recodeLabs("gender", patterns, replacements, insert = FALSE)
+	%>% mutate_at("gender", factor)
 )
 
 
@@ -84,6 +90,7 @@ patterns <- c("NIU|miss|don")
 replacements <- c(NA)
 working_df <- (working_df
 	%>% recodeLabs("expend_total_USD_per", patterns, replacements, insert = FALSE)
+	%>% mutate_at("expend_total_USD_per", as.numeric)
 )
 
 
@@ -96,14 +103,16 @@ isbelowpovertyline_tab <- (working_df
 
 ## Convert yes and no to 1 and 0, and NA otherwise
 
-patterns <- c("NIU|miss|don")
-replacements <- c(NA)
+patterns <- c("^no", "^yes", "NIU|miss|don")
+replacements <- c("No", "Yes", NA)
 working_df <- (working_df
 	%>% recodeLabs("isbelowpovertyline", patterns, replacements, insert = FALSE)
+	%>% mutate_at("isbelowpovertyline", factor)
+	%>% mutate(isbelowpovertyline = relevel(isbelowpovertyline, ref = "No"))
 )
 
 
-#### ---- 6. Hunder scale -----
+#### ---- 6. Hunger scale -----
 
 hhdhungerscale_tab <- (working_df
 	%>% propFunc("hhdhungerscale", coltotal = TRUE)
@@ -112,10 +121,12 @@ hhdhungerscale_tab <- (working_df
 
 ## Convert yes and no to 1 and 0, and NA otherwise
 
-patterns <- c("NIU|miss|don")
-replacements <- c(NA)
+patterns <- c("severely", "mildly|moderately", "food secure", "NIU|miss|don")
+replacements <- c("Severely insecure", "Mildly/Moderately insecure", "Secure" , NA)
 working_df <- (working_df
 	%>% recodeLabs("hhdhungerscale", patterns, replacements, insert = FALSE)
+	%>% mutate_at("hhdhungerscale", factor)
+	%>% mutate(hhdhungerscale = relevel(hhdhungerscale, ref = "Severely insecure"))
 )
 
 #### ---- 7. Ethnicity -----
@@ -131,6 +142,8 @@ patterns <- c("kikuyu|meru|embu", "luhya", "luo", "kamba", "kisii", "other|^bora
 replacements <- c("Kikuyu", "Luhya", "Luo", "Kamba", "Kisii", "Other", NA)
 working_df <- (working_df
 	%>% recodeLabs("ethnicity", patterns, replacements, insert = FALSE)
+	%>% mutate_at("ethnicity", factor)
+	%>% mutate(ethnicity = relevel(ethnicity, ref = "Other"))
 )
 
 #### ---- 8. Number of people living in the structure -----
@@ -166,6 +179,15 @@ working_df <- (working_df
 )
 
 
+#### ---- Wealth quintile ----
+
+patterns <- c("^lowe", "^seco", "^midd", "^four", "^highe", "NIU|miss|don")
+replacements <- c("Lowest", "Second", "Middle", "Fourth", "Highest", NA)
+working_df <- (working_df
+	%>% recodeLabs("wealthquintile", patterns, replacements, insert = FALSE)
+	%>% mutate_at("wealthquintile", factor)
+	%>% mutate(wealthquintile = relevel(wealthquintile, ref = "Lowest"))
+)
 #### ---- Missingness -----
 
 ## Proportion per variable merged with codebook
@@ -191,7 +213,6 @@ no_vars_droped <- length(vars_droped)
 working_df <- (working_df
   %>% select(-c(vars_droped))
 )
-
 
 #### ---- Cases to completely drop ----
 

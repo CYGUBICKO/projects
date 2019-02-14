@@ -244,4 +244,6 @@ DT::datatable(fixed_effects)
 
 Mike and Morgan suggest another way to kind of to multi-variate GLMM by reshaping the dataset to long format (along WASH variables) and then treating the new 'WASH indicator' as one of the fixed efffects.
 
+----
+
 $$wash = (demographs + social + economics + slum + year)*wash\_indicator + \mathbf{(1 + year|hh\_id:wash\_indicator)}$$

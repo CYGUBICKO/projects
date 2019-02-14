@@ -50,6 +50,9 @@ cleaning.Rout: cleaning.R
 complete.Rout: complete.R
 # wash_codebook.csv: complete.Rout ;
 
+# Select only variables for analysis
+analysisdata.Rout: analysisdata.R
+
 # Logistic PCA to create a single variable for WASH variables
 logisticpca.Rout: logisticpca.R
 
@@ -60,6 +63,9 @@ descriptives.Rout: descriptives.R
 # Analysis
 ## 1. Generalized Linear Mixed-effects Model (GLMM)
 glmmModel.Rout: glmmModel.R
+
+## 2. Multivariate GLMM
+multivglmmModel.Rout: multivglmmModel.R
 
 # Unsupervised learning (Clustering)
 

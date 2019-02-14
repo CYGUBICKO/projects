@@ -12,7 +12,7 @@ library(compiler)
 library(parallel)
 library(boot)
 
-load("descriptives.rda")
+load("logisticpca.rda")
 
 # Mixed effect logistic regression using glmer
 working_df <- (working_df 
@@ -21,7 +21,7 @@ working_df <- (working_df
 
 start_time <- Sys.time()
 
-wash_gmler_model <- glmer(cat_wash_num ~ ageyears + gender + ethnicity + numpeople_total + hhdhungerscale + wealthquintile + expend_total_USD_per_centered + slumarea + intvwyear + (1 + intvwyear|hhid_anon)
+wash_gmler_model <- glmer(cat_wash_num ~ ageyears + gender + ethnicity + numpeople_total + hhdhungerscale + isbelowpovertyline + wealthquintile + expend_total_USD_per_centered + slumarea + intvwyear + (1 + intvwyear|hhid_anon)
 	, data = working_df
 	, family = binomial
 	, control = glmerControl(optimizer = "bobyqa")

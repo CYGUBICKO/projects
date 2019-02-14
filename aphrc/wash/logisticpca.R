@@ -7,25 +7,12 @@ library(dplyr)
 library(logisticPCA)
 
 load("globalFunctions.rda")
-load("complete.rda")
+load("analysisdata.rda")
 
-## Conduct logistic PCA to create a single variable for the three wash variables:
+## Conduct logistic PCA to create a single variable for the three wash variables (wash_vars):
 # * cat_hhwatersource
 # * cat_hhtoilettype
 # * cat_hhgarbagedisposal
-
-wash_vars <- grep("^cat_", colnames(working_df), value = TRUE)
-
-## Convert Improved and Unimproved to 1 and 0, respectively:
-
-patterns <- c("^improved", "unimproved")
-replacements <- c(1, 0)
-working_df <- (working_df
-	%>% recodeLabs(wash_vars, patterns, replacements, insert = FALSE)
-	%>% mutate_at(wash_vars, as.numeric)
-	%>% rowsumFunc(wash_vars, "total_wash_indicators")
-	%>% mutate(wash_access_rate = total_wash_indicators/(length(wash_vars)))
-)
 
 #### ---- 1. Cross-validation -----
 # Determine the optimal number of Bernoulli saturated models?? (https://cran.r-project.org/web/packages/logisticPCA/vignettes/logisticPCA.html)
@@ -54,14 +41,28 @@ working_df <- (working_df
 	)
 )
 
-
+## Update codebook
 codebook <- updateCodebook("wash_score", "Composite PC score for WASH variables - New")
 codebook <- updateCodebook("cat_wash", "Catogorized composite WASH variable - New")
+
+# Some cleaning
+
+factors <- function(x){
+	factor(x, levels = c(1, 0), labels = c( "Improved", "Unimproved"))
+}
+
+working_df <- (working_df
+	%>% mutate_at(c(wash_vars, "cat_wash"), funs(factors))
+	%>% mutate(cat_wash_num = ifelse(cat_wash=="Improved", 1, 0))
+)
+
+codebook <- updateCodebook("expend_total_USD_per_centered", "Centered total HH expenditure - New")
+codebook <- updateCodebook("cat_wash_num", "0/1 Categorized composite WASH variable - New")
 
 save(file = "logisticpca.rda"
 	, working_df
 	, codebook
-	, wash_vars
 	, logistic_pca
+	, wash_vars
 )
 

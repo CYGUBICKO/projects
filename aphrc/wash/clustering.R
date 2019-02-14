@@ -17,7 +17,7 @@ load("descriptivePlots.rda")
 #### ---- Determine k ----
 
 factor_vars <- c("hhid_anon"
-	, "slumarea", "gender", "ethnicity"
+	, "slumarea", "gender", "ethnicity", "isbelowpovertyline"
 )
 ordered_factors_vars <- c("hhdhungerscale"
 	, "wealthquintile", "cat_hhwatersource"
