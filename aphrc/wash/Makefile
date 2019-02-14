@@ -31,7 +31,7 @@ $(ms)/Makefile:
 ######################################################################
 
 ## Loading data and defining some important functions
-## ln -s ~/Dropbox/aphrc/wash/data 
+## ln -fs ~/Dropbox/aphrc/wash/data 
 
 Ignore += data docs
 
@@ -44,7 +44,7 @@ globalFunctions.Rout: globalFunctions.R
 loadData.Rout: data/NUHDSS_Wash.dta loadData.R
 
 # Some cleaning
-cleaning.Rout: cleaning.R
+## cleaning.Rout: cleaning.R
 
 # Drop cases
 complete.Rout: complete.R
