@@ -68,6 +68,7 @@ glmmModel.Rout: glmmModel.R
 multivglmmModel.Rout: multivglmmModel.R
 
 # Unsupervised learning (Clustering)
+clustering.Rout: clustering.R
 
 ## Report
 wash_report.html: wash_report.Rmd
