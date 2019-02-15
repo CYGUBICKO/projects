@@ -44,7 +44,7 @@ globalFunctions.Rout: globalFunctions.R
 loadData.Rout: data/NUHDSS_Wash.dta loadData.R
 
 # Some cleaning
-## cleaning.Rout: cleaning.R
+cleaning.Rout: cleaning.R
 
 # Drop cases
 complete.Rout: complete.R
