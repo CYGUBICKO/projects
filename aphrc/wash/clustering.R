@@ -15,17 +15,22 @@ load("descriptivePlots.rda")
 #The goal is to find k representative objects which minimize the sum of the dissimilarities of the observations to their closest representative object.
 
 #### ---- Determine k ----
+factors <- function(x){
+	factor(x, levels = c(0, 1), labels = c("Unimproved", "Improved"))
+}
 
-factor_vars <- c("hhid_anon"
-	, "slumarea", "gender", "ethnicity", "isbelowpovertyline"
-)
-ordered_factors_vars <- c("hhdhungerscale"
-	, "wealthquintile", "cat_hhwatersource"
-	, "cat_hhtoilettype", "cat_hhgarbagedisposal"
-)
-numeric_vars <- c("intvwyear"
-	, "ageyears", "numpeople_total"
-	, "expend_total_USD_per_centered"
+cluster_vars <- colnames(working_df)[!colnames(working_df) %in% c("total_wash_indicators", "wash_access_rate")]
+
+cluster_df <- (working_df
+	%>% select(cluster_vars)
+	%>% mutate_at(wash_vars, funs(factors))
 )
 
-cluster_df <- select
+var_levels <- as.data.frame(sapply(cluster_df
+		, function(x) length(levels(x))
+	)
+)
+colnames(var_levels) <- "levels"
+bin_vars <- row.names(var_levels)[var_levels[["levels"]]==2]
+bin_var_pos <-  grep(bin_vars, colnames(cluster_df))
+
