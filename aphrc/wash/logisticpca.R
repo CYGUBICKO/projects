@@ -28,7 +28,7 @@ logistic_pca <- logisticPCA(wash_vars_df, k = 2, m = 0, main_effects = TRUE)
 
 # Create the two categories (Unimproved, Improved)
 
-score <- logistic_pca[["PCs"]][,2]
+score <- logistic_pca[["PCs"]][,1]
 cats <- quantile(score, probs=seq(0, 1, by = 0.5), na.rm = TRUE)
 working_df <- (working_df
 	%>% mutate(wash_score = score
