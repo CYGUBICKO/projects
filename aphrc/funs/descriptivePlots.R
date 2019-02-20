@@ -2,22 +2,29 @@
 
 propPlot <- function(df
   	, tab_vars
+	, color_var
   	, legend_title
   	, y_limits = c(0,1)
+	, filter_rule
 	){
-	
+	# filter_rule = quo(var %in% "what") or filter_rule = quo(var1 cond &/| var1...)
 	var <- last(tab_vars)
 	issue_labs <- extractLabs(var)
 	summary_df <- (df
 	   %>% propFunc(tab_vars)
 	   %>% drop_na()
 	)
+	if (!missing(filter_rule)){
+		summary_df <- (summary_df
+			%>% filter(UQ(filter_rule))
+		)
+	}
 	
 	prop_plot <- (ggplot(summary_df
 	   , aes_string(x = first(tab_vars)
 			, y = "prop"
-	  		, group = var
-	   	, color = var
+	  		, group = color_var
+	   	, color = color_var
 		)
 		)
 	   + geom_line()
@@ -42,7 +49,9 @@ propPlot <- function(df
 
 countPlot <- function(df
   	, tab_vars
+	, color_var
   	, legend_title
+	, filter_rule
 	){
 	
 	var <- last(tab_vars)
@@ -51,11 +60,16 @@ countPlot <- function(df
 	   %>% propFunc(tab_vars)
 	   %>% drop_na()
 	)
+	if (!missing(filter_rule)){
+		summary_df <- (summary_df
+			%>% filter(UQ(filter_rule))
+		)
+	}
 	count_plot <- (ggplot(summary_df
 	   , aes_string(x = first(tab_vars)
 			, y = "n"
-	  		, group = var
-	   	, color = var
+	  		, group = color_var
+	   	, color = color_var
 		)
 		)
 	   + geom_line()
@@ -74,7 +88,7 @@ countPlot <- function(df
 # colvar - Variable to use in colouring or legend
 # xvar - x variable
 
-meanPlot <- function(df, xvar, yvar, colvar){
+meanPlot <- function(df, xvar, yvar, color_var){
 	issue_labs <- extractLabs(yvar)
 	mean_plot <- (ggplot(df, aes_string(x = xvar))
 		+ geom_boxplot(aes_string(y = yvar, colour = colvar), outlier.colour = NULL)
