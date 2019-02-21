@@ -12,6 +12,8 @@ library(Rtsne)
 load("globalFunctions.rda")
 load("analysisdata.rda")
 
+set.seed(7902)
+
 #Since the clustering data contains both categorical and numeric variables, we can not therefore use the k-modes clustering. K-medoids clustering allows both numeric and categorical data.
 
 #The goal is to find k representative objects which minimize the sum of the dissimilarities of the observations to their closest representative object.
@@ -28,7 +30,7 @@ cluster_df <- (working_df
 	%>% mutate_at(wash_vars, funs(factors))
 	%>% as.data.frame()
 )
-cluster_df <- cluster_df[1:2000,]
+cluster_df <- cluster_df[sample(1:nrow(working_df), 8000),]
 
 var_levels <- as.data.frame(sapply(cluster_df
 		, function(x) length(levels(x))
@@ -67,13 +69,15 @@ plot(1:10, sil_width,
 lines(1:10, sil_width)
 
 # perform clustering
-pam_fit <- pam(gower_distance, diss = TRUE, k = 7)
+#k <- which.max(sil_width)
+k <- 4
+pam_fit <- pam(gower_distance, diss = TRUE, k = k)
 
 # add cluster variable to the datast
 cluster_df$cluster <- pam_fit$clustering
 
-cluster_df$cluster2 <- factor(pam_fit$clustering, levels = 1:7,
-                                    labels = paste("Cluster",1:7, sep=""))
+cluster_df$cluster2 <- factor(pam_fit$clustering, levels = 1:k,
+                                    labels = paste("Cluster",1:k, sep=""))
 
 
 # create t-SNE object - 2 dimensions
