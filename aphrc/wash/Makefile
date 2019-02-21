@@ -35,7 +35,7 @@ $(ms)/Makefile:
 
 Ignore += data docs
 
-Sources += $(wildcard *.R *.Rmd)
+Sources += $(wildcard *.R *.rmd)
 
 # Define all important R-functions in one file
 globalFunctions.Rout: globalFunctions.R
@@ -70,7 +70,11 @@ multivglmmModel.Rout: multivglmmModel.R
 # Unsupervised learning (Clustering)
 
 ## Report
-wash_report.html: wash_report.Rmd
+wash_report.html: wash_report.rmd
+
+## https://cygubicko.github.io/projects/test.html
+test.html: test.rmd
+## test.rmd.rdeps: test.rmd makestuff/rmdstep.pl
 
 ######################################################################
 

@@ -1,0 +1,258 @@
+---
+title: 'APHRC WASH Data'
+author: "Steve and Jonathan"
+date: " `r as.Date(Sys.time())` "
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
+---
+
+```{r setup, include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(echo = FALSE
+	, warning = FALSE
+	, message = FALSE
+	, fig.width = 10
+	, fig.height = 10
+	, results = "asis")
+options(width = 12)
+library(ggplot2)
+#library(plotly)
+#library(gapminder)
+#library("papeR")
+library(DT)
+library(dplyr)
+library(pander)
+
+theme_set(theme_bw() +
+	theme(panel.spacing=grid::unit(0,"lines")))
+```
+
+```{r}
+load("cleaning.rda")
+load("descriptives.rda")
+```
+
+<br><br>
+
+# Introduction
+
+Here we present a summary of processing steps on WASH dataset.
+
+* The aim is to **investigate the contribution of demographic, social or economic factors to improved water sanitation and hygien (WASH) among the urban poor**.
+
+<br><br>
+
+## Activities
+
+* Three WASH variables were created as per WHO definition (**Damazo**). See codebook for variable labels.
+  
+  * cat_watersource
+  
+  * cat_toilettype
+  
+  * cat_garbagedisposal
+
+* For every variable, cases with _NIU or Missing: Impute_ were recoded to _NA_. 
+
+* Cases which had _NA_ in **Gender** and **Age** were completely dropped.
+
+* Combined smaller groups to others.
+
+* A composite variable was created from the three was variables using **logistic PCA**. 
+  
+  * PCs scores were used to create categories (quantiles).
+  
+* Centered the Household total expenditure.
+
+* For every case, we summed the number of WASH indicators the had access to (max = 3) and calculated the proportion **(No sure how to call this rate)** Is it possible to model the total as poisson process?
+  
+* Visualization  plots for individual WASH were created but initial modelling is on composite WASH variable.
+
+* We also present the result from Generalized Linear Mixed-effect Model using _lme4_ package _(glmer)_. 
+
+<br><br>
+
+## Proposed modelling approaches
+
+* Use scoring approaches e.g., PCA to create composite WASH variable and then apply GLMM.
+
+* Apply multivariate mixed models; either using pseudo multivariate approach in _(glmer)_ or use other approaches proposed by **Samuel**.
+
+* Assume equal weights for each of the WASH indicator variables and model as a count data. We could use Poisson or Negative Binomial.
+
+* Model them separately.
+
+* Any other suggestions?
+<br><br>
+
+
+## Codebook
+
+```{r}
+datatable(codebook, caption = "Codebook")
+```
+
+<br><br>
+
+# Data Exploration
+
+## Missingness
+
+The table below summarizes the proportion of missingness for all the variables.
+
+```{r}
+miss_prop_df_tab
+```
+
+* A total of `r no_vars_droped` variables which had $100\%$ missingness were dropped.
+
+<br><br>
+
+## Descriptives
+
+We begin by showing the distribution of individual WASH variables (indicators) over time and space (slum area). Thereafter, we show the distribution of demographic, social and economic variables, of interest, based on composite WASH variable.
+
+### Water source
+
+```{r}
+descriptive_saved_plots[["water_plot"]]
+```
+
+<br><br>
+
+### Toilet type
+
+```{r}
+descriptive_saved_plots[["toilet_plot"]]
+```
+
+<br><br>
+
+### Garbage disposal
+
+```{r}
+descriptive_saved_plots[["garbage_plot"]]
+```
+
+
+<br><br>
+
+### Composite WASH indicator variable
+
+```{r}
+descriptive_saved_plots[["cat_wash_plot"]]
+```
+
+<br><br>
+
+#### Composite WASH indicator and Gender
+
+```{r}
+descriptive_saved_plots[["wash_gender_plot"]]
+```
+
+<br><br>
+
+#### Composite WASH indicator and Age
+
+```{r}
+descriptive_saved_plots[["wash_gender_plot"]]
+```
+
+<br><br>
+
+#### Composite WASH indicator and Ethnicity
+
+```{r}
+descriptive_saved_plots[["wash_ethnicity_plot"]]
+```
+
+<br><br>
+
+#### Composite WASH indicator and Hunger scale
+
+```{r}
+descriptive_saved_plots[["wash_hhdhungerscale_plot"]]
+```
+
+<br><br>
+
+#### Composite WASH indicator and Poverty line
+
+```{r}
+descriptive_saved_plots[["wash_isbelowpovertyline_plot"]]
+```
+
+<br><br>
+
+#### Composite WASH indicator and Wealth quintile
+
+```{r}
+descriptive_saved_plots[["wash_wealthquintile_plot"]]
+```
+
+<br><br>
+
+#### Composite WASH indicator and Total household expenditure
+
+```{r}
+descriptive_saved_plots[["expend_total_USD_per_centered_plot"]]
+```
+
+
+<br><br>
+
+### Proportion of WASH indicators the respondent had access to.
+
+```{r}
+descriptive_saved_plots[["prop_wash_plot"]]
+```
+
+<br><br>
+
+# Data Analysis
+
+## Generalized Linear Mixed Models
+
+### Model 1
+
+The specification for this model was as follows:
+
+$$wash = demographs + social + economics + slum + year + \mathbf{(1 + year|hh\_id)}$$
+
+
+```{r}
+gmler_summary <- summary(wash_gmler_model)
+#print(gmler_summary)
+```
+
+Random Effect:
+
+```{r}
+# random_intercepts <- (as.data.frame(gmler_summary[["varcor"]])
+#   %>% select(-c("var1", "var2"))
+#   %>% mutate(vcov = round(vcov, 5))
+#   %>% mutate(sdcor = round(sdcor, 5))
+# )
+#DT::datatable(random_intercepts, rownames = FALSE)
+pander(gmler_summary[["varcor"]])
+```
+
+Fixed effects:
+
+```{r}
+fixed_effects <- as.data.frame(round(gmler_summary[["coefficients"]], 4))
+DT::datatable(fixed_effects)
+```
+
+
+### Model 2
+
+Mike and Morgan suggest another way to kind of to multi-variate GLMM by reshaping the dataset to long format (along WASH variables) and then treating the new 'WASH indicator' as one of the fixed effects.
+
+----
+
+$$wash = (demographs + social + economics + slum + year)*wash\_indicator + \mathbf{(1 + year|hh\_id:wash\_indicator)}$$
