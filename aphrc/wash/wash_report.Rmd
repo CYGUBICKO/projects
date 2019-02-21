@@ -80,6 +80,20 @@ Here we present a summary of processing steps on WASH dataset.
 
 <br><br>
 
+## Proposed modelling approaches
+
+* Use scoring approaches e.g., PCA to create composite WASH variable and then apply GLMM.
+
+* Apply multivariate mixed models; either using pseudo multivariate approach in _(glmer)_ or use other approaches proposed by **Samuel**.
+
+* Assume equal weights for each of the WASH indicator variables and model as a count data. We could use Poisson or Negative Binomial.
+
+* Model them separately.
+
+* Any other suggestions?
+<br><br>
+
+
 ## Codebook
 
 ```{r}
@@ -242,7 +256,7 @@ DT::datatable(fixed_effects)
 
 ### Model 2
 
-Mike and Morgan suggest another way to kind of to multi-variate GLMM by reshaping the dataset to long format (along WASH variables) and then treating the new 'WASH indicator' as one of the fixed efffects.
+Mike and Morgan suggest another way to kind of to multi-variate GLMM by reshaping the dataset to long format (along WASH variables) and then treating the new 'WASH indicator' as one of the fixed effects.
 
 ----
 
