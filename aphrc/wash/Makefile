@@ -74,7 +74,6 @@ wash_report.html: wash_report.rmd
 
 ## https://cygubicko.github.io/projects/test.html
 test.html: test.rmd
-## test.rmd.rdeps: test.rmd makestuff/rmdstep.pl
 
 ######################################################################
 
