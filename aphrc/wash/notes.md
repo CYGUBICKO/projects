@@ -1,4 +1,16 @@
+
+JD feels it is too early to start fitting multivariate models: we don't understand the data structure, and we don't understand multivariate models ☺. We can attack both of these problems separately, and do whatever we want, as long as we don't look at the real response variables. For me, the next two steps are
+
+* Look at the predictor variables and how they're structured and asked which ones to use and whether we can do the analysis at a household level instead of an individual level
+
+* Simulate fake response variables with different simple assumptions, maybe using just a subset of the data set since the data set is large, and see if we can make sense of multivariate model fits. At the beginning, we should probably start with a pretty simple set of predictors.
+
+We have to think about the form of predictor variables. Age should obviously be some sort of spline, and maybe intvwyear as well.
+
+----------------------------------------------------------------------
+
 Gender and age
+
 * Staged cases with "Missing: Impute)" to dropi
 
 Wealth index

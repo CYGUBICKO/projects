@@ -11,7 +11,8 @@ current: target
 
 # stuff
 
-Sources += Makefile
+Sources += Makefile notes.md
+Ignore += ../autopsy
 
 msrepo = https://github.com/dushoff
 ms = makestuff
@@ -78,6 +79,8 @@ wash_report.html: wash_report.rmd
 test.html: test.rmd
 
 ######################################################################
+
+Ignore += *.rda
 
 clean: 
 	rm -f *Rout.*  *.Rout .*.RData .*.Rout.* .*.wrapR.* .*.Rlog *.RData *.wrapR.* *.Rlog *.rdeps *.rda .*.rdeps .*.rda
