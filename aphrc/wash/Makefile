@@ -15,9 +15,11 @@ Sources += Makefile
 
 msrepo = https://github.com/dushoff
 ms = makestuff
+-include $(ms)/os.mk
+
+## Used by Steve to link data to right place
 Ignore += local.mk
 -include local.mk
--include $(ms)/os.mk
 
 # -include $(ms)/perl.def
 

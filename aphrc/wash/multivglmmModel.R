@@ -31,7 +31,13 @@ working_df <- (working_df
 
 start_time <- Sys.time()
 
-wash_multivgmler_model <- glmer(wash_variable_value ~ (ageyears + gender + ethnicity + numpeople_total + hhdhungerscale + isbelowpovertyline + wealthquintile + expend_total_USD_per_centered) * wash_variable + slumarea + intvwyear + (1 + intvwyear|hhid_anon:wash_variable)
+wash_multivgmler_model <- glmer(
+	wash_variable_value ~ (
+		ageyears + gender + ethnicity + numpeople_total 
+		+ hhdhungerscale 
+		+ isbelowpovertyline + wealthquintile 
+		+ expend_total_USD_per_centered
+	) * wash_variable + slumarea + intvwyear + (1 + intvwyear|hhid_anon:wash_variable)
 	, data = working_df
 	, family = binomial
 	, control = glmerControl(optimizer = "bobyqa")
