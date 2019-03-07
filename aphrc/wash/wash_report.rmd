@@ -37,6 +37,7 @@ theme_set(theme_bw() +
 ```{r}
 load("cleaning.rda")
 load("descriptives.rda")
+load("simulateResponse.rda")
 load("glmmModel.rda")
 ```
 
@@ -220,44 +221,102 @@ descriptive_saved_plots[["prop_wash_plot"]]
 
 # Data Analysis
 
+## Generalized Linear models
+
+In order to gain some understanding before engaging into a more complex mode, we simulated 'fake' response variable. 
+
+* To estimate $\beta$s, a logistic regression model _(glm)_ was used on the observed response variable. 
+* We then ran $1000$ simulations and for each simulation, calculate:
+
+	* $\mathbf{X\beta}$
+	* $p = \frac{1}{1 + \exp(-\mathbf{X\beta})}$
+	* _'Fake' y_
+		
+		* `y = rbinom(n, 1, p)`
+	
+	* Average _'Fake' y_ to obtain the proportion of 1s generated
+
+The first model, separately, fitted each of the wash variable:
+
+\begin{align}
+single\_wash\_var &\sim intvwyear + slumarea + ageyears\\ 
+	& + gender + ethnicity + numpeople\_total + isbelowpovertyline\\
+	& + wealthquintile + expend\_total\_USD\_per\_centered
+\end{align}
+
+```{r}
+yfake_glm_plot
+```
+
+The second model: Restructured the data into long format fitted the model on a single indicator variable.
+
+\begin{align}
+wash\_indicator &\sim (intvwyear + slumarea + ageyears\\
+	& + gender + ethnicity + numpeople\_total + isbelowpovertyline\\
+	& + wealthquintile + expend\_total\_USD\_per\_centered) * wash\_variable_label
+\end{align}
+
+
+```{r}
+glm_pseudo <- as.data.frame(round(model_summary_wash
+[["coefficients"]], 4))
+DT::datatable(glm_pseudo, options = list(paging = FALSE))
+```
+
+We then used the estimated $\beta$ (coeffs.) to simulate 'fake' y.
+
+* Merged with the labels
+* Distribution similar to the individual fitting
+
+```{r}
+yfake_glm_wash_plot
+```
+
+
+
+
+
+
+
 ## Generalized Linear Mixed Models
 
-### Model 1
 
-The specification for this model was as follows:
+<!-- ### Model 1 -->
 
-$$wash = demographs + social + economics + slum + year + \mathbf{(1 + year|hh\_id)}$$
+<!-- The specification for this model was as follows: -->
 
-
-```{r}
-gmler_summary <- summary(wash_gmler_model)
-#print(gmler_summary)
-```
-
-Random Effect:
-
-```{r}
-# random_intercepts <- (as.data.frame(gmler_summary[["varcor"]])
-#   %>% select(-c("var1", "var2"))
-#   %>% mutate(vcov = round(vcov, 5))
-#   %>% mutate(sdcor = round(sdcor, 5))
-# )
-#DT::datatable(random_intercepts, rownames = FALSE)
-pander(gmler_summary[["varcor"]])
-```
-
-Fixed effects:
-
-```{r}
-fixed_effects <- as.data.frame(round(gmler_summary[["coefficients"]], 4))
-DT::datatable(fixed_effects)
-```
+<!-- $$wash = demographs + social + economics + slum + year + \mathbf{(1 + year|hh\_id)}$$ -->
 
 
-### Model 2
+<!-- ```{r} -->
+<!-- gmler_summary <- summary(wash_gmler_model) -->
+<!-- #print(gmler_summary) -->
+<!-- ``` -->
 
-Mike and Morgan suggest another way to kind of to multi-variate GLMM by reshaping the dataset to long format (along WASH variables) and then treating the new 'WASH indicator' as one of the fixed effects.
+<!-- Random Effect: -->
 
-----
+<!-- ```{r} -->
+<!-- random_intercepts <- (as.data.frame(gmler_summary[["varcor"]]) -->
+<!--    %>% select(-c("var1", "var2")) -->
+<!--    %>% mutate(vcov = round(vcov, 5)) -->
+<!--    %>% mutate(sdcor = round(sdcor, 5)) -->
+<!--  ) -->
+<!-- DT::datatable(random_intercepts, rownames = FALSE) -->
+<!-- pander(gmler_summary[["varcor"]]) -->
+<!-- ``` -->
 
-$$wash = (demographs + social + economics + slum + year)*wash\_indicator + \mathbf{(1 + year|hh\_id:wash\_indicator)}$$
+<!-- Fixed effects: -->
+
+<!-- ```{r} -->
+<!-- fixed_effects <- as.data.frame(round(gmler_summary[["coefficients"]], 4)) -->
+<!-- DT::datatable(fixed_effects) -->
+<!-- ``` -->
+
+
+<!-- ### Model 2 -->
+
+<!-- Mike and Morgan suggest another way to kind of to multi-variate GLMM by reshaping the dataset to long format (along WASH variables) and then treating the new 'WASH indicator' as one of the fixed effects. -->
+
+<!-- ---- -->
+
+<!-- $$wash = (demographs + social + economics + slum + year)*wash\_indicator + \mathbf{(1 + year|hh\_id:wash\_indicator)}$$ -->

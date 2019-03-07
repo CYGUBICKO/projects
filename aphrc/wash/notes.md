@@ -1,4 +1,26 @@
 
+* Steve: Variables for analysis
+	
+	* Selected
+		
+		* slumarea
+		* interview year
+		* age
+		* gender
+		* ethnicity
+		* number of people in hh
+		* Poverty line
+		* wealthquintile
+		* hh expenditure
+
+	* Not sure
+
+		* Hunger scale
+		* Should I consider variations in hhid_anon
+		* How do we treat years? Factors or continous
+
+----------------------------------------------------------------------
+
 JD feels it is too early to start fitting multivariate models: we don't understand the data structure, and we don't understand multivariate models ☺. We can attack both of these problems separately, and do whatever we want, as long as we don't look at the real response variables. For me, the next two steps are
 
 * Look at the predictor variables and how they're structured and asked which ones to use and whether we can do the analysis at a household level instead of an individual level

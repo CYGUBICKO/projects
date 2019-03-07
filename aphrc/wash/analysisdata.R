@@ -19,6 +19,7 @@ wash_vars <- grep("^cat_", colnames(working_df), value = TRUE)
 patterns <- c("^improved", "unimproved")
 replacements <- c(1, 0)
 working_df <- (working_df
+	%>% mutate(intvwyear = as.numeric(levels(intvwyear))[intvwyear])
 	%>% recodeLabs(wash_vars, patterns, replacements, insert = FALSE)
 	%>% mutate_at(wash_vars, as.numeric)
 	%>% rowsumFunc(wash_vars, "total_wash_indicators")

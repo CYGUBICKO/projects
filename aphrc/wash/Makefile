@@ -38,7 +38,8 @@ $(ms)/Makefile:
 
 Ignore += data docs
 
-Sources += $(wildcard *.R *.rmd)
+subdirs += ../funs 
+Sources += $(wildcard *.R *.rmd) $(subdirs)
 
 # Define all important R-functions in one file
 globalFunctions.Rout: globalFunctions.R
@@ -63,12 +64,15 @@ logisticpca.Rout: logisticpca.R
 descriptivePlots.Rout: descriptivePlots.R
 descriptives.Rout: descriptives.R
 
+# Simulating Response variable
+simulateResponse.Rout: simulateResponse.R
+
 # Analysis
 ## 1. Generalized Linear Mixed-effects Model (GLMM)
 glmmModel.Rout: glmmModel.R
 
 ## 2. Multivariate GLMM
-multivglmmModel.Rout: multivglmmModel.R
+#multivglmmModel.Rout: multivglmmModel.R
 
 # Unsupervised learning (Clustering)
 
