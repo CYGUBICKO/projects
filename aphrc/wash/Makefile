@@ -38,7 +38,7 @@ $(ms)/Makefile:
 
 Ignore += data docs
 
-subdirs += ../funs 
+## subdirs += ../funs 
 Sources += $(wildcard *.R *.rmd) $(subdirs)
 
 # Define all important R-functions in one file
