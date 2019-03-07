@@ -67,6 +67,7 @@ descriptives.Rout: descriptives.R
 # Simulating Response variable
 simulateResponse.Rout: simulateResponse.R
 
+# Not to make. Just a demo for fake y
 simpleResponse.Rout: simpleResponse.R
 
 # Analysis

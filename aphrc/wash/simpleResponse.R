@@ -17,19 +17,17 @@ set.seed(7902)
 
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
-nsims <- 30
-people <- 10
+nsims <- 3000
+people <- 5000
 dat <- (
 	tibble(
 		wealth = sample(c("High", "Low"), size=people, replace=TRUE)
 	) %>% mutate(
 		water = rbinom(people, size=1
-			, prob = ifelse(wealth=="High", 0.8, 0.2)
+			, prob = ifelse(wealth=="High", 0.7, 0.3)
 		)
 	)
 )
-
-print(dat)
 
 predictors <- c("wealth")
 
@@ -40,11 +38,25 @@ model_form <- as.formula(paste0("water", "~ "
 print(model_form)
 
 # Fake response object
-fake_dat <- (dat
+yfake_obj_toilet <- (dat
 	%>% genfakeRes(model_form, ., nsims = nsims)
 )
 
-print(fake_dat)
+print(yfake_obj_toilet)
+
+yfake_df_toilet <- yfake_obj_toilet[["yfake"]] %>% mutate(variable = "Water")
+yobs_prop_toilet <- yfake_obj_toilet[["yobs_prop"]]
+
+yfake_glm_plot <- (ggplot(yfake_df_toilet, aes(x = yfake, fill = variable)) 
+	+ geom_density(alpha = 0.3)
+	+ geom_segment(aes(x = yobs_prop_toilet, xend = yobs_prop_toilet, y = 0, yend = 5)
+		, colour = "blue", arrow=arrow(length=unit(0.3,"cm"), ends = "first")
+	)
+	+ labs(x = "Prop. of fake 1s generated", y = "Desnsity")
+	+ ggtitle("Compare proportion of fake 1s generated vs observed")
+	+ theme(plot.title = element_text(hjust = 0.5))
+)
+print(yfake_glm_plot)
 
 quit()
 
@@ -145,16 +157,16 @@ yobs_prop_wash <- yfake_obj_wash[["yobs_prop"]]
 model_summary_wash <- yfake_obj_wash[["model_summary"]]
 model_summary_wash
 
-# Vizualize
+# vizualize
 yfake_glm_wash_plot <- (ggplot(yfake_df_wash, aes(x = yfake, fill = variable)) 
 	+ geom_density(alpha = 0.3)
-	+ scale_fill_manual(name = "Improved"
+	+ scale_fill_manual(name = "improved"
 		, values = cols
-		, breaks = c("Water source", "Toilet type", "Garbage disposal")
-		, labels = c("Water source", "Toilet type", "Garbage disposal")
+		, breaks = c("water source", "toilet type", "garbage disposal")
+		, labels = c("water source", "toilet type", "garbage disposal")
 	)
-	+ labs(x = "Prop. of fake 1s generated", y = "Desnsity")
-	+ ggtitle("Compare proportion of fake 1s generated (Psedo multi-variate)")
+	+ labs(x = "prop. of fake 1s generated", y = "desnsity")
+	+ ggtitle("compare proportion of fake 1s generated (psedo multi-variate)")
 	+ theme(plot.title = element_text(hjust = 0.5))
 )
 print(yfake_glm_wash_plot)

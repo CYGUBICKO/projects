@@ -30,8 +30,8 @@ genfakeRes <- function(formular, data = data, nsims = 1000){
 		y_rep[s, ] <- rbinom(n, 1, p)
 	}
 
-	# Compute the proportion of 1s in the fake response
-	sim_prop <- apply(y_rep, 2, function(x){
+	# Compute the proportion of 1s in the fake response per sim
+	sim_prop <- apply(y_rep, 1, function(x){
 			p <- sum(x == 1)/length(x)
 			return(p)
 		}
@@ -41,7 +41,10 @@ genfakeRes <- function(formular, data = data, nsims = 1000){
 	# Proportion of 1s in the observed data
 	res <- all.vars(formular)[[1]]
 	inter <- last(all.vars(formular)) # In case ther is interaction in the model
-	yobs_prop <- sum(data[, res]==1)/length(data[, res])
+	yobs_prop <- (model_df
+		%>% summarize_at(res, mean)
+		%>% pull()
+	)
 	out <- list(yfake = yfake_df
 		, yobs_prop = yobs_prop
 		, model_summary = model_summary

@@ -92,12 +92,15 @@ yfake_df_garbage <- yfake_obj_garbage[["yfake"]] %>% mutate(variable = "Garbage 
 yobs_prop_garbage <- yfake_obj_garbage[["yobs_prop"]]
 
 yfake_df <- rbind(yfake_df_water, yfake_df_toilet, yfake_df_garbage)
-head(yfake_df)
 
 # Compare the results with the observed
 cols <- c("Water source" = "red"
 	, "Toilet type" = "blue"
 	, "Garbage disposal" = "green"
+)
+
+obs_prop_df <- data.frame(props = c(yobs_prop_water, yobs_prop_toilet, yobs_prop_garbage)
+	, variable = c("Water source", "Toilet type", "Garbage disposal")
 )
 
 yfake_glm_plot <- (ggplot(yfake_df, aes(x = yfake, fill = variable)) 
@@ -107,18 +110,14 @@ yfake_glm_plot <- (ggplot(yfake_df, aes(x = yfake, fill = variable))
 		, breaks = c("Water source", "Toilet type", "Garbage disposal")
 		, labels = c("Water source", "Toilet type", "Garbage disposal")
 	)
-	+ geom_segment(aes(x = yobs_prop_water, xend = yobs_prop_water, y = 0, yend = 5)
-		, colour = "red", arrow=arrow(length=unit(0.3,"cm"), ends = "first")
-	)
-	+ geom_segment(aes(x = yobs_prop_toilet, xend = yobs_prop_toilet, y = 0, yend = 5)
-		, colour = "blue", arrow=arrow(length=unit(0.3,"cm"), ends = "first")
-	)
-	+ geom_segment(aes(x = yobs_prop_garbage, xend = yobs_prop_garbage, y = 0, yend = 5)
-		, colour = "green", arrow=arrow(length=unit(0.3,"cm"), ends = "first")
+	+ geom_vline(data = obs_prop_df, aes(xintercept = props, fill = variable)
+	, linetype="dashed"
 	)
 	+ labs(x = "Prop. of fake 1s generated", y = "Desnsity")
 	+ ggtitle("Compare proportion of fake 1s generated vs observed")
 	+ theme(plot.title = element_text(hjust = 0.5))
+	+ guides(fill = FALSE)
+	+ facet_grid(~variable, scales = "free")
 )
 print(yfake_glm_plot)
 
@@ -146,24 +145,19 @@ simulation_df <- subset_df[["train_df"]]
 yfake_obj_wash <- (simulation_df
 	%>% genfakeRes(model_form, ., nsims = nsims)
 )
-long_labs <- yfake_obj_wash[["long_labs"]]
-yfake_df_wash <- (yfake_obj_wash[["yfake"]] 
-	%>% mutate(variable = long_labs)
-)
+yfake_df_wash <- yfake_obj_wash[["yfake"]] 
 yobs_prop_wash <- yfake_obj_wash[["yobs_prop"]]
 model_summary_wash <- yfake_obj_wash[["model_summary"]]
-model_summary_wash
 
 # Vizualize
-yfake_glm_wash_plot <- (ggplot(yfake_df_wash, aes(x = yfake, fill = variable)) 
-	+ geom_density(alpha = 0.3)
-	+ scale_fill_manual(name = "Improved"
-		, values = cols
-		, breaks = c("Water source", "Toilet type", "Garbage disposal")
-		, labels = c("Water source", "Toilet type", "Garbage disposal")
+yfake_glm_wash_plot <- (ggplot(yfake_df_wash, aes(x = yfake)) 
+	+ geom_density(alpha = 0.3, fill = "lightgreen")
+	+ geom_vline(aes(xintercept = yobs_prop_wash, color = "green4")
+		, linetype="dashed"
 	)
 	+ labs(x = "Prop. of fake 1s generated", y = "Desnsity")
 	+ ggtitle("Compare proportion of fake 1s generated (Psedo multi-variate)")
+	+ guides(colour = FALSE)
 	+ theme(plot.title = element_text(hjust = 0.5))
 )
 print(yfake_glm_wash_plot)
@@ -173,9 +167,7 @@ sims_saved_plots <- sapply(grep("_plot$", ls(), value = TRUE), get)
 
 save(file = "simulateResponse.rda"
 	, model_summary_wash
-	, yobs_prop_water 
-	, yobs_prop_toilet
-	, yobs_prop_garbage
+	, yobs_prop_wash
 	, yfake_glm_plot
 	, yfake_glm_wash_plot
 )
