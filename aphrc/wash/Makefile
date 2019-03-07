@@ -67,6 +67,8 @@ descriptives.Rout: descriptives.R
 # Simulating Response variable
 simulateResponse.Rout: simulateResponse.R
 
+simpleResponse.Rout: simpleResponse.R
+
 # Analysis
 ## 1. Generalized Linear Mixed-effects Model (GLMM)
 glmmModel.Rout: glmmModel.R
