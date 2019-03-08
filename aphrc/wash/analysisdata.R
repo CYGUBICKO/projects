@@ -48,6 +48,10 @@ working_df <- (working_df
 	)
 )
 
+df_outpath <- paste0("data/", "wash_analysis_df.rds")
+saveRDS(working_df, df_outpath)
+write.csv(codebook, "data/codebook.csv")
+
 save(file = "analysisdata.rda"
 	, working_df
 	, codebook
