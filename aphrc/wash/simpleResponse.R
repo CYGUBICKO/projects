@@ -18,168 +18,90 @@ set.seed(7902)
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
 nsims <- 3000
-people <- 5000
-dat <- (
-	tibble(
-		wealth = sample(c("High", "Low"), size=people, replace=TRUE)
-	) %>% mutate(
-		water = rbinom(people, size=1
-			, prob = ifelse(wealth=="High", 0.7, 0.3)
-		)
-	)
+df_prop <- 0.2 # Prop of data to use
+
+predictors <- c("intvwyear"
+	, "slumarea"
+	, "ageyears"
+	, "gender"
+	, "ethnicity"
+	, "numpeople_total"
+	, "isbelowpovertyline"
+  , "wealthquintile"
+  , "expend_total_USD_per_centered"
 )
 
-predictors <- c("wealth")
+#### ---- Water source ----
 
-model_form <- as.formula(paste0("water", "~ "
+model_form <- as.formula(paste0("cat_hhwatersource", "~ "
 		, paste(predictors, collapse = "+")
 	)
 )
 print(model_form)
 
-# Fake response object
-yfake_obj_toilet <- (dat
-	%>% genfakeRes(model_form, ., nsims = nsims)
+# Proportion of data
+subset_df <- working_df %>% balPartition("cat_hhwatersource", prop = df_prop)
+simulation_df <- subset_df[["train_df"]]
+
+# Model matrix
+X <- model.matrix(model_form, data = simulation_df)
+
+betas <- list(b0 = 300
+	, intvwyear = 0.2
+	, slumareaViwandani = -0.5
+	, ageyears = 0.5
+	, genderMale = 0
+  	, ethnicityKamba = -1
+  	, ethnicityKikuyu = 1
+  	, ethnicityKisii = 0.5
+  	, ethnicityLuhya = -0.9
+  	, ethnicityLuo = 0.8
+  	, numpeople_total = 0.5
+  	, isbelowpovertylineYes = -0.5
+  	, wealthquintileFourth = 2
+  	, wealthquintileHighest = 2.5
+  	, wealthquintileMiddle = 1.5
+  	, wealthquintileSecond = 1
+  	, expend_total_USD_per_centered = 1.2
 )
+betas <- unlist(betas)
+n <- nrow(X)
+covmat <- cov(X)
 
-print(yfake_obj_toilet)
+ysims <- array(NA, c(nsims, n))
+for (s in 1:nsims){
+	b <- mvrnorm(1, betas, covmat)
+	xb <- X %*% b
+	p <- 1/(1 + exp(-xb))
+	ysims[s, ] <- rbinom(n, 1, p)
+}
 
-yfake_df_toilet <- yfake_obj_toilet[["yfake"]] %>% mutate(variable = "Water")
-yobs_prop_toilet <- yfake_obj_toilet[["yobs_prop"]]
+# Props of 1s per simulation
+sim_prop <- apply(ysims, 1, function(x){
+		p <- sum(x == 1)/length(x)
+		return(p)
+	}
+)
+ysims_df <- data.frame(y_prop = sim_prop)
+print(ysims_df)
 
-yfake_glm_plot <- (ggplot(yfake_df_toilet, aes(x = yfake, fill = variable)) 
-	+ geom_density(alpha = 0.3)
-	+ geom_segment(aes(x = yobs_prop_toilet, xend = yobs_prop_toilet, y = 0, yend = 5)
-		, colour = "blue", arrow=arrow(length=unit(0.3,"cm"), ends = "first")
+# Prop of 1s observed
+yobs_prop <- (simulation_df
+	%>% na.omit()
+	%>% summarize_at("cat_hhwatersource", mean)
+	%>% pull()
+)
+print(yobs_prop)
+
+sim_plot <- (ggplot(ysims_df, aes(x = y_prop))
+	+ geom_density(alpha = 0.3, fill = "lightgreen")
+	+ geom_vline(aes(xintercept = yobs_prop, color = "green4")
+		, linetype="dashed"
 	)
 	+ labs(x = "Prop. of fake 1s generated", y = "Desnsity")
-	+ ggtitle("Compare proportion of fake 1s generated vs observed")
+	+ ggtitle("Compare proportion of fake 1s generated vs Observed")
+	+ guides(colour = FALSE)
 	+ theme(plot.title = element_text(hjust = 0.5))
 )
-print(yfake_glm_plot)
-
-quit()
-
-#### ---- Toilet type ----
-
-model_form <- as.formula(paste0("cat_hhtoilettype", "~ "
-		, paste(predictors, collapse = "+")
-	)
-)
-
-subset_df <- working_df %>% balPartition("cat_hhtoilettype", prop = df_prop)
-simulation_df <- subset_df[["train_df"]]
- 
-# Fake response object
-yfake_obj_toilet <- (simulation_df
-	%>% genfakeRes(model_form, ., nsims = nsims)
-)
-yfake_df_toilet <- yfake_obj_toilet[["yfake"]] %>% mutate(variable = "Toilet type")
-yobs_prop_toilet <- yfake_obj_toilet[["yobs_prop"]]
-
-#### ---- Garbage disposal ----
-
-model_form <- as.formula(paste0("cat_hhgarbagedisposal", "~ "
-		, paste(predictors, collapse = "+")
-	)
-)
-
-subset_df <- working_df %>% balPartition("cat_hhgarbagedisposal", prop = df_prop)
-simulation_df <- subset_df[["train_df"]]
- 
-# Fake response object
-yfake_obj_garbage <- (simulation_df
-	%>% genfakeRes(model_form, ., nsims = nsims)
-)
-yfake_df_garbage <- yfake_obj_garbage[["yfake"]] %>% mutate(variable = "Garbage disposal")
-yobs_prop_garbage <- yfake_obj_garbage[["yobs_prop"]]
-
-yfake_df <- rbind(yfake_df_water, yfake_df_toilet, yfake_df_garbage)
-head(yfake_df)
-
-# Compare the results with the observed
-cols <- c("Water source" = "red"
-	, "Toilet type" = "blue"
-	, "Garbage disposal" = "green"
-)
-
-yfake_glm_plot <- (ggplot(yfake_df, aes(x = yfake, fill = variable)) 
-	+ geom_density(alpha = 0.3)
-	+ scale_fill_manual(name = "Improved"
-		, values = cols
-		, breaks = c("Water source", "Toilet type", "Garbage disposal")
-		, labels = c("Water source", "Toilet type", "Garbage disposal")
-	)
-	+ geom_segment(aes(x = yobs_prop_water, xend = yobs_prop_water, y = 0, yend = 5)
-		, colour = "red", arrow=arrow(length=unit(0.3,"cm"), ends = "first")
-	)
-	+ geom_segment(aes(x = yobs_prop_toilet, xend = yobs_prop_toilet, y = 0, yend = 5)
-		, colour = "blue", arrow=arrow(length=unit(0.3,"cm"), ends = "first")
-	)
-	+ geom_segment(aes(x = yobs_prop_garbage, xend = yobs_prop_garbage, y = 0, yend = 5)
-		, colour = "green", arrow=arrow(length=unit(0.3,"cm"), ends = "first")
-	)
-	+ labs(x = "Prop. of fake 1s generated", y = "Desnsity")
-	+ ggtitle("Compare proportion of fake 1s generated vs observed")
-	+ theme(plot.title = element_text(hjust = 0.5))
-)
-print(yfake_glm_plot)
-
-#### ---- Pseudo Multivariate model ----
-
-patterns <- c("watersource", "toilettype", "garbagedis")
-replacements <- c("Water source", "Toilet type", "Garbage disposal")
-working_df_long <- (working_df 
-	%>% gather(wash_variable, wash_variable_value, wash_vars)
-	%>% recodeLabs("wash_variable", patterns, replacements, insert = FALSE)
-	%>% mutate_at("wash_variable", factor)
-)
-
-model_form <- as.formula(paste0("wash_variable_value", "~ ("
-		, paste(predictors, collapse = "+")
-		, ")*"
-		, "wash_variable"
-	)
-)
-
-subset_df <- working_df_long %>% balPartition("wash_variable", prop = df_prop)
-simulation_df <- subset_df[["train_df"]]
- 
-# Fake response object
-yfake_obj_wash <- (simulation_df
-	%>% genfakeRes(model_form, ., nsims = nsims)
-)
-long_labs <- yfake_obj_wash[["long_labs"]]
-yfake_df_wash <- (yfake_obj_wash[["yfake"]] 
-	%>% mutate(variable = long_labs)
-)
-yobs_prop_wash <- yfake_obj_wash[["yobs_prop"]]
-model_summary_wash <- yfake_obj_wash[["model_summary"]]
-model_summary_wash
-
-# vizualize
-yfake_glm_wash_plot <- (ggplot(yfake_df_wash, aes(x = yfake, fill = variable)) 
-	+ geom_density(alpha = 0.3)
-	+ scale_fill_manual(name = "improved"
-		, values = cols
-		, breaks = c("water source", "toilet type", "garbage disposal")
-		, labels = c("water source", "toilet type", "garbage disposal")
-	)
-	+ labs(x = "prop. of fake 1s generated", y = "desnsity")
-	+ ggtitle("compare proportion of fake 1s generated (psedo multi-variate)")
-	+ theme(plot.title = element_text(hjust = 0.5))
-)
-print(yfake_glm_wash_plot)
-
-
-sims_saved_plots <- sapply(grep("_plot$", ls(), value = TRUE), get)
-
-save(file = "simulateResponse.rda"
-	, model_summary_wash
-	, yobs_prop_water 
-	, yobs_prop_toilet
-	, yobs_prop_garbage
-	, yfake_glm_plot
-	, yfake_glm_wash_plot
-)
+print(sim_plot)
 
