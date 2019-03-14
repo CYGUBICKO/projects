@@ -12,7 +12,7 @@ current: target
 # stuff
 
 Sources += Makefile notes.md
-Ignore += ../autopsy
+Ignore += ../autopsy/*.Rlog
 
 msrepo = https://github.com/dushoff
 ms = makestuff
