@@ -1,4 +1,25 @@
 
+
+2019 Mar 14 (Thu)
+=================
+
+Next steps:
+
+* Fit a model and recapture beta (just use serv1)
+* Add hhid to the pipeline and fit a mixed model
+* Add a household level confounder (unobs_capital)
+	* Each household has some unobserved capital
+	* simulate at random for each household 
+	* merge into individual level data
+	* add betas for unobs_capital
+* refit the mixed model (one variable at a time)
+* Make the long data frame
+* fit the combined mixed model
+
+* Make the pipeline a little less ugly. 
+
+----------------------------------------------------------------------
+
 * Steve: Variables for analysis
 	
 	* Selected

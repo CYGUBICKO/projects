@@ -70,6 +70,9 @@ simulateResponse.Rout: simulateResponse.R
 # Not to make. Just a demo for fake y
 simpleResponse.Rout: simpleResponse.R
 
+compdata.Rout: compdata.R
+complex.Rout: complex.R
+
 # Analysis
 ## 1. Generalized Linear Mixed-effects Model (GLMM)
 glmmModel.Rout: glmmModel.R

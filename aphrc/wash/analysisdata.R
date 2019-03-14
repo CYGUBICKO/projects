@@ -33,7 +33,7 @@ working_df <- (working_df
 cluster_vars <- c("hhid_anon", "intvwyear", "slumarea")
 demographic_vars <- c("gender", "ethnicity", "ageyears", "numpeople_total")
 social_vars <- c("isbelowpovertyline", "hhdhungerscale")
-economic_vars <- c("wealthquintile", "expend_total_USD_per_centered")
+economic_vars <- c("wealthindex", "expend_total_USD_per_centered")
 added_wash_vars <- c("total_wash_indicators", "wash_access_rate")
 
 working_df <- (working_df
@@ -47,6 +47,8 @@ working_df <- (working_df
 		)
 	)
 )
+
+summary(working_df)
 
 df_outpath <- paste0("data/", "wash_analysis_df.rds")
 saveRDS(working_df, df_outpath)

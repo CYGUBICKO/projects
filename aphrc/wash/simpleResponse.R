@@ -17,8 +17,8 @@ set.seed(7902)
 
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
-nsims <- 3000
-df_prop <- 0.2 # Prop of data to use
+nsims <- 1000
+df_prop <- 0.05 # Prop of data to use
 
 predictors <- c("intvwyear"
 	, "slumarea"
@@ -27,7 +27,7 @@ predictors <- c("intvwyear"
 	, "ethnicity"
 	, "numpeople_total"
 	, "isbelowpovertyline"
-  , "wealthquintile"
+  , "wealthindex"
   , "expend_total_USD_per_centered"
 )
 
@@ -46,7 +46,7 @@ simulation_df <- subset_df[["train_df"]]
 # Model matrix
 X <- model.matrix(model_form, data = simulation_df)
 
-betas <- list(b0 = 300
+betas <- c(b0 = 0
 	, intvwyear = 0.2
 	, slumareaViwandani = -0.5
 	, ageyears = 0.5
@@ -58,20 +58,17 @@ betas <- list(b0 = 300
   	, ethnicityLuo = 0.8
   	, numpeople_total = 0.5
   	, isbelowpovertylineYes = -0.5
-  	, wealthquintileFourth = 2
-  	, wealthquintileHighest = 2.5
-  	, wealthquintileMiddle = 1.5
-  	, wealthquintileSecond = 1
+	, wealthindex = 1
   	, expend_total_USD_per_centered = 1.2
 )
-betas <- unlist(betas)
+## betas <- unlist(betas)
+print(betas)
+
 n <- nrow(X)
-covmat <- cov(X)
 
 ysims <- array(NA, c(nsims, n))
 for (s in 1:nsims){
-	b <- mvrnorm(1, betas, covmat)
-	xb <- X %*% b
+	xb <- X %*% betas
 	p <- 1/(1 + exp(-xb))
 	ysims[s, ] <- rbinom(n, 1, p)
 }

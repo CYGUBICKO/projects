@@ -22,8 +22,12 @@ incomplete_df <- (working_df
 
 codebook <- updateCodebook("dropcase", "Cases to drop (TRUE - Drop) - New")
 
+## Don't have two names for the same thing!
 working_df <- complete_df
 
+summary(working_df)
+
+## Change this to save
 save.image("complete.rda")
 
 # Save codebook to csv
