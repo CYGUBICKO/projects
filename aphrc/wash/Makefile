@@ -67,8 +67,8 @@ descriptives.Rout: descriptives.R
 # Simulating Response variable
 simulateResponse.Rout: simulateResponse.R
 
-# Not to make. Just a demo for fake y
-simpleResponse.Rout: simpleResponse.R
+# Fit simple GLM to recapture beta 
+simpleGlm.Rout: simpleGlm.R
 
 compdata.Rout: compdata.R
 complex.Rout: complex.R

@@ -19,156 +19,79 @@ theme_set(theme_bw() +
 
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
-# Sample the dataset within predictor variable: Balancing 
-
-
-# Model set up
-
-nsims = 1000 # Number of simulations to run
+nsims = 200 # Number of simulations to run
 df_prop <- 0.2 # Prop of data to use
 
-predictors <- c("intvwyear"
-	, "slumarea"
-	, "ageyears"
-	, "gender"
-	, "ethnicity"
-	, "numpeople_total"
-	, "isbelowpovertyline"
-  , "wealthquintile"
-  , "expend_total_USD_per_centered"
-)
+# Predictor variable to simulate
+predictors <- "wealthindex"
 
-#### ---- Water source ----
+# Beta values
+beta1_int <- 2
+beta1_wealth <- 4 
+beta2_int <- 3
+beta2_wealth <- 5
+beta3_int <- 1
+beta3_wealth <- 3
 
-model_form <- as.formula(paste0("cat_hhwatersource", "~ "
-		, paste(predictors, collapse = "+")
+n <- nrow(working_df)
+sim_df <- (working_df
+	%>% select_("hhid_anon", predictors)
+	%>% filter(runif(n)<df_prop)
+	%>% mutate(
+		pred1 = beta1_wealth*wealthindex + beta1_int
+		, pred2 = beta2_wealth*wealthindex + beta2_int
+		, pred3 = beta3_wealth*wealthindex + beta3_int
 	)
 )
-print(model_form)
+summary(sim_df)
 
-subset_df <- working_df %>% balPartition("cat_hhwatersource", prop = df_prop)
-simulation_df <- subset_df[["train_df"]]
- 
-# Fake response object
-yfake_obj_water <- (simulation_df
-	%>% genfakeRes(model_form, ., nsims = nsims)
+# Proportion of 1s per simulation
+prop_df <- tibble(sims = 1:nsims
+	, service1 = numeric(nsims)
+	, service2 = numeric(nsims)
+	, service3 = numeric(nsims)
 )
-yfake_df_water <- yfake_obj_water[["yfake"]] %>% mutate(variable = "Water source")
-yobs_prop_water <- yfake_obj_water[["yobs_prop"]]
 
+people <- nrow(sim_df)
+sim_dflist <- list()
 
-#### ---- Toilet type ----
-
-model_form <- as.formula(paste0("cat_hhtoilettype", "~ "
-		, paste(predictors, collapse = "+")
+for (i in 1:nsims){
+	dat <- (sim_df
+		%>% mutate(
+			service1 = rbinom(people, 1, plogis(pred1))
+			, service2 = rbinom(people, 1, plogis(pred2))
+			, service3 = rbinom(people, 1, plogis(pred3))
+		)
 	)
+	prop_df[i,2] <- mean(dat[["service1"]])
+	prop_df[i,3] <- mean(dat[["service2"]])
+	prop_df[i,4] <- mean(dat[["service3"]])
+	sim_dflist[[i]] <- dat
+}
+
+summary(prop_df)
+
+print(sim_dflist)
+
+prop_plot <- (prop_df
+	%>% gather(var, prop, -sims)
+	%>% ggplot(aes(x = prop))
+		+ geom_histogram(alpha = 0.4)
+		+ facet_grid(~var, scales = "free")
 )
 
-subset_df <- working_df %>% balPartition("cat_hhtoilettype", prop = df_prop)
-simulation_df <- subset_df[["train_df"]]
- 
-# Fake response object
-yfake_obj_toilet <- (simulation_df
-	%>% genfakeRes(model_form, ., nsims = nsims)
-)
-yfake_df_toilet <- yfake_obj_toilet[["yfake"]] %>% mutate(variable = "Toilet type")
-yobs_prop_toilet <- yfake_obj_toilet[["yobs_prop"]]
+print(prop_plot)
 
-#### ---- Garbage disposal ----
+# sim_df: simulated predicted values
+# sim_dflist: simulated predicted response variables per sim
 
-model_form <- as.formula(paste0("cat_hhgarbagedisposal", "~ "
-		, paste(predictors, collapse = "+")
-	)
-)
+betas <- sapply(grep("beta[1-9]", ls(), value = TRUE), get)
 
-subset_df <- working_df %>% balPartition("cat_hhgarbagedisposal", prop = df_prop)
-simulation_df <- subset_df[["train_df"]]
- 
-# Fake response object
-yfake_obj_garbage <- (simulation_df
-	%>% genfakeRes(model_form, ., nsims = nsims)
-)
-yfake_df_garbage <- yfake_obj_garbage[["yfake"]] %>% mutate(variable = "Garbage disposal")
-yobs_prop_garbage <- yfake_obj_garbage[["yobs_prop"]]
-
-yfake_df <- rbind(yfake_df_water, yfake_df_toilet, yfake_df_garbage)
-
-# Compare the results with the observed
-cols <- c("Water source" = "red"
-	, "Toilet type" = "blue"
-	, "Garbage disposal" = "green"
-)
-
-obs_prop_df <- data.frame(props = c(yobs_prop_water, yobs_prop_toilet, yobs_prop_garbage)
-	, variable = c("Water source", "Toilet type", "Garbage disposal")
-)
-
-yfake_glm_plot <- (ggplot(yfake_df, aes(x = yfake, fill = variable)) 
-	+ geom_density(alpha = 0.3)
-	+ scale_fill_manual(name = "Improved"
-		, values = cols
-		, breaks = c("Water source", "Toilet type", "Garbage disposal")
-		, labels = c("Water source", "Toilet type", "Garbage disposal")
-	)
-	+ geom_vline(data = obs_prop_df, aes(xintercept = props, fill = variable)
-	, linetype="dashed"
-	)
-	+ labs(x = "Prop. of fake 1s generated", y = "Desnsity")
-	+ ggtitle("Compare proportion of fake 1s generated vs observed")
-	+ theme(plot.title = element_text(hjust = 0.5))
-	+ guides(fill = FALSE)
-	+ facet_grid(~variable, scales = "free")
-)
-print(yfake_glm_plot)
-
-#### ---- Pseudo Multivariate model ----
-
-patterns <- c("watersource", "toilettype", "garbagedis")
-replacements <- c("Water source", "Toilet type", "Garbage disposal")
-working_df_long <- (working_df 
-	%>% gather(wash_variable, wash_variable_value, wash_vars)
-	%>% recodeLabs("wash_variable", patterns, replacements, insert = FALSE)
-	%>% mutate_at("wash_variable", factor)
-)
-
-model_form <- as.formula(paste0("wash_variable_value", "~ ("
-		, paste(predictors, collapse = "+")
-		, ")*"
-		, "wash_variable"
-	)
-)
-
-subset_df <- working_df_long %>% balPartition("wash_variable", prop = df_prop)
-simulation_df <- subset_df[["train_df"]]
- 
-# Fake response object
-yfake_obj_wash <- (simulation_df
-	%>% genfakeRes(model_form, ., nsims = nsims)
-)
-yfake_df_wash <- yfake_obj_wash[["yfake"]] 
-yobs_prop_wash <- yfake_obj_wash[["yobs_prop"]]
-model_summary_wash <- yfake_obj_wash[["model_summary"]]
-
-# Vizualize
-yfake_glm_wash_plot <- (ggplot(yfake_df_wash, aes(x = yfake)) 
-	+ geom_density(alpha = 0.3, fill = "lightgreen")
-	+ geom_vline(aes(xintercept = yobs_prop_wash, color = "green4")
-		, linetype="dashed"
-	)
-	+ labs(x = "Prop. of fake 1s generated", y = "Desnsity")
-	+ ggtitle("Compare proportion of fake 1s generated (Psedo multi-variate)")
-	+ guides(colour = FALSE)
-	+ theme(plot.title = element_text(hjust = 0.5))
-)
-print(yfake_glm_wash_plot)
-
-
-sims_saved_plots <- sapply(grep("_plot$", ls(), value = TRUE), get)
-
+descriptive_saved_plots <- sapply(grep("_plot$", ls(), value = TRUE), get)
 save(file = "simulateResponse.rda"
-	, model_summary_wash
-	, yobs_prop_wash
-	, yfake_glm_plot
-	, yfake_glm_wash_plot
+	, sim_df
+	, sim_dflist
+	, betas
+	, predictors
 )
 

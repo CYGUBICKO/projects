@@ -28,20 +28,29 @@ complex <- (complex
 
 people <- nrow(complex)
 datlist <- list()
-propv <- numeric(nsims)
+propv1 <- numeric(nsims)
+propv2 <- numeric(nsims)
 for (i in 1:nsims){
 	dat <- (complex
 		%>% mutate(
 			serv1 = rbinom(people, 1, plogis(pred1))
-			, serv2 = rbinom(people, 1, plogis(pred1))
+			, serv2 = rbinom(people, 1, plogis(pred2))
 		)
 	)
-	propv[[i]] <- mean(dat[["serv1"]])
+	propv1[[i]] <- mean(dat[["serv1"]])
+	propv2[[i]] <- mean(dat[["serv2"]])
 	datlist[[i]] <- dat
 }
 
+print(datlist)
+
 warnings()
 
-print(ggplot(tibble(prop=propv), aes(x=prop))
+print(ggplot(tibble(prop=propv1), aes(x=prop))
+	+ geom_histogram()
+)
+
+
+print(ggplot(tibble(prop=propv2), aes(x=prop))
 	+ geom_histogram()
 )
