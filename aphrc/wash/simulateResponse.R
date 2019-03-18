@@ -19,11 +19,12 @@ theme_set(theme_bw() +
 
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
-nsims = 200 # Number of simulations to run
+nsims = 50 # Number of simulations to run
 df_prop <- 0.2 # Prop of data to use
 
 # Predictor variable to simulate
 predictors <- "wealthindex"
+n <- nrow(working_df)
 
 # Beta values
 beta1_int <- 2
@@ -32,8 +33,6 @@ beta2_int <- 3
 beta2_wealth <- 5
 beta3_int <- 1
 beta3_wealth <- 3
-
-n <- nrow(working_df)
 sim_df <- (working_df
 	%>% select_("hhid_anon", predictors)
 	%>% filter(runif(n)<df_prop)

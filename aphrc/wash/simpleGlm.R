@@ -21,11 +21,13 @@ set.seed(7902)
 # * predictors
 
 response <- "service1"
-sims <- length(sim_dflist)
+nsims <- length(sim_dflist)
+model_form <- as.formula(paste0(response, "~ ", paste(predictors, collapse = "+")))
+
 coef_list <- list()
 glm_list <- list()
-for (s in 1:sims){
-	model_form <- as.formula(paste0(response, "~ ", paste(predictors, collapse = "+")))
+
+for (s in 1:nsims){
 	glm_model <- glm(model_form, data = sim_dflist[[s]], family = "binomial")
 	coef_list[[s]] <- coef(glm_model)
 	glm_list[[s]] <- glm_model
@@ -42,10 +44,10 @@ betas_df <- (data.frame(betas)
 )
 print(betas_df)
 
-beta_plot <- (coef_df
+glm_beta_plot <- (coef_df
 	%>% gather(coef, value)
 	%>% ggplot(aes(x = value))
-	+ geom_density(alpha = 0.3, fill = "lightgreen")
+	+ geom_histogram()
   	+ geom_vline(data = betas_df, aes(xintercept = betas, color = coef)
      	, linetype="dashed"
   	)
@@ -55,6 +57,9 @@ beta_plot <- (coef_df
   	+ theme(plot.title = element_text(hjust = 0.5))
 	+ facet_wrap(~coef, scales = "free")
 )
-print(beta_plot)
+print(glm_beta_plot)
 
-
+save(file = "simpleGlm.rda"
+	, glm_list
+	, glm_beta_plot
+)

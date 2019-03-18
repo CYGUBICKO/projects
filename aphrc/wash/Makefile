@@ -70,8 +70,11 @@ simulateResponse.Rout: simulateResponse.R
 # Fit simple GLM to recapture beta 
 simpleGlm.Rout: simpleGlm.R
 
-compdata.Rout: compdata.R
-complex.Rout: complex.R
+# Fit simple GLMER to recapture beta 
+simpleGlmer.Rout: simpleGlmer.R
+
+# Add confounders
+confounders.Rout: confounders.R
 
 # Analysis
 ## 1. Generalized Linear Mixed-effects Model (GLMM)

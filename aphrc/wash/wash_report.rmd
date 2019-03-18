@@ -38,6 +38,8 @@ theme_set(theme_bw() +
 load("cleaning.rda")
 load("descriptives.rda")
 load("simulateResponse.rda")
+load("simpleGlm.rda")
+load("simpleGlmer.rda")
 #load("glmmModel.rda")
 ```
 
@@ -217,68 +219,96 @@ descriptive_saved_plots[["expend_total_USD_per_centered_plot"]]
 descriptive_saved_plots[["prop_wash_plot"]]
 ```
 
-<br><br>
 
-# Data Analysis
+# Simulations
 
-## Generalized Linear models
+* Picked one of the predictor variables _wealthindex_
 
-In order to gain some understanding before engaging into a more complex mode, we simulated 'fake' response variable. 
+* Initialised values of $\beta$ and _intercept_ for the three services.
+  
+  * `predicted <- intercept + beta * wealthindex`
+  
+* Sampled _fake y_ from a binomial distribution
 
-* To estimate $\beta$s, a logistic regression model _(glm)_ was used on the observed response variable. 
-* We then ran $1000$ simulations and for each simulation, calculate:
+  * `y <- rbinom(n, 1, plogis(predicted))`
 
-	* $\mathbf{X\beta}$
-	* $p = \frac{1}{1 + \exp(-\mathbf{X\beta})}$
-	* _'Fake' y_
-		
-		* `y = rbinom(n, 1, p)`
-	
-	* Average _'Fake' y_ to obtain the proportion of 1s generated
+## GLM
 
-The first model, separately, fitted each of the wash variable:
-
-\begin{align}
-single\_wash\_var &\sim intvwyear + slumarea + ageyears\\ 
-	& + gender + ethnicity + numpeople\_total + isbelowpovertyline\\
-	& + wealthquintile + expend\_total\_USD\_per\_centered
-\end{align}
+* `model <- glm(service1 ~ wealthindex, data = data, family = "binomial") `
 
 ```{r}
-yfake_glm_plot
+glm_beta_plot
 ```
 
-The second model: Restructured the data into long format fitted the model on a single indicator variable.
 
-\begin{align}
-wash\_indicator &\sim (intvwyear + slumarea + ageyears\\
-	& + gender + ethnicity + numpeople\_total + isbelowpovertyline\\
-	& + wealthquintile + expend\_total\_USD\_per\_centered) * wash\_variable_label
-\end{align}
+## GMLER
 
+Included _hhid_ and then:
+
+* `model <- gmler(service1 ~ wealthindex + (1|hhid_anon), data = data, family = binomial)`
 
 ```{r}
-glm_pseudo <- as.data.frame(round(model_summary_wash
-[["coefficients"]], 4))
-DT::datatable(glm_pseudo, options = list(paging = FALSE))
-```
-
-We then used the estimated $\beta$ (coeffs.) to simulate 'fake' y.
-
-* Merged with the labels
-* Distribution similar to the individual fitting
-
-```{r}
-yfake_glm_wash_plot
+glmer_beta_plot
 ```
 
 
 
 
+<!-- # Data Analysis -->
+
+<!-- ## Generalized Linear models -->
+
+<!-- In order to gain some understanding before engaging into a more complex mode, we simulated 'fake' response variable.  -->
+
+<!-- * To estimate $\beta$s, a logistic regression model _(glm)_ was used on the observed response variable.  -->
+<!-- * We then ran $1000$ simulations and for each simulation, calculate: -->
+
+<!-- 	* $\mathbf{X\beta}$ -->
+<!-- 	* $p = \frac{1}{1 + \exp(-\mathbf{X\beta})}$ -->
+<!-- 	* _'Fake' y_ -->
+
+<!-- 		* `y = rbinom(n, 1, p)` -->
+
+<!-- 	* Average _'Fake' y_ to obtain the proportion of 1s generated -->
+
+<!-- The first model, separately, fitted each of the wash variable: -->
+
+<!-- \begin{align} -->
+<!-- single\_wash\_var &\sim intvwyear + slumarea + ageyears\\  -->
+<!-- 	& + gender + ethnicity + numpeople\_total + isbelowpovertyline\\ -->
+<!-- 	& + wealthquintile + expend\_total\_USD\_per\_centered -->
+<!-- \end{align} -->
+
+<!-- ```{r} -->
+<!-- yfake_glm_plot -->
+<!-- ``` -->
+
+<!-- The second model: Restructured the data into long format fitted the model on a single indicator variable. -->
+
+<!-- \begin{align} -->
+<!-- wash\_indicator &\sim (intvwyear + slumarea + ageyears\\ -->
+<!-- 	& + gender + ethnicity + numpeople\_total + isbelowpovertyline\\ -->
+<!-- 	& + wealthquintile + expend\_total\_USD\_per\_centered) * wash\_variable_label -->
+<!-- \end{align} -->
 
 
+<!-- ```{r} -->
+<!-- glm_pseudo <- as.data.frame(round(model_summary_wash -->
+<!-- [["coefficients"]], 4)) -->
+<!-- DT::datatable(glm_pseudo, options = list(paging = FALSE)) -->
+<!-- ``` -->
 
-## Generalized Linear Mixed Models
+<!-- We then used the estimated $\beta$ (coeffs.) to simulate 'fake' y. -->
+
+<!-- * Merged with the labels -->
+<!-- * Distribution similar to the individual fitting -->
+
+<!-- ```{r} -->
+<!-- yfake_glm_wash_plot -->
+<!-- ``` -->
+
+
+<!-- ## Generalized Linear Mixed Models -->
 
 
 <!-- ### Model 1 -->
