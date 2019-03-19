@@ -23,7 +23,7 @@ set.seed(7902)
 # * predictors
 
 nsims <- length(sim_dflist)
-model_form <- as.formula(service1 ~ wealthindex + (1|hhid_anon))
+model_form <- as.formula(service1 ~ U + wealthindex + (1|hhid_anon))
 
 coef_list <- list()
 glmer_list <- list()
@@ -42,7 +42,7 @@ summary(coef_df)
 print(coef_df)
 
 # Extract beta values assigned in the simulation
-betas_df <- (data.frame(betas)
+betas_df <- (data.frame(betas) 
 	%>% rownames_to_column("coef")
 	%>% filter(grepl("beta1", coef)) # comment out/replace witht the correct beta
 	%>% mutate(coef = ifelse(grepl("_int", coef), "(Intercept)", predictors))

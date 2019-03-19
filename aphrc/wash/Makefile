@@ -73,9 +73,6 @@ simpleGlm.Rout: simpleGlm.R
 # Fit simple GLMER to recapture beta 
 simpleGlmer.Rout: simpleGlmer.R
 
-# Add confounders
-confounders.Rout: confounders.R
-
 # Analysis
 ## 1. Generalized Linear Mixed-effects Model (GLMM)
 glmmModel.Rout: glmmModel.R

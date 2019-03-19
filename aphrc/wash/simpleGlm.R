@@ -22,7 +22,8 @@ set.seed(7902)
 
 response <- "service1"
 nsims <- length(sim_dflist)
-model_form <- as.formula(paste0(response, "~ ", paste(predictors, collapse = "+")))
+model_form <- as.formula(service1 ~ wealthindex)
+print(model_form)
 
 coef_list <- list()
 glm_list <- list()

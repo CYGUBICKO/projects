@@ -19,8 +19,8 @@ theme_set(theme_bw() +
 
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
-nsims = 100 # Number of simulations to run
-df_prop <- 0.3 # Prop of data to use
+nsims <- 50 # Number of simulations to run
+df_prop <- 0.2 # Prop of data to use
 
 # Predictor variable to simulate
 predictors <- "wealthindex"
@@ -33,15 +33,25 @@ beta2_int <- 3
 beta2_wealth <- 5
 beta3_int <- 1
 beta3_wealth <- 3
+
+# Confounder beta
+betaU <- 0.1 
+
+
 sim_df <- (working_df
 	%>% select_("hhid_anon", predictors)
 	%>% filter(runif(n)<df_prop)
-	%>% mutate(
-		pred1 = beta1_wealth*wealthindex + beta1_int
-		, pred2 = beta2_wealth*wealthindex + beta2_int
-		, pred3 = beta3_wealth*wealthindex + beta3_int
+	%>% group_by(hhid_anon)
+	%>% mutate(U = rnorm(n=1)
+		, pred1 = betaU*U + beta1_wealth*wealthindex + beta1_int
+		, pred2 = betaU*U + beta2_wealth*wealthindex + beta2_int
+		, pred3 = betaU*U + beta3_wealth*wealthindex + beta3_int
 	)
+	%>% ungroup()
+
 )
+print(sim_df)
+
 summary(sim_df)
 
 # Proportion of 1s per simulation
