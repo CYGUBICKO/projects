@@ -19,8 +19,8 @@ theme_set(theme_bw() +
 
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
-nsims = 50 # Number of simulations to run
-df_prop <- 0.2 # Prop of data to use
+nsims = 100 # Number of simulations to run
+df_prop <- 0.3 # Prop of data to use
 
 # Predictor variable to simulate
 predictors <- "wealthindex"

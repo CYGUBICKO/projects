@@ -37,7 +37,7 @@ theme_set(theme_bw() +
 ```{r}
 load("cleaning.rda")
 load("descriptives.rda")
-load("simulateResponse.rda")
+#load("simulateResponse.rda")
 load("simpleGlm.rda")
 load("simpleGlmer.rda")
 #load("glmmModel.rda")
