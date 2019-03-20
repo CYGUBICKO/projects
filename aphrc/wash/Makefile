@@ -36,10 +36,9 @@ $(ms)/Makefile:
 ## Loading data and defining some important functions
 ## ln -fs ~/Dropbox/aphrc/wash/data 
 
-Ignore += data docs
+Ignore += data docs temp_files
 
-## subdirs += ../funs 
-Sources += $(wildcard *.R *.rmd) $(subdirs)
+Sources += $(wildcard *.R *.rmd) $(.../funs/*.R)
 
 # Define all important R-functions in one file
 globalFunctions.Rout: globalFunctions.R
