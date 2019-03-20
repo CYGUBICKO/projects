@@ -33,7 +33,7 @@ $(ms)/Makefile:
 ## Loading data and defining some important functions
 ## ln -s ~/Dropbox/aphrc/verbal_autopsy/data 
 
-Ignore += data docs
+Ignore += data docs $(wildcard *.Rhistory)
 
 Sources += $(wildcard *.R *.Rmd)
 
