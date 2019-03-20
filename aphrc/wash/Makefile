@@ -73,9 +73,15 @@ simpleGlm.Rout: simpleGlm.R
 # Fit simple GLMER to recapture beta 
 simpleGlmer.Rout: simpleGlmer.R
 
+# Fit a more complex glmer based on long-format data
+complexGlmer.Rout: complexGlmer.R
+
+# Summary plots
+glmerSummary.Rout: glmerSummary.R
+
 # Analysis
 ## 1. Generalized Linear Mixed-effects Model (GLMM)
-glmmModel.Rout: glmmModel.R
+#glmmModel.Rout: glmmModel.R
 
 ## 2. Multivariate GLMM
 #multivglmmModel.Rout: multivglmmModel.R

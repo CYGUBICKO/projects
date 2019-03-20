@@ -40,7 +40,7 @@ load("descriptives.rda")
 #load("simulateResponse.rda")
 load("simpleGlm.rda")
 load("simpleGlmer.rda")
-#load("glmmModel.rda")
+load("glmerSummary.rda")
 ```
 
 <br><br>
@@ -241,7 +241,7 @@ glm_beta_plot
 ```
 
 
-## GMLER
+## Simple GMLER
 
 Included _hhid_ and then:
 
@@ -251,7 +251,15 @@ Included _hhid_ and then:
 glmer_beta_plot
 ```
 
+## Complex GMLER
 
+The three simulated wash variables were transformed to long format; Services is label while status takes $0$ or $1$.
+
+* `model <- gmler(status ~ wealthindex*services + 0 + (services + 0|hhid_anon), data = data, family = binomial)`
+
+```{r}
+complexglmer_plot 
+```
 
 
 <!-- # Data Analysis -->

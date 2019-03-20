@@ -61,6 +61,5 @@ glm_beta_plot <- (coef_df
 print(glm_beta_plot)
 
 save(file = "simpleGlm.rda"
-	, glm_list
 	, glm_beta_plot
 )

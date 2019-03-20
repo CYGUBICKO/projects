@@ -19,12 +19,12 @@ theme_set(theme_bw() +
 
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
-nsims <- 50 # Number of simulations to run
-df_prop <- 0.2 # Prop of data to use
+nsims <- 200 # Number of simulations to run
+df_prop <- 0.7 # Prop of sample per hh
+indiv_perhh <- 13 # Minimum no. of interviews per hh to qualify for sampling
 
 # Predictor variable to simulate
 predictors <- "wealthindex"
-n <- nrow(working_df)
 
 # Beta values
 beta1_int <- 2
@@ -40,14 +40,16 @@ betaU <- 0.1
 
 sim_df <- (working_df
 	%>% select_("hhid_anon", predictors)
-	%>% filter(runif(n)<df_prop)
 	%>% group_by(hhid_anon)
+	%>% mutate(nindiv = n()) # Count within households
+	%>% filter(nindiv>=indiv_perhh & runif(n())<df_prop)
 	%>% mutate(U = rnorm(n=1)
 		, pred1 = betaU*U + beta1_wealth*wealthindex + beta1_int
 		, pred2 = betaU*U + beta2_wealth*wealthindex + beta2_int
 		, pred3 = betaU*U + beta3_wealth*wealthindex + beta3_int
 	)
 	%>% ungroup()
+	%>% droplevels()
 
 )
 print(sim_df)

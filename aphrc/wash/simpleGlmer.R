@@ -23,7 +23,7 @@ set.seed(7902)
 # * predictors
 
 nsims <- length(sim_dflist)
-model_form <- as.formula(service1 ~ U + wealthindex + (1|hhid_anon))
+model_form <- as.formula(service1 ~ wealthindex + (1|hhid_anon))
 
 coef_list <- list()
 glmer_list <- list()
@@ -32,7 +32,7 @@ for (s in 1:nsims){
 	glmer_model <- glmer(model_form
 		, data = sim_dflist[[s]]
       , family = binomial
-      , control = glmerControl(optimizer = "bobyqa")
+      , control = glmerControl(optimizer = "nloptwrap")
 	)
 	coef_list[[s]] <- fixef(glmer_model)
 	glmer_list[[s]] <- glmer_model
@@ -65,6 +65,5 @@ glmer_beta_plot <- (coef_df
 print(glmer_beta_plot)
 
 save(file = "simpleGlmer.rda"
-	, glmer_list
 	, glmer_beta_plot
 )
