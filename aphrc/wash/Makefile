@@ -65,6 +65,9 @@ descriptivePlots.Rout: descriptivePlots.R
 
 households.Rout: households.R
 
+# Big simulation
+simulateBig.Rout: simulateBig.R
+
 # Simulating Response variable
 simulateResponse.Rout: simulateResponse.R
 
