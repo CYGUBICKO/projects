@@ -17,12 +17,13 @@ load("complexGlmer.rda")
 # * complexglmer_list - glmer fits per simulation
 # * complexcoef_df - fixed effect coef per simulation
 # * betas - initial beta values for simulations
+# * predictors 
 
 # Extract beta values assigned in the simulation
 betas_df <- (data.frame(betas) 
 	%>% rownames_to_column("labels")
 	%>% mutate(coef = ifelse(grepl("[1-9]_int", labels), paste0("serviceservice", extract_numeric(labels))
-			, ifelse(grepl("_wealth", labels), "wealthindex", labels)
+			, ifelse(grepl("_wealth", labels), predictors, labels)
 		)
 	)
 	%>% group_by(coef)

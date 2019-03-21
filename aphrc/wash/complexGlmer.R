@@ -53,6 +53,7 @@ print(complexcoef_df)
 save(file = "complexGlmer.rda"
 	, complexglmer_list
    , complexcoef_df
+	, predictors
 	, betas
 )
 

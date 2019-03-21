@@ -19,7 +19,7 @@ theme_set(theme_bw() +
 
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
-nsims <- 200 # Number of simulations to run
+nsims <- 400 # Number of simulations to run
 df_prop <- 0.7 # Prop of sample per hh
 indiv_perhh <- 13 # Minimum no. of interviews per hh to qualify for sampling
 
