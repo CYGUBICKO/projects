@@ -21,7 +21,7 @@ theme_set(theme_bw() +
 
 nsims <- 400 # Number of simulations to run
 df_prop <- 0.7 # Prop of sample per hh
-indiv_perhh <- 13 # Minimum no. of interviews per hh to qualify for sampling
+indiv_perhh <- 12 # Minimum no. of interviews per hh to qualify for sampling
 
 # Predictor variable to simulate
 predictors <- "wealthindex"
