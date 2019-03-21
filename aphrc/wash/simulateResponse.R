@@ -19,46 +19,42 @@ theme_set(theme_bw() +
 
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
-nsims <- 400 # Number of simulations to run
-df_prop <- 0.7 # Prop of sample per hh
-indiv_perhh <- 10 # Minimum no. of interviews per hh to qualify for sampling
+nsims <- 40 # Number of simulations to run
+sample_prop <- 0.1 # Prop of sample per hh
 year <- 2013
 
 # Predictor variable to simulate
 predictors <- "wealthindex"
 
 # Beta values
-beta1_int <- 2
+beta1_int <- 0
 beta1_wealth <- 4 
 beta2_int <- 3
-beta2_wealth <- 5
+beta2_wealth <- 2
 beta3_int <- 1
 beta3_wealth <- 3
 
 # Confounder beta
-betaU <- 0.1 
-
+beta1_U <- 0.1 
+beta2_U <- 0.1 
+beta3_U <- 0.1 
 
 sim_df <- (working_df
-	%>% select_("hhid_anon", "intvwyear", predictors)
-	%>% group_by(hhid_anon)
-	%>% mutate(nindiv = n()) # Count within households
-	%>% filter(intvwyear==year & nindiv>=indiv_perhh & runif(n())<df_prop)
-	%>% mutate(U = rnorm(n=1)
-		, pred1 = betaU*U + beta1_wealth*wealthindex + beta1_int
-		, pred2 = betaU*U + beta2_wealth*wealthindex + beta2_int
-		, pred3 = betaU*U + beta3_wealth*wealthindex + beta3_int
+	%>% filter(intvwyear==year & runif(n())<sample_prop)
+	%>% select_("hhid_anon", predictors)
+	%>% mutate(U = rnorm(n=n())
+		, pred1 = beta1_U*U + beta1_wealth*wealthindex + beta1_int
+		, pred2 = beta2_U*U + beta2_wealth*wealthindex + beta2_int
+		, pred3 = beta3_U*U + beta3_wealth*wealthindex + beta3_int
 	)
-	%>% ungroup()
 	%>% droplevels()
-
 )
 print(sim_df)
 
 summary(sim_df)
 
 # Proportion of 1s per simulation
-prop_df <- tibble(sims = 1:nsims
+service_prop <- tibble(sims = 1:nsims
 	, service1 = numeric(nsims)
 	, service2 = numeric(nsims)
 	, service3 = numeric(nsims)
@@ -75,17 +71,17 @@ for (i in 1:nsims){
 			, service3 = rbinom(people, 1, plogis(pred3))
 		)
 	)
-	prop_df[i,2] <- mean(dat[["service1"]])
-	prop_df[i,3] <- mean(dat[["service2"]])
-	prop_df[i,4] <- mean(dat[["service3"]])
+	service_prop[i,2] <- mean(dat[["service1"]])
+	service_prop[i,3] <- mean(dat[["service2"]])
+	service_prop[i,4] <- mean(dat[["service3"]])
 	sim_dflist[[i]] <- dat
 }
 
-summary(prop_df)
+summary(service_prop)
 
 print(sim_dflist)
 
-prop_plot <- (prop_df
+prop_plot <- (service_prop
 	%>% gather(var, prop, -sims)
 	%>% ggplot(aes(x = prop))
 		+ geom_histogram(alpha = 0.4)

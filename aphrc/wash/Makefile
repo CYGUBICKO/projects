@@ -60,8 +60,10 @@ analysisdata.Rout: analysisdata.R
 logisticpca.Rout: logisticpca.R
 
 # Descriptives
-descriptivePlots.Rout: descriptivePlots.R
 descriptives.Rout: descriptives.R
+descriptivePlots.Rout: descriptivePlots.R
+
+households.Rout: households.R
 
 # Simulating Response variable
 simulateResponse.Rout: simulateResponse.R
