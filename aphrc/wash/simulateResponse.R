@@ -21,7 +21,8 @@ theme_set(theme_bw() +
 
 nsims <- 400 # Number of simulations to run
 df_prop <- 0.7 # Prop of sample per hh
-indiv_perhh <- 12 # Minimum no. of interviews per hh to qualify for sampling
+indiv_perhh <- 10 # Minimum no. of interviews per hh to qualify for sampling
+year <- 2013
 
 # Predictor variable to simulate
 predictors <- "wealthindex"
@@ -39,10 +40,10 @@ betaU <- 0.1
 
 
 sim_df <- (working_df
-	%>% select_("hhid_anon", predictors)
+	%>% select_("hhid_anon", "intvwyear", predictors)
 	%>% group_by(hhid_anon)
 	%>% mutate(nindiv = n()) # Count within households
-	%>% filter(nindiv>=indiv_perhh & runif(n())<df_prop)
+	%>% filter(intvwyear==year & nindiv>=indiv_perhh & runif(n())<df_prop)
 	%>% mutate(U = rnorm(n=1)
 		, pred1 = betaU*U + beta1_wealth*wealthindex + beta1_int
 		, pred2 = betaU*U + beta2_wealth*wealthindex + beta2_int
