@@ -23,7 +23,7 @@ set.seed(7902)
 # * predictors
 
 nsims <- length(sim_dflist)
-model_form <- as.formula(service1 ~ wealthindex + (1|hhid_anon))
+model_form <- as.formula(service1 ~ wealthindex  + (1|hhid_anon))
 
 coef_list <- list()
 glmer_list <- list()
@@ -65,5 +65,6 @@ glmer_beta_plot <- (coef_df
 print(glmer_beta_plot)
 
 save(file = "simpleGlmer.rda"
+	, glmer_list
 	, glmer_beta_plot
 )
