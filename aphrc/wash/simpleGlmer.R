@@ -32,7 +32,7 @@ for (s in 1:nsims){
 	glmer_model <- glmer(model_form
 		, data = sim_dflist[[s]]
       , family = binomial
-      , control = glmerControl(optimizer = "nloptwrap")
+		, nAGQ = 20
 	)
 	coef_list[[s]] <- fixef(glmer_model)
 	glmer_list[[s]] <- glmer_model

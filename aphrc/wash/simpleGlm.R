@@ -20,16 +20,21 @@ set.seed(7902)
 # * betas
 # * predictors
 
-response <- "service1"
+#response <- "service1"
+services <- c("service1", "service2", "service3")
 nsims <- length(sim_dflist)
-model_form <- as.formula(service1 ~ wealthindex)
+model_form <- as.formula(status ~ wealthindex:service)
 print(model_form)
 
 coef_list <- list()
 glm_list <- list()
 
 for (s in 1:nsims){
-	glm_model <- glm(model_form, data = sim_dflist[[s]], family = "binomial")
+   long_df <- (sim_dflist[[s]]
+      %>% select(c("hhid_anon", predictors, services))
+      %>% gather(service, status, services)
+   )
+	glm_model <- glm(model_form, data = long_df, family = "binomial")
 	coef_list[[s]] <- coef(glm_model)
 	glm_list[[s]] <- glm_model
 }

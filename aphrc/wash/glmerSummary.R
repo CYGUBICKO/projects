@@ -36,9 +36,9 @@ complexglmer_plot <- (complexcoef_df
    %>% gather(coef, value)
    %>% ggplot(aes(x = value))
    + geom_histogram()
-   + geom_vline(data = betas_df, aes(xintercept = means, color = coef)
-      , linetype="dashed"
-   )
+#   + geom_vline(data = betas_df, aes(xintercept = means, color = coef)
+#      , linetype="dashed"
+#   )
    + labs(x = "Betas", y = "Desnsity")
    + ggtitle("Fixed effect estmates")
    + guides(colour = FALSE)

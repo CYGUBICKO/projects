@@ -26,8 +26,7 @@ set.seed(7902)
 
 services <- c("service1", "service2", "service3")
 nsims <- length(sim_dflist)
-model_form <- as.formula(status ~ wealthindex*service + 0 + (service +   
-+ 0|hhid_anon))
+model_form <- as.formula(status ~ wealthindex:service + (1|hhid_anon))
 
 complexcoef_list <- list()
 complexglmer_list <- list()
@@ -40,7 +39,7 @@ for (s in 1:nsims){
    glmer_model <- glmer(model_form
       , data = long_df
       , family = binomial
-      , control = glmerControl(optimizer = "nloptwrap")
+		, nAGQ = 20
    )
    complexcoef_list[[s]] <- fixef(glmer_model)
    complexglmer_list[[s]] <- glmer_model
