@@ -40,7 +40,7 @@ for (s in 1:nsims){
    glmer_model <- glmer(model_form
       , data = long_df
       , family = binomial
-		, nAGQ = 20
+		## , nAGQ = 20
    )
    complexcoef_list[[s]] <- fixef(glmer_model)
    complexglmer_list[[s]] <- glmer_model
