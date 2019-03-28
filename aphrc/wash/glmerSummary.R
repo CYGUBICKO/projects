@@ -16,31 +16,18 @@ load("complexGlmer.rda")
 # Incoming objects:
 # * complexglmer_list - glmer fits per simulation
 # * complexcoef_df - fixed effect coef per simulation
-# * betas - initial beta values for simulations
+# * betas_df & betas - initial beta values for simulations
 # * predictors 
-
-# Extract beta values assigned in the simulation
-betas_df <- (data.frame(betas) 
-	%>% rownames_to_column("labels")
-	%>% mutate(coef = ifelse(grepl("[1-9]_int", labels), paste0("serviceservice", extract_numeric(labels))
-			, ifelse(grepl("_wealth", labels), predictors, labels)
-		)
-	)
-	%>% group_by(coef)
-	%>% summarise(means = mean(betas))
-)
-print(betas_df)
-
 
 complexglmer_plot <- (complexcoef_df
    %>% gather(coef, value)
    %>% ggplot(aes(x = value))
    + geom_histogram()
-#   + geom_vline(data = betas_df, aes(xintercept = means, color = coef)
-#      , linetype="dashed"
-#   )
-   + labs(x = "Betas", y = "Desnsity")
-   + ggtitle("Fixed effect estmates")
+   + geom_vline(data = betas_df, aes(xintercept = betas, color = coef)
+      , linetype="dashed"
+   )
+   + labs(x = "Betas", y = "Count")
+   + ggtitle("Fitted vs True betas")
    + guides(colour = FALSE)
    + theme(plot.title = element_text(hjust = 0.5))
    + facet_wrap(~coef, scales = "free")
@@ -48,6 +35,7 @@ complexglmer_plot <- (complexcoef_df
 print(complexglmer_plot)
 
 save(file = "glmerSummary.rda"
+	, complexglmer_list
 	, complexglmer_plot
 )
 

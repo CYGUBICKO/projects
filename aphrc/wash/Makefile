@@ -59,14 +59,10 @@ analysisdata.Rout: analysisdata.R
 # Logistic PCA to create a single variable for WASH variables
 logisticpca.Rout: logisticpca.R
 
-# Descriptives
+# Descriptives plots
 descriptives.Rout: descriptives.R
-descriptivePlots.Rout: descriptivePlots.R
 
-households.Rout: households.R
-
-# Big simulation
-simulateBig.Rout: simulateBig.R
+# households.Rout: households.R
 
 # Simulating Response variable
 simulateResponse.Rout: simulateResponse.R
@@ -74,29 +70,14 @@ simulateResponse.Rout: simulateResponse.R
 # Fit simple GLM to recapture beta 
 simpleGlm.Rout: simpleGlm.R
 
-# Fit simple GLMER to recapture beta 
-simpleGlmer.Rout: simpleGlmer.R
-
 # Fit a more complex glmer based on long-format data
 complexGlmer.Rout: complexGlmer.R
 
 # Summary plots
 glmerSummary.Rout: glmerSummary.R
 
-# Analysis
-## 1. Generalized Linear Mixed-effects Model (GLMM)
-#glmmModel.Rout: glmmModel.R
-
-## 2. Multivariate GLMM
-#multivglmmModel.Rout: multivglmmModel.R
-
-# Unsupervised learning (Clustering)
-
 ## Report
 wash_report.html: wash_report.rmd
-
-## https://cygubicko.github.io/projects/test.html
-test.html: test.rmd
 
 ######################################################################
 

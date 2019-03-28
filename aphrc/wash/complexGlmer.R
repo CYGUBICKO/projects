@@ -21,12 +21,13 @@ set.seed(7902)
 
 # Objects in
 # * sim_dflist
+# * betas_df
 # * betas
 # * predictors
 
 services <- c("service1", "service2", "service3")
 nsims <- length(sim_dflist)
-model_form <- as.formula(status ~ wealthindex:service + (1|hhid_anon))
+model_form <- as.formula(status ~ 0 + wealthindex:service + service + (1|hhid_anon))
 
 complexcoef_list <- list()
 complexglmer_list <- list()
@@ -53,6 +54,7 @@ save(file = "complexGlmer.rda"
 	, complexglmer_list
    , complexcoef_df
 	, predictors
+	, betas_df
 	, betas
 )
 

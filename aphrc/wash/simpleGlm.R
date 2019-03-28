@@ -17,13 +17,14 @@ set.seed(7902)
 
 # Objects in
 # * sim_dflist
+# & betas_df
 # * betas
 # * predictors
 
 #response <- "service1"
 services <- c("service1", "service2", "service3")
 nsims <- length(sim_dflist)
-model_form <- as.formula(status ~ wealthindex:service)
+model_form <- as.formula(status ~ 0 + wealthindex:service + service)
 print(model_form)
 
 coef_list <- list()
@@ -38,17 +39,10 @@ for (s in 1:nsims){
 	coef_list[[s]] <- coef(glm_model)
 	glm_list[[s]] <- glm_model
 }
+
 coef_df <- Reduce(rbind, coef_list) %>% as_tibble()
 summary(coef_df)
 print(coef_df)
-
-# Extract beta values assigned in the simulation
-betas_df <- (data.frame(betas) 
-	%>% rownames_to_column("coef")
-	%>% filter(grepl("beta1", coef)) # comment out/replace witht the correct beta
-	%>% mutate(coef = ifelse(grepl("_int", coef), "(Intercept)", predictors))
-)
-print(betas_df)
 
 glm_beta_plot <- (coef_df
 	%>% gather(coef, value)
@@ -57,8 +51,8 @@ glm_beta_plot <- (coef_df
   	+ geom_vline(data = betas_df, aes(xintercept = betas, color = coef)
      	, linetype="dashed"
   	)
-  	+ labs(x = "Betas", y = "Desnsity")
-  	+ ggtitle("Fitted vs random choice beta")
+  	+ labs(x = "Betas", y = "Count")
+  	+ ggtitle("Fitted vs True betas")
   	+ guides(colour = FALSE)
   	+ theme(plot.title = element_text(hjust = 0.5))
 	+ facet_wrap(~coef, scales = "free")
@@ -67,4 +61,5 @@ print(glm_beta_plot)
 
 save(file = "simpleGlm.rda"
 	, glm_beta_plot
+	, betas
 )

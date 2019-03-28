@@ -11,8 +11,9 @@ library(scales)
 
 load("globalFunctions.rda")
 load("logisticpca.rda")
-load("descriptivePlots.rda")
 
+# Functions to generate basic plots for descriptive stats (counts and proportions)
+source("../funs/descriptivePlots.R")
 
 theme_set(theme_bw()+
 theme(panel.spacing=grid::unit(0,"lines")))
@@ -342,7 +343,7 @@ print(expend_total_USD_per_centered_plot)
 descriptive_saved_plots <- sapply(grep("_plot$", ls(), value = TRUE), get)
 
 save(file = "descriptives.rda"
-	, working_df
+#	, working_df
 	, codebook
 	, descriptive_saved_plots
 )

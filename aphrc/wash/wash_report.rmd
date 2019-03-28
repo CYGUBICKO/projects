@@ -37,9 +37,7 @@ theme_set(theme_bw() +
 ```{r}
 load("cleaning.rda")
 load("descriptives.rda")
-#load("simulateResponse.rda")
 load("simpleGlm.rda")
-load("simpleGlmer.rda")
 load("glmerSummary.rda")
 ```
 
@@ -232,30 +230,20 @@ descriptive_saved_plots[["prop_wash_plot"]]
 
   * `y <- rbinom(n, 1, plogis(predicted))`
 
+The three simulated wash variables were transformed to long format; Services is label while status takes $0$ or $1$.
+
 ## GLM
 
-* `model <- glm(service1 ~ wealthindex, data = data, family = "binomial") `
+* `model <- glm(status ~ 0 + service:wealthindex + service, data = data, family = "binomial") `
 
 ```{r}
 glm_beta_plot
 ```
 
-
-## Simple GMLER
-
-Included _hhid_ and then:
-
-* `model <- gmler(service1 ~ wealthindex + (1|hhid_anon), data = data, family = binomial)`
-
-```{r}
-glmer_beta_plot
-```
-
 ## Complex GMLER
 
-The three simulated wash variables were transformed to long format; Services is label while status takes $0$ or $1$.
 
-* `model <- gmler(status ~ wealthindex*services + 0 + (services + 0|hhid_anon), data = data, family = binomial)`
+* `model <- gmler(status ~ 0 + wealthindex:services + service + (1|hhid_anon), data = data, family = binomial)`
 
 ```{r}
 complexglmer_plot 
