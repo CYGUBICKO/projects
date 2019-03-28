@@ -73,6 +73,9 @@ simpleGlm.Rout: simpleGlm.R
 # Fit a more complex glmer based on long-format data
 complexGlmer.Rout: complexGlmer.R
 
+# Extract summary stats of complexGlmer
+glmerStats.Rout: glmerStats.R
+
 # Summary plots
 glmerSummary.Rout: glmerSummary.R
 
