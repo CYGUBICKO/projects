@@ -38,7 +38,7 @@ $(ms)/Makefile:
 
 Ignore += data docs temp_files 
 
-Sources += $(wildcard *.R *.rmd) $(.../funs/*.R)
+Sources += $(wildcard *.R *.rmd *.tex) $(.../funs/*.R)
 
 # Define all important R-functions in one file
 globalFunctions.Rout: globalFunctions.R

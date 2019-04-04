@@ -1,0 +1,93 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{pgf,tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{matrix,chains,positioning,decorations.pathreplacing,arrows}
+\usepackage{xcolor}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{verbatim}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{hyperref}
+%\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\usepackage{subcaption}
+
+%\usetheme{CambridgeUS} %Good
+\setbeamertemplate{itemize item}[ball]
+\setbeamertemplate{itemize subitem}[ball]
+
+%\usepackage{enumerate}
+%\numberwithin{equation}{section}
+
+
+\title{Multiple-response models for multivariate binary response}
+\author{Steve Cygu \& Prof. Jonathan Dushoff\\ \vspace{1cm} McMaster University, Canada.}
+\date{April 09, 2019}
+
+\begin{document}
+\frame{\titlepage}
+
+\frame{\small{\frametitle{OUTLINE}\tableofcontents}} 
+
+
+\section{Background}
+
+\begin{frame}{Background}
+\begin{itemize}
+\item Longitudinal (2003 - 2015) NUHDSS covering Korogocho and Viwandani
+\item Predictors
+\begin{itemize}
+\pause
+\item Slum area
+\pause
+\item Interview year
+\pause
+\item Age
+\pause
+\item Gender
+\pause
+\item Ethnicity
+\pause
+\item Household size
+\pause
+\item Wealth index
+\pause
+\item Household expenditure
+\end{itemize}
+\item Response(s): Three WASH variables were created as per WHO definition
+
+\begin{itemize}
+\pause
+\item Drinking water source
+\pause
+\item Toilet facility type
+\pause
+\item Garbage disposal method
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\section{Objective}
+
+\begin{frame}{Objective}
+The aim is to investigate the contribution of demographic, socialland economic factors to improved waster, sanitation and hygien (WASH) among the urban poor.
+\end{frame}
+
+\begin{frame}{Problems}
+How do we account for the repeated measurements within the households accross the years?
+\pause
+\begin{itemize}
+\item Model the wash varaibles seperately (Manuscript already submitted?)
+\item Pick one of the WASH indicator and treat the remaining two as fixed covariates
+\end{itemize}
+\textcolor{red}{The two appraches are not accounting for the unmeasured variations and correlation among the WASH variables} 
+\end{frame}
+
+
+\end{document}
