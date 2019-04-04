@@ -82,6 +82,7 @@ binaryMcmcglmm.Rout: binaryMcmcglmm.R
 
 # Some experimenting
 oneGlmer.Rout: oneGlmer.R
+oneMcmcglmm.Rout: oneMcmcglmm.R
 
 # Extract summary stats of complexGlmer
 glmerStats.Rout: glmerStats.R
