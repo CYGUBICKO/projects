@@ -23,8 +23,8 @@ pfun <- function(beta_0, beta_x, beta_z){
 	))
 }
 
-plot(ran, pfun(beta_0, beta_x, 0), type="l")
+a <- pfun(beta_0, beta_x, 5)
+b <- pfun(beta_0, beta_x, 5)
+identical(a, b)
 
-for(beta_z in 1:3){
-	lines(ran, pfun(beta_0, beta_x, beta_z))
-}
+plot(ran, pfun(beta_0, beta_x, 5), type="l")
