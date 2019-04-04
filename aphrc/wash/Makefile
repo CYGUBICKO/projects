@@ -96,6 +96,9 @@ mcmcglmmSummary.Rout: mcmcglmmSummary.R
 ## Report
 wash_report.html: wash_report.rmd
 
+## Presentation
+wash_presentation.pdf: wash_presentation.tex
+
 ######################################################################
 
 Ignore += *.rda
@@ -107,6 +110,7 @@ clean:
 
 ### Makestuff
 
+-include $(ms)/texdeps.mk
 -include $(ms)/pandoc.mk
 -include $(ms)/git.mk
 -include $(ms)/visual.mk
