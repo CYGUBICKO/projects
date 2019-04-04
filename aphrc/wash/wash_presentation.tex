@@ -1,4 +1,4 @@
-\documentclass[handout]{beamer}
+\documentclass{beamer}
 \usepackage[utf8]{inputenc}
 \usepackage{pgf,tikz}
 \usetikzlibrary{arrows}
@@ -38,35 +38,24 @@
 \section{Background}
 
 \begin{frame}{Background}
-\begin{itemize}
+\begin{itemize}[<+->]
 \item Longitudinal (2003 - 2015) NUHDSS covering Korogocho and Viwandani
 \item Predictors
-\begin{itemize}
-\pause
+\begin{itemize}[<+->]
 \item Slum area
-\pause
 \item Interview year
-\pause
 \item Age
-\pause
 \item Gender
-\pause
 \item Ethnicity
-\pause
 \item Household size
-\pause
 \item Wealth index
-\pause
 \item Household expenditure
 \end{itemize}
 \item Response(s): Three WASH variables were created as per WHO definition
 
-\begin{itemize}
-\pause
+\begin{itemize}[<+->]
 \item Drinking water source
-\pause
 \item Toilet facility type
-\pause
 \item Garbage disposal method
 \end{itemize}
 \end{itemize}
@@ -82,13 +71,88 @@ The aim is to investigate the contribution of demographic, socialland economic f
 
 \begin{frame}{Problems}
 How do we account for the repeated measurements within the households accross the years?
-\pause
-\begin{itemize}
+\begin{itemize}[<+->]
 \item Model the wash varaibles seperately (Manuscript already submitted?)
 \item Pick one of the WASH indicator and treat the remaining two as fixed covariates
 \end{itemize}
+\pause
 \textcolor{red}{The two appraches are not accounting for the unmeasured variations and correlation among the WASH variables} 
 \end{frame}
+
+\begin{frame}{Problems}
+Does this matter?
+
+\begin{itemize}[<+->]
+\item Aceess to any of the WASH indicators (variables) vary within the households and also accross the years.
+\end{itemize}
+\pause
+\begin{columns}[t]
+\column{.35\textwidth}
+\includegraphics[width=\textwidth]{water_plot.pdf}
+\pause
+\column{.35\textwidth}
+\includegraphics[width=\textwidth]{toilet_plot.pdf}
+\pause
+\column{.35\textwidth}
+\includegraphics[width=\textwidth]{garbage_plot.pdf}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Problems}
+
+There are several questions we can ask:
+\begin{itemize}[<+->]
+\item[1.] How do we pull information from (accross) the three levels (WASH)?
+\begin{itemize}[<+->]
+\item Can we account for household level variations?
+\end{itemize}
+\item[2.] Can we estimate the correlation between the WASH variables while controlling for the other covariates?
+\item[3.] Can we control for the variation and still get a reliable estimate of the covariance?
+\end{itemize}
+
+\pause
+What we may know?
+\begin{itemize}[<+->]
+\item \textcolor{red}{This is a difficult problem}!!!
+\item \textcolor{gray}{Generalised linear mixed effects models may be a good starting point}
+\item But we need some understanding of data generation process
+\begin{itemize}[<+->]
+\item \textcolor{blue}{Some simulations}
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\section{Methods}
+\begin{frame}{Methods}
+Assume that we only observed the predictors and simulate response
+\begin{itemize}[<+->]
+\item Pick one of the predictors - \textcolor{blue}{wealth index}, $x$
+\item There are some unobserved confounders, $U$, effect
+\item Assume we know the effect sizes, $\beta$s
+\pause
+\[
+\hat{y}_i = U_i + \beta_{0i} + \beta_{1i}x
+\]
+Where $i\in\{\text{WASH}\}$
+\item Let $P$ be the probability that HH has access to $i\in\{\text{WASH}\}$
+\[
+P = \frac{1}{1 + \exp{(-\hat{y_i})}}
+\]
+\item Simulate response, $y_i$ from a binomial distribution with probability of observing WASH $P$
+\end{itemize}
+\pause
+\textcolor{blue}{Now that we know the observed $\beta$s, can we find a model which gives us back the $\beta$s having answered the 3 question above?}
+\end{frame}
+
+\subsection{Simulations}
+\begin{frame}{Simulation results}
+\centering
+\includegraphics[scale=0.4]{prop_plot.pdf}
+\end{frame}
+
+\subsection{Models}
+
 
 
 \end{document}

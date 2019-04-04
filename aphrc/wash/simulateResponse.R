@@ -85,11 +85,15 @@ print(sim_dflist)
 prop_plot <- (service_prop
 	%>% gather(var, prop, -sims)
 	%>% ggplot(aes(x = prop))
-		+ geom_histogram(alpha = 0.4)
+		+ geom_histogram()
 		+ facet_grid(~var, scales = "free")
+		+ labs(x = "Proportion of HHs that has access to services (WASH)"
+			, y = "Count"
+		)
 )
 
 print(prop_plot)
+ggsave("prop_plot.pdf", prop_plot)
 
 # sim_df: simulated predicted values
 # sim_dflist: simulated predicted response variables per sim

@@ -42,6 +42,7 @@ water_plot <- (water_plot[["prop_plot"]]
 	+ theme(legend.position = "right")
 )
 water_plot
+ggsave("water_plot.pdf", water_plot)
 
 # Check with JD
 propFunc(working_df, tab_vars)
@@ -71,6 +72,7 @@ toilet_plot <- (toilet_plot[["prop_plot"]]
 	+ theme(legend.position = "right")
 )
 toilet_plot
+ggsave("toilet_plot.pdf", toilet_plot)
 
 ##### ---- 3. Garbage disposal ----
 
@@ -94,6 +96,7 @@ garbage_plot <- (garbage_plot[["prop_plot"]]
 	+ theme(legend.position = "right")
 )
 garbage_plot
+ggsave("garbage_plot.pdf", garbage_plot)
 
 #### ---- 4. Logistic PCA Wash Variable ----
 
