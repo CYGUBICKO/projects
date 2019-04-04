@@ -20,8 +20,8 @@ theme_set(theme_bw() +
 
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
-nsims <- 100 # Number of simulations to run
-sample_prop <- 0.6 # Prop of sample per hh
+nsims <- 50 # Number of simulations to run
+sample_prop <- 0.08 # Prop of sample per hh
 year <- 2013
 
 # Predictor variable to simulate
@@ -29,11 +29,11 @@ predictors <- "wealthindex"
 
 # Beta values
 service1_int <- 0.4
-service1_wealth <- 4 
-service2_int <- 3
-service2_wealth <- 2
-service3_int <- 1
-service3_wealth <- 3
+service1_wealth <- 0.4 
+service2_int <- 0.5
+service2_wealth <- 0.6
+service3_int <- 0.2
+service3_wealth <- 0.7
 
 # Confounder service
 serviceU_1 <- 0.1
@@ -54,42 +54,22 @@ print(sim_df)
 
 summary(sim_df)
 
-# Proportion of 1s per simulation
-service_prop <- tibble(sims = 1:nsims
-	, service1 = numeric(nsims)
-	, service2 = numeric(nsims)
-	, service3 = numeric(nsims)
-)
-
 people <- nrow(sim_df)
 sim_dflist <- list()
 
 for (i in 1:nsims){
 	dat <- (sim_df
 		%>% mutate(
-			service1 = rbinom(people, 1, plogis(pred1))
-			, service2 = rbinom(people, 1, plogis(pred2))
-			, service3 = rbinom(people, 1, plogis(pred3))
+			service1 = rpois(people, exp(pred1))
+			, service2 = rpois(people, exp(pred2))
+			, service3 = rpois(people, exp(pred3))
 		)
 	)
-	service_prop[i,2] <- mean(dat[["service1"]])
-	service_prop[i,3] <- mean(dat[["service2"]])
-	service_prop[i,4] <- mean(dat[["service3"]])
 	sim_dflist[[i]] <- dat
 }
 
-summary(service_prop)
-
 print(sim_dflist)
 
-prop_plot <- (service_prop
-	%>% gather(var, prop, -sims)
-	%>% ggplot(aes(x = prop))
-		+ geom_histogram(alpha = 0.4)
-		+ facet_grid(~var, scales = "free")
-)
-
-print(prop_plot)
 
 # sim_df: simulated predicted values
 # sim_dflist: simulated predicted response variables per sim
@@ -108,7 +88,7 @@ betas_df <- (data.frame(betas)
 )
 print(betas_df)
 
-save(file = "simulateResponse.rda"
+save(file = "simulatePoisson.rda"
 	, sim_df
 	, sim_dflist
 	, betas_df

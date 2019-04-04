@@ -66,6 +66,7 @@ descriptives.Rout: descriptives.R
 
 # Simulating Response variable
 simulateResponse.Rout: simulateResponse.R
+simulatePoisson.Rout: simulatePoisson.R
 
 # Fit simple GLM to recapture beta 
 simpleGlm.Rout: simpleGlm.R
@@ -73,14 +74,23 @@ simpleGlm.Rout: simpleGlm.R
 # Fit a more complex glmer based on long-format data
 complexGlmer.Rout: complexGlmer.R
 
+# Fit poisson GMLER
+poissonGlmer.Rout: poissonGlmer.R
+
+# Try MCMCglmm
+binaryMcmcglmm.Rout: binaryMcmcglmm.R
+
 # Some experimenting
 oneGlmer.Rout: oneGlmer.R
 
 # Extract summary stats of complexGlmer
 glmerStats.Rout: glmerStats.R
+mcmcglmmStats.Rout: mcmcglmmStats.R
 
 # Summary plots
 glmerSummary.Rout: glmerSummary.R
+poissonSummary.Rout: poissonSummary.R
+mcmcglmmSummary.Rout: mcmcglmmSummary.R
 
 ## Report
 wash_report.html: wash_report.rmd
