@@ -99,6 +99,9 @@ wash_report.html: wash_report.rmd
 ## Presentation
 wash_presentation.pdf: wash_presentation.tex
 
+## Theory 
+binary_random.Rout: binary_random.R 
+
 ######################################################################
 
 Ignore += *.rda

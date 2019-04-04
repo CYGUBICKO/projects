@@ -1,4 +1,16 @@
 
+2019 Apr 04 (Thu)
+=================
+
+Fitting
+* Figure out how to fix variances in MCMCglmm (see vignette, try to understand rescaling part)
+* Talk to BB about lme4?
+
+Theory
+* Write down and extend our idea about how REs on the intercept should also affect β_effect values
+* Are linear relationships on the log-odds scale still linear?
+ * Can we do the integral (logistic distributed over a Gaussian and then back to logit scale)?
+ * What do simulations show? 
 
 2019 Mar 14 (Thu)
 =================
