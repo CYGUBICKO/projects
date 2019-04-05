@@ -106,9 +106,9 @@ binary_random.Rout: binary_random.R
 
 Ignore += *.rda
 Ignore += *.Rhistory
-Ignore += ../autopsy/*
-Ignore += ../autopsy/*
 Ignore += *.pdf *.html *.csv *.vrb *.png
+subdirs += hh autopsy
+Ignore += $(subdirs)
 
 clean: 
 	rm -f *Rout.*  *.Rout .*.RData .*.Rout.* .*.wrapR.* .*.Rlog *.RData *.wrapR.* *.Rlog *.rdeps *.rda .*.rdeps .*.rda
