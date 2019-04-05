@@ -106,8 +106,8 @@ binary_random.Rout: binary_random.R
 
 Ignore += *.rda
 Ignore += *.Rhistory
-Ignore += *.pdf *.html *.csv *.vrb *.png
-subdirs += hh autopsy
+Ignore += *.pdf *.html *.csv *.vrb *.png *.Rexit
+subdirs += hh autopsy data docs temp_files 
 Ignore += $(subdirs)
 
 clean: 
