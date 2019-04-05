@@ -38,7 +38,7 @@ $(ms)/Makefile:
 
 Ignore += data docs temp_files 
 
-Sources += $(wildcard *.R *.rmd *.tex) $(.../funs/*.R)
+Sources += $(wildcard *.R *.rmd *.tex)
 
 # Define all important R-functions in one file
 globalFunctions.Rout: globalFunctions.R
@@ -106,6 +106,9 @@ binary_random.Rout: binary_random.R
 
 Ignore += *.rda
 Ignore += *.Rhistory
+Ignore += ../autopsy/*
+Ignore += ../autopsy/*
+Ignore += *.pdf *.html *.csv *.vrb *.png
 
 clean: 
 	rm -f *Rout.*  *.Rout .*.RData .*.Rout.* .*.wrapR.* .*.Rlog *.RData *.wrapR.* *.Rlog *.rdeps *.rda .*.rdeps .*.rda
