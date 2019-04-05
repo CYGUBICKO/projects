@@ -61,7 +61,7 @@ dat <- (sim_df
 
 ## Analyze
 services <- c("service1", "service2", "service3")
-model_form <- as.formula(status ~ 0 + wealthindex:service + service + (service - 1|hhid_anon))
+model_form <- as.formula(status ~ 0 + wealthindex:service + service + (service||hhid_anon))
 sim <- 23
 
 complexcoef_list <- list()
@@ -71,13 +71,6 @@ long_df <- (dat
 %>% select(c("hhid_anon", predictors, services))
 %>% gather(service, status, services)
 )
-
-fit.bglmer <- bglmer(model_form
-	,data=long_df
-	, family=binomial (link='logit')
-)
-
-summary(fit.bglmer)
 
 trick_model <- glmer(model_form
 , data = long_df

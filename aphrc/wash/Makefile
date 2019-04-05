@@ -105,6 +105,7 @@ binary_random.Rout: binary_random.R
 ######################################################################
 
 Ignore += *.rda
+Ignore += *.Rhistory
 
 clean: 
 	rm -f *Rout.*  *.Rout .*.RData .*.Rout.* .*.wrapR.* .*.Rlog *.RData *.wrapR.* *.Rlog *.rdeps *.rda .*.rdeps .*.rda

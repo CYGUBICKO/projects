@@ -151,8 +151,27 @@ P = \frac{1}{1 + \exp{(-\hat{y_i})}}
 \includegraphics[scale=0.4]{prop_plot.pdf}
 \end{frame}
 
-\subsection{Models}
-
+\subsection{Tried models}
+\begin{frame}{Data structure}
+\begin{itemize}[<+->]
+\item Stacked response variables column-wise and predictor variables duplicated
+\begin{columns}[t]
+\column{.3\textwidth}
+\includegraphics[width=\textwidth]{wide_df.png}
+\pause
+\column{0.02\textwidth}
+$\Longrightarrow$
+\pause
+\column{.3\textwidth}
+\includegraphics[width=\textwidth]{long_df.png}
+\end{columns}\\
+\item The idea is to fit a Generalized Linear Mixed-Effects Model with varying intercepts for the \textcolor{blue}{services}
+\begin{itemize}[<+->]
+\item Response: \textcolor{blue}{status}
+\item Predictor: \textcolor{blue}{wealthindex}
+\end{itemize}
+\end{itemize}
+\end{frame}
 
 
 \end{document}
