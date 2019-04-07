@@ -21,7 +21,7 @@ load("analysisdata.rda")
 
 set.seed(7902)
 
-sample_prop <- 0.02 # Prop to sample
+sample_prop <- 0.2 # Prop to sample
 year <- 2013
 predictors <- "wealthindex"
 
@@ -61,7 +61,7 @@ dat <- (sim_df
 
 ## Analyze
 services <- c("service1", "service2", "service3")
-model_form <- as.formula(status ~ 0 + wealthindex:service + service + (service||hhid_anon))
+model_form <- as.formula(status ~ 0 + wealthindex:service + service + (1|hhid_anon))
 sim <- 23
 
 complexcoef_list <- list()

@@ -13,7 +13,7 @@ library(ggplot2)
 load("globalFunctions.rda")
 load("analysisdata.rda")
 
-set.seed(7902)
+set.seed(7777)
 
 theme_set(theme_bw() +
             theme(panel.spacing=grid::unit(0,"lines")))
@@ -21,7 +21,7 @@ theme_set(theme_bw() +
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
 nsims <- 100 # Number of simulations to run
-sample_prop <- 0.6 # Prop of sample per hh
+sample_prop <- 0.2 # Prop of sample per hh
 year <- 2013
 
 # Predictor variable to simulate
@@ -93,7 +93,7 @@ prop_plot <- (service_prop
 )
 
 print(prop_plot)
-ggsave("prop_plot.pdf", prop_plot)
+#ggsave("git_push/prop_plot.pdf", prop_plot)
 
 # sim_df: simulated predicted values
 # sim_dflist: simulated predicted response variables per sim

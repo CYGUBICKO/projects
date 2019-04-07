@@ -17,7 +17,7 @@ theme_set(theme_bw() + theme(panel.spacing=grid::unit(0,"lines")))
 load("globalFunctions.rda")
 load("simulateResponse.rda")
 
-set.seed(7902)
+set.seed(7777)
 
 # Objects in
 # * sim_dflist
@@ -27,7 +27,7 @@ set.seed(7902)
 
 services <- c("service1", "service2", "service3")
 nsims <- length(sim_dflist)
-model_form <- as.formula(status ~ 0 + wealthindex:service + service + (1|hhid_anon))
+model_form <- as.formula(status ~ 0 + wealthindex:service + service + (service + 0|hhid_anon))
 
 complexcoef_list <- list()
 complexglmer_list <- list()
@@ -37,13 +37,17 @@ for (s in 1:nsims){
       %>% select(c("hhid_anon", predictors, services))
       %>% gather(service, status, services)
    )
-   glmer_model <- glmer(model_form
-      , data = long_df
-      , family = binomial
-		## , nAGQ = 20
-   )
-   complexcoef_list[[s]] <- fixef(glmer_model)
-   complexglmer_list[[s]] <- glmer_model
+	tryCatch({
+   	glmer_model <- glmer(model_form
+      	, data = long_df
+      	, family = binomial
+			## , nAGQ = 20
+   	)
+   	complexcoef_list[[s]] <- fixef(glmer_model)
+   	complexglmer_list[[s]] <- glmer_model
+	}
+	, error = function(e){print(e)}
+	)
 }
 
 complexcoef_df <- Reduce(rbind, complexcoef_list) %>% as_tibble()

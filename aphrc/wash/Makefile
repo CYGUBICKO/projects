@@ -97,6 +97,7 @@ mcmcglmmSummary.Rout: mcmcglmmSummary.R
 wash_report.html: wash_report.rmd
 
 ## Presentation
+presentation.Rout: presentation.R
 wash_presentation.pdf: wash_presentation.tex
 
 ## Theory 
