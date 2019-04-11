@@ -95,3 +95,4 @@ Topics
 	* Joint model: Does it involve composite score or not.
 	* Spikes in 2009
 
+# (1/(1+exp(-x)))*(1/(2pi*d^2)*exp(-(x-m)^2/(2*d^2))) dx
