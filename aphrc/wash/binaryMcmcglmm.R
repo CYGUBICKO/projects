@@ -30,8 +30,8 @@ nsims <- length(sim_dflist)
 
 
 # Priors
-priors = list(R = list(V = diag(1), nu = 1)
-	, G = list(G1 = list(V = diag(3)*0.02, nu = 1, fix = 1))
+priors <- list(G=list(G1 = list(V = diag(3)*1e-16, n = 1, fix = 1, alpha.mu = rep(0, 3), alpha.V  = diag(3)*1125)
+	, G2 = list(V = diag(3)*0.02, n = 0, fix = 1))
 )
 
 mcmcglmmcoef_list <- list()
@@ -43,7 +43,7 @@ for (s in 1:nsims){
       %>% gather(service, status, services)
    )
 	model <- MCMCglmm(status ~ 0 + wealthindex:service + service
-		, random = ~corg(service + 0):hhid_anon
+		, random = ~corg(service):hhid_anon + us(service):units
 		, family = "categorical"
 		, data = long_df
  		, prior = priors

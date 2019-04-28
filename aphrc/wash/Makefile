@@ -67,6 +67,7 @@ descriptives.Rout: descriptives.R
 # Simulating Response variable
 simulateResponse.Rout: simulateResponse.R
 simulatePoisson.Rout: simulatePoisson.R
+simulateMvariate.Rout: simulateMvariate.R
 
 # Fit simple GLM to recapture beta 
 simpleGlm.Rout: simpleGlm.R
@@ -79,6 +80,7 @@ poissonGlmer.Rout: poissonGlmer.R
 
 # Try MCMCglmm
 binaryMcmcglmm.Rout: binaryMcmcglmm.R
+multiMcmcglmm.Rout: multiMcmcglmm.R
 
 # Some experimenting
 oneGlmer.Rout: oneGlmer.R
@@ -92,6 +94,7 @@ mcmcglmmStats.Rout: mcmcglmmStats.R
 glmerSummary.Rout: glmerSummary.R
 poissonSummary.Rout: poissonSummary.R
 mcmcglmmSummary.Rout: mcmcglmmSummary.R
+multimcmcglmmSummary.Rout: multimcmcglmmSummary.R
 
 ## Report
 wash_report.html: wash_report.rmd
