@@ -38,7 +38,7 @@ $(ms)/Makefile:
 
 Ignore += data docs temp_files 
 
-Sources += $(wildcard *.R *.rmd *.tex)
+Sources += $(wildcard *.R *.rmd *.tex *.sage)
 
 # Define all important R-functions in one file
 globalFunctions.Rout: globalFunctions.R
@@ -105,6 +105,10 @@ wash_presentation.pdf: wash_presentation.tex
 
 ## Theory 
 binary_random.Rout: binary_random.R 
+
+## Integration in sage
+integration.out: integration.sage
+	sage $< > $@
 
 ######################################################################
 

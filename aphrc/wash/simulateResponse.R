@@ -20,7 +20,7 @@ theme_set(theme_bw() +
 
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
-nsims <- 100 # Number of simulations to run
+nsims <- 50 # Number of simulations to run
 sample_prop <- 0.15 # Prop of sample per hh
 year <- 2013
 
@@ -43,6 +43,7 @@ serviceU_3 <- 0.1
 sim_df <- (working_df
 	%>% filter(intvwyear==year & runif(n())<sample_prop)
 	%>% select_("hhid_anon", predictors)
+	%>% mutate_at(predictors, scale)
 	%>% mutate(U = rnorm(n=n())
 		, pred1 = serviceU_1*U + service1_wealth*wealthindex + service1_int
 		, pred2 = serviceU_2*U + service2_wealth*wealthindex + service2_int

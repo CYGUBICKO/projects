@@ -101,7 +101,7 @@ betas_df <- (data.frame(betas)
 )
 print(betas_df)
 
-save(file = "simulateResponse.rda"
+save(file = "simulateMvariate.rda"
 	, sim_df
 	, sim_dflist
 	, betas_df
