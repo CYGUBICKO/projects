@@ -4,8 +4,10 @@
 #### ---- By: Steve and Jonathan ----
 #### ---- Date: 2019 Apr 03 (Wed) ----
 
+library(MCMCglmm)
+
 #load("complexGlmer.rda")
-load("binaryMcmcglmm.rda")
+load("multiMcmcglmm.rda")
 
 # Incoming objects:
 # * complexglmer_list - glmer fits per simulation
@@ -13,9 +15,9 @@ load("binaryMcmcglmm.rda")
 # * betas_df & betas - initial beta values for simulations
 # * predictors 
 
-nsims <- length(mcmcglmm_list)
+nsims <- length(multimcmcglmm_list)
 
 for (s in 1:nsims){
-	print(summary(mcmcglmm_list[[s]]))
+	print(summary(multimcmcglmm_list[[s]]))
 }
 
