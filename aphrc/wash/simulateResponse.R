@@ -36,13 +36,13 @@ service3_int <- 0.3
 service3_wealth <- 0.6
 
 # Confounder service
-serviceU_1 <- 0.1
+serviceU_1 <- 0.2
 serviceU_2 <- 0.1
-serviceU_3 <- 0.1
+serviceU_3 <- 0.4
 
 sim_df <- (working_df
 	%>% filter(intvwyear==year & runif(n())<sample_prop)
-	%>% select_("hhid_anon", predictors)
+	%>% select(hhid_anon, predictors)
 	%>% mutate_at(predictors, scale)
 	%>% mutate(U = rnorm(n=n())
 		, pred1 = serviceU_1*U + service1_wealth*wealthindex + service1_int
