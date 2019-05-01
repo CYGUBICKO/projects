@@ -24,7 +24,7 @@ complexglmer_plot <- (complexcoef_df
    %>% ggplot(aes(x = value))
    + geom_histogram()
    + geom_vline(data = betas_df, aes(xintercept = betas, color = coef)
-      , linetype="dashed", size = 2
+      , linetype="dashed"
    )
    + labs(x = "Betas", y = "Count")
    + ggtitle("Fitted vs True betas")

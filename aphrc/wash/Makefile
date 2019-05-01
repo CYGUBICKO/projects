@@ -67,6 +67,8 @@ descriptives.Rout: descriptives.R
 # Simulating Response variable
 simulateResponse.Rout: simulateResponse.R
 simulatePoisson.Rout: simulatePoisson.R
+
+## Just trying to include Cov in the simulations
 simulateMvariate.Rout: simulateMvariate.R
 
 # Fit simple GLM to recapture beta 
@@ -106,7 +108,7 @@ wash_presentation.pdf: wash_presentation.tex
 ## Theory 
 binary_random.Rout: binary_random.R 
 
-## Integration in sage
+## Integrating f(theta)*l(theta)
 integration.out: integration.sage
 	sage $< > $@
 
