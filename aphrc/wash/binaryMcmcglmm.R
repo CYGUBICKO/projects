@@ -43,7 +43,7 @@ for (s in 1:nsims){
       %>% gather(service, status, services)
    )
 	model <- MCMCglmm(status ~ 0 + wealthindex:service + service
-		, random = ~corg(service):hhid_anon + us(service):units
+		, random = ~us(service):hhid_anon + us(service):units
 		, family = "categorical"
 		, data = long_df
  		, prior = priors

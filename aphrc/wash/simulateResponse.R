@@ -21,8 +21,8 @@ theme_set(theme_bw() +
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
 nsims <- 50 # Number of simulations to run
-sample_prop <- 0.15 # Prop of sample per hh
-year <- 2013
+sample_prop <- 0.03 # Prop of sample per hh
+year <- c(2007:2015)
 
 # Predictor variable to simulate
 predictors <- "wealthindex"
@@ -36,22 +36,28 @@ service3_int <- 0.3
 service3_wealth <- 0.6
 
 # Confounder service
-serviceU_1 <- 0.2
-serviceU_2 <- 0.1
-serviceU_3 <- 0.4
+serviceU_1 <- 0.01
+serviceU_2 <- 0.15
+serviceU_3 <- 0.09
 
 sim_df <- (working_df
-	%>% filter(intvwyear==year & runif(n())<sample_prop)
+	%>% group_by(intvwyear, hhid_anon)
+	%>% filter(intvwyear %in% year & runif(n())<=sample_prop & !is.nan(wealthindex))
 	%>% select(hhid_anon, predictors)
+	%>% ungroup()
 	%>% mutate_at(predictors, scale)
-	%>% mutate(U = rnorm(n=n())
-		, pred1 = serviceU_1*U + service1_wealth*wealthindex + service1_int
-		, pred2 = serviceU_2*U + service2_wealth*wealthindex + service2_int
-		, pred3 = serviceU_3*U + service3_wealth*wealthindex + service3_int
+	%>% group_by(hhid_anon)
+	%>% mutate(U1 = rnorm(n=1)
+		, U2 = rnorm(n=1)
+		, U3 = rnorm(n=1)
+		, pred1 = serviceU_1*U1 + service1_wealth*wealthindex + service1_int
+		, pred2 = serviceU_2*U2 + service2_wealth*wealthindex + service2_int
+		, pred3 = serviceU_3*U3 + service3_wealth*wealthindex + service3_int
 	)
+	%>% ungroup()
 	%>% droplevels()
 )
-print(sim_df)
+print(data.frame(select(sim_df, hhid_anon, wealthindex, U1, U2, U3)))
 
 summary(sim_df)
 

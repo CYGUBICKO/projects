@@ -30,12 +30,12 @@ nsims <- length(sim_dflist)
 
 
 # Priors
-#priors <- list(G=list(G1 = (list(V = diag(3)*0.2, nu = 0.002, alpha.mu = rep(0, 3), alpha.V  = diag(3)*1225)))
-#	, R = list(V = diag(3)*0.2, nu = 0.002)
-#)
-priors <- list(G=list(G1=(list(V=diag(3)*0.2, nu=1, alpha.mu = rep(0, 3), alpha.V  = diag(3)*1000))),R=list(V=diag(3)*0.009, nu=1))
-IJ <- (1/3) * (diag(3) + matrix(1, 3, 3))
-priors$B = list(mu = rep(0, 6), V = kronecker(IJ, diag(2)*1.7 + pi^2/3))
+priors <- list(G=list(G1 = (list(V = diag(3), nu = 0.002, alpha.mu = rep(0, 3), alpha.V  = diag(3)*625)))
+	, R = list(V = diag(3), nu = 0.002)
+)
+#priors <- list(G=list(G1=(list(V=diag(3)*0.2, nu=1, alpha.mu = rep(0, 3), alpha.V  = diag(3)*1000))),R=list(V=diag(3)*0.009, nu=1))
+#IJ <- (1/3) * (diag(3) + matrix(1, 3, 3))
+#priors$B = list(mu = rep(0, 6), V = kronecker(IJ, diag(2)*1.7 + pi^2/3))
 multimcmcglmmcoef_list <- list()
 multimcmcglmm_list <- list()
 for (s in 1:nsims){
