@@ -98,6 +98,9 @@ poissonSummary.Rout: poissonSummary.R
 mcmcglmmSummary.Rout: mcmcglmmSummary.R
 multimcmcglmmSummary.Rout: multimcmcglmmSummary.R
 
+# Diagnostics
+glmerDiagnostics.Rout: glmerDiagnostics.R
+
 ## Report
 wash_report.html: wash_report.rmd
 
@@ -110,7 +113,7 @@ binary_random.Rout: binary_random.R
 
 ## Integrating f(theta)*l(theta)
 integration.out: integration.sage
-	sage $< > $@
+	sage $< |tee > $@
 
 ######################################################################
 

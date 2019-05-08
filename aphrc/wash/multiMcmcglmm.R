@@ -30,30 +30,48 @@ nsims <- length(sim_dflist)
 
 
 # Priors
-priors <- list(G=list(G1 = (list(V = diag(3), nu = 0.002, alpha.mu = rep(0, 3), alpha.V  = diag(3)*625)))
-	, R = list(V = diag(3), nu = 0.002)
-)
+#priors <- list(G=list(G1 = (list(V = diag(3), nu = 0.002, alpha.mu = rep(0, 3), alpha.V  = diag(3)*625)))
+#	, R = list(V = diag(3), nu = 0.002)
+#)
 #priors <- list(G=list(G1=(list(V=diag(3)*0.2, nu=1, alpha.mu = rep(0, 3), alpha.V  = diag(3)*1000))),R=list(V=diag(3)*0.009, nu=1))
 #IJ <- (1/3) * (diag(3) + matrix(1, 3, 3))
 #priors$B = list(mu = rep(0, 6), V = kronecker(IJ, diag(2)*1.7 + pi^2/3))
+B.prior <- list(V=diag(6)*1e7, mu=rep(0,6))
+priors <- list(
+	B = B.prior
+	, R = list(V = diag(3)*0.01, nu = 2)
+	, G = list(
+		G1=list(V = diag(3)*1e-17, nu = 0.001, alpha.mu = c(0,0,0), alpha.V = diag(3)*625)
+	)
+)
+
+
 multimcmcglmmcoef_list <- list()
 multimcmcglmm_list <- list()
 for (s in 1:nsims){
    df <- (sim_dflist[[s]]
       %>% data.frame()
    )
-	model <- MCMCglmm(cbind(service1, service2, service3) ~ wealthindex:trait + trait - 1
-		, random = ~us(trait):hhid_anon
-		, rcov = ~us(trait):units
-		, family = c("categorical", "categorical", "categorical")		
-		, data = df
- 		, prior = priors
- 		, trunc = TRUE
-		, verbose = FALSE
-   )
-	model_summary <- summary(model)
-   multimcmcglmmcoef_list[[s]] <- model_summary[["solutions"]][,1]
-   multimcmcglmm_list[[s]] <- model
+	tryCatch({
+		model <- MCMCglmm(cbind(service1, service2, service3) ~ wealthindex:trait + trait - 1
+			, random = ~us(trait):hhid_anon
+			, rcov = ~us(trait):units
+			, family = c("categorical", "categorical", "categorical")		
+			, data = df
+			, prior = priors
+			, slice = TRUE
+			, trunc = TRUE
+			, verbose = FALSE
+			, thin   = 20
+			, burnin = 5000
+			, nitt   = 105000
+		)
+		model_summary <- summary(model)
+		multimcmcglmmcoef_list[[s]] <- model_summary[["solutions"]][,1]
+		multimcmcglmm_list[[s]] <- model
+	}
+	, error = function(e){print(e)}
+	)
 }
 
 multimcmcglmmcoef_df <- Reduce(rbind, multimcmcglmmcoef_list) %>% as_tibble()

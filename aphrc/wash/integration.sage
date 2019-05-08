@@ -11,7 +11,7 @@ sol1 = integrate(f, x, -infinity, infinity);
 print(sol1.simplify())
 
 # Likelihood function, L(theta) = exp(x)/(1 + exp(-x))
-l = 1/(1 + exp(-x))
+l = 1/(1 + exp(-x));
 sol2 = integrate(l, x, -infinity, 1);
 print(sol2.simplify())
 
