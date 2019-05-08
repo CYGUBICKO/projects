@@ -64,7 +64,7 @@ for (s in 1:nsims){
 			, verbose = FALSE
 			, thin   = 20
 			, burnin = 5000
-			, nitt   = 105000
+			, nitt   = 30000
 		)
 		model_summary <- summary(model)
 		multimcmcglmmcoef_list[[s]] <- model_summary[["solutions"]][,1]
