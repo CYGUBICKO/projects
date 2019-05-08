@@ -120,8 +120,8 @@ integration.out: integration.sage
 Ignore += *.rda
 Ignore += *.Rhistory
 Ignore += *.pdf *.html *.csv *.vrb *.png *.Rexit
-subdirs += hh autopsy data docs temp_files 
-Ignore += $(subdirs)
+sub += hh autopsy data docs temp_files 
+Ignore += $(sub)
 
 clean: 
 	rm -f *Rout.*  *.Rout .*.RData .*.Rout.* .*.wrapR.* .*.Rlog *.RData *.wrapR.* *.Rlog *.rdeps *.rda .*.rdeps .*.rda *.vrb *.toc *.out *.nav *.snm *.log *.aux

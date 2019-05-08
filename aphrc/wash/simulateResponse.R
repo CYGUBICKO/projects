@@ -21,8 +21,14 @@ theme_set(theme_bw() +
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
 nsims <- 1 # Number of simulations to run
+<<<<<<< HEAD
 sample_prop <- 0.3 # Prop of sample per hh
 year <- c(2013)
+=======
+nsims <- 50 # Number of simulations to run
+sample_prop <- 0.03 # Prop of sample per hh
+year <- c(2007:2015)
+>>>>>>> f5bb7b78aba47f4749d47997943443c802dcff42
 
 # Predictor variable to simulate
 predictors <- "wealthindex"
@@ -36,9 +42,15 @@ service3_int <- 0.3
 service3_wealth <- 0.6
 
 # Confounder service
+<<<<<<< HEAD
 serviceU_1 <- 0.62
 serviceU_2 <- 0.70
 serviceU_3 <- 0.85
+=======
+serviceU_1 <- 0.51
+serviceU_2 <- 0.35
+serviceU_3 <- 0.49
+>>>>>>> f5bb7b78aba47f4749d47997943443c802dcff42
 
 sim_df <- (working_df
 	%>% group_by(intvwyear, hhid_anon)
