@@ -100,6 +100,7 @@ multimcmcglmmSummary.Rout: multimcmcglmmSummary.R
 
 # Diagnostics
 glmerDiagnostics.Rout: glmerDiagnostics.R
+multimcmcDiagnostics.Rout: multimcmcDiagnostics.R
 
 ## Report
 wash_report.html: wash_report.rmd

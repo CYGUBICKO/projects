@@ -21,18 +21,18 @@ theme_set(theme_bw() +
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
 nsims <- 1 # Number of simulations to run
-sample_prop <- 0.03 # Prop of sample per hh
-year <- c(2007:2015)
+sample_prop <- 0.05 # Prop of samples
+year <- c(2010:2015)
 
 # Predictor variable to simulate
 predictors <- "wealthindex"
 
 # Beta values
-service1_int <- 0.1
-service1_wealth <- 0.4 
+service1_int <- -0.1
+service1_wealth <- -0.4 
 service2_int <- 0.2
 service2_wealth <- 0.5
-service3_int <- 0.3
+service3_int <- -0.3
 service3_wealth <- 0.6
 
 # Confounder service
