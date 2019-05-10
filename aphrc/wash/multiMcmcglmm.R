@@ -26,7 +26,7 @@ set.seed(7777)
 # * predictors
 
 services <- c("service1", "service2", "service3")
-nsims <- length(sim_dflist)
+nsims <- 1 #length(sim_dflist)
 
 multimcmcglmmcoef_list <- list()
 multimcmcglmm_list <- list()
@@ -52,7 +52,7 @@ for (s in 1:nsims){
 	tryCatch({
 		model <- MCMCglmm(cbind(service1, service2, service3) ~ wealthindex:trait + trait - 1
 			, random = ~us(trait):hhid_anon
-			, rcov = ~us(trait):units
+#			, rcov = ~us(trait):units
 			, family = c("categorical", "categorical", "categorical")		
 			, data = df
 			, prior = priors

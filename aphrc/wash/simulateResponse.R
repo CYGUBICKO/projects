@@ -22,7 +22,7 @@ theme_set(theme_bw() +
 
 nsims <- 100 # Number of simulations to run
 sample_prop <- 0.05 # Prop of samples
-year <- c(2010:2015)
+year <- 2013
 
 # Predictor variable to simulate
 predictors <- "wealthindex"
