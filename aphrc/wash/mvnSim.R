@@ -2,14 +2,15 @@ library(lme4)
 library(mvtnorm)
 library(dplyr)
 library(tidyr)
+library(ggplot2)
 
-n <- 10000
+n <- 1000
 b0 <- 2
-b1 <- 3
+b1 <- 4
 b2 <- 10
 
 b1_sd <- 1
-b2_sd <- 3
+b2_sd <- 1
 cor_ab <- 0.5
 
 cormat <- matrix(c(1,cor_ab,cor_ab,1),2,2)
@@ -21,27 +22,48 @@ print(covmat)
 
 x <- rnorm(n)
 
-b0vec <- rnorm(2*n,mean=b0)
+b0vec <- rnorm(2*n,mean=b0,sd=0.00001)
 
 betas <- MASS::mvrnorm(n=n
 	, mu = rep(c(b1, b2), each=1)
 	, Sigma = covmat
 )
 
-y1 <- head(b0vec,n) + betas[,1]*x + rnorm(n)
+y1 <- head(b0vec,n) + betas[,1]*x
 y2 <- tail(b0vec,n) + betas[,2]*x + rnorm(n)
 
 dat <- data.frame(y1, y2, X=x, id=1:n)
 
 mdat <- (dat
 	%>% gather(key="type", value="Y", -X, -id)
+	%>% mutate( p = plogis(Y)
+		, service = rbinom(2*n, 1, p)
+		)
 )
 
-mod <- lmer(Y~ type:X + type + (0+type|id)
+print(mdat)
+print(ggplot(mdat, aes(y=p, x=type, color=type))
+	+ geom_boxplot()
+)
+
+norm_mod <- lmer(Y~ type:X + type + (0+type|id)
 	, data=mdat
 	, control=lmerControl(check.nobs.vs.nlev="ignore",check.nobs.vs.nRE="ignore")
 )
 
+
+mod <- glm(service ~ X 
+	, data=(mdat %>% filter(type=="y1"))
+	, family = binomial
+)
+
 print(summary(mod))
 
+binom_mod <- glmer(service ~ type:X + (0+type|id)
+	, data = mdat
+	, family = binomial
+	, control=lmerControl(check.nobs.vs.nlev="ignore",check.nobs.vs.nRE="ignore")
+)
+
+print(summary(binom_mod))
 

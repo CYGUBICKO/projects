@@ -1,3 +1,11 @@
+2019 May 10 (Fri)
+================
+
+* univariate simulation test works for logistic regression (only if we have a single beta (i.e. betas cannot have large variations))
+
+* multivariate normal simulation test works perfectly
+
+* multivariate logistic kinda works combining the two ideas above (but fails completely if we have variation in the betas)
 
 2019 Apr 04 (Thu)
 =================
