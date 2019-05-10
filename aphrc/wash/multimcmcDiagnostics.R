@@ -23,8 +23,15 @@ load("multiMcmcglmm.rda")
 # * betas_df & betas - initial beta values for simulations
 # * predictors 
 
-multimcmc_model <- multimcmcglmm_list[[1]]
-
+### Marginalised loglic as per pg 47 of courseNotes mcmcglmm
+mcmc_mgl <- multimcmcglmm_list[[1]]
+c2 <- ((16 * sqrt(3))/(15 * pi))^2
+mcmc_names <- names(data.frame(mcmc_mgl[["VCV"]]))
+mcmc_mgl[["VCV"]][, grep("\\.hhid_anon", mcmc_names)] <- 
+mcmc_mgl[["VCV"]][, grep("\\.hhid_anon", mcmc_names)]/(1 + c2 * mcmc_mgl[["VCV"]][, grep("\\.units", mcmc_names)])
+mcmc_mgl[["Sol"]][, 4:6] <- mcmc_mgl[["Sol"]][, 4:6]/sqrt(1 + c2 * mcmc_mgl[["VCV"]][, grep("\\.units", mcmc_names)[c(1, 5, 9)]])
+mcmc_mgl[["VCV"]][, c(1, 5, 9)] <- sqrt(mcmc_mgl[["VCV"]][, c(1, 5, 9)]) 
+multimcmc_model <- mcmc_mgl
 # Estimate CI
 
 beta_estimates <- (summary(multimcmc_model)[["solutions"]]
@@ -84,5 +91,6 @@ mean_values <- (rand
 mean_values
 
 save(file = "multimcmcDiagnostics.rda"
+	, multimcmc_model
 )
 

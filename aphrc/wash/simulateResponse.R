@@ -20,7 +20,7 @@ theme_set(theme_bw() +
 
 # Aim is to simulate the outcome variable so as to understand the underlying distribution.
 
-nsims <- 1 # Number of simulations to run
+nsims <- 100 # Number of simulations to run
 sample_prop <- 0.05 # Prop of samples
 year <- c(2010:2015)
 

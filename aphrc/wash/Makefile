@@ -102,6 +102,9 @@ multimcmcglmmSummary.Rout: multimcmcglmmSummary.R
 glmerDiagnostics.Rout: glmerDiagnostics.R
 multimcmcDiagnostics.Rout: multimcmcDiagnostics.R
 
+# Compare mcmc and glmer
+compareModels.Rout: compareModels.R
+
 ## Report
 wash_report.html: wash_report.rmd
 

@@ -11,6 +11,7 @@ library(ggplot2)
 library(gridExtra)
 library(lme4)
 library(lattice)
+library(dotwhisker)
 
 theme_set(theme_bw() + theme(panel.spacing=grid::unit(0,"lines")))
 
@@ -25,15 +26,18 @@ load("complexGlmer.rda")
 lme4_model <- complexglmer_list[[1]]
 long_df <- complexdf_list[[1]]
 
+# Parameter estimates
+dwplot(lme4_model, effects = "fixed", by_2sd = FALSE)
+
 # Residual plots
-plot(lme4_model, type = c("p","smooth"))
-
 plot(lme4_model, service ~ resid(.))
+plot(lme4_model)
 
-qqmath(ranef(lme4_model, condVar = TRUE))
-
-# dotplot(ranef(lme4_model, condVar=TRUE), lattice.options=list(layout=c(1,3)))
+# Compute profile confidence intervals for comparison
+#lme4_CI_prof <- confint(lme4_model)
 
 save(file = "glmerDiagnostics.rda"
+	, lme4_model
+#	, lme4_CI_prof
 )
 

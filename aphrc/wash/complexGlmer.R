@@ -27,7 +27,7 @@ set.seed(7777)
 # * predictors
 
 services <- c("service1", "service2", "service3")
-nsims <- 1 #length(sim_dflist)
+nsims <- length(sim_dflist)
 model_form <- as.formula(status ~ 0 + wealthindex:service + service + (0 + service|hhid_anon))
 
 complexcoef_list <- list()
