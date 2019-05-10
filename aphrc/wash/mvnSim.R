@@ -1,0 +1,47 @@
+library(lme4)
+library(mvtnorm)
+library(dplyr)
+library(tidyr)
+
+n <- 10000
+b0 <- 2
+b1 <- 3
+b2 <- 10
+
+b1_sd <- 1
+b2_sd <- 3
+cor_ab <- 0.5
+
+cormat <- matrix(c(1,cor_ab,cor_ab,1),2,2)
+sdvec <- c(b1_sd, b2_sd)
+varmat <- sdvec %*% t(sdvec)
+covmat <- varmat * cormat 
+
+print(covmat)
+
+x <- rnorm(n)
+
+b0vec <- rnorm(2*n,mean=b0)
+
+betas <- MASS::mvrnorm(n=n
+	, mu = rep(c(b1, b2), each=1)
+	, Sigma = covmat
+)
+
+y1 <- head(b0vec,n) + betas[,1]*x + rnorm(n)
+y2 <- tail(b0vec,n) + betas[,2]*x + rnorm(n)
+
+dat <- data.frame(y1, y2, X=x, id=1:n)
+
+mdat <- (dat
+	%>% gather(key="type", value="Y", -X, -id)
+)
+
+mod <- lmer(Y~ type:X + type + (0+type|id)
+	, data=mdat
+	, control=lmerControl(check.nobs.vs.nlev="ignore",check.nobs.vs.nRE="ignore")
+)
+
+print(summary(mod))
+
+

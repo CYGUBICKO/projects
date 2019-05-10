@@ -119,6 +119,11 @@ binary_random.Rout: binary_random.R
 integration.out: integration.sage
 	sage $< |tee > $@
 
+
+## Bottomline test with multivariate normal response
+
+mvnSim.Rout: mvnSim.R
+
 ######################################################################
 
 Ignore += *.rda
