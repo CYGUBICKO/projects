@@ -28,17 +28,17 @@ year <- 2013
 predictors <- "wealthindex"
 
 # Beta values
-service1_int <- -0.1
-service1_wealth <- -0.4 
+service1_int <- 0.1
+service1_wealth <- 0.4 
 service2_int <- 0.2
 service2_wealth <- 0.5
-service3_int <- -0.3
+service3_int <- 0.3
 service3_wealth <- 0.6
 
 # Confounder service
-serviceU_1 <- 0.51
-serviceU_2 <- 0.35
-serviceU_3 <- 0.49
+serviceU_1 <- 0.6
+serviceU_2 <- 0.2
+serviceU_3 <- 0.6
 
 sim_df <- (working_df
 	%>% group_by(intvwyear, hhid_anon)

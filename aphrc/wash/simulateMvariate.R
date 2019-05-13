@@ -4,13 +4,15 @@
 #### ---- By: Steve and Jonathan ----
 #### ---- Date: 2019 Mar 05 (Tue) ----
 
-library(arm)
-library(mvtnorm)
+library(MASS)
 library(data.table)
 library(dplyr)
+options(dplyr.width = Inf)
+
 library(tidyr)
 library(tibble)
 library(ggplot2)
+
 
 load("globalFunctions.rda")
 load("analysisdata.rda")
@@ -22,8 +24,8 @@ theme_set(theme_bw() +
 
 # Simulate multivariate response.
 
-nsims <- 1 # Number of simulations to run
-sample_prop <- 0.2 # Prop of sample per hh
+nsims <- 100 # Number of simulations to run
+sample_prop <- 0.05 # Prop of sample per hh
 year <- 2013
 
 # Predictor variable to simulate
@@ -36,70 +38,85 @@ service2_int <- 0.2
 service2_wealth <- 0.5
 service3_int <- 0.1
 service3_wealth <- 0.6
-# Covariance matrix
-## Var(Services) = 1; Cov(Service1, Service2) = Cov(Service2, Service3) = 0.5 and Cov(Service1, Service3) = 0
-covMat <- matrix(
-	c(4, 0.5, 0
-		, 0.5, 2, 0
-		, 0, 0, 3
+
+# Correlation matrix
+cor_s1s2 <- 0.3
+cor_s1s3 <- 0.2
+cor_s2s3 <- 0.6
+corMat <- matrix(
+	c(1, cor_s1s2, cor_s1s3
+		, cor_s1s2, 1, cor_s2s3
+		, cor_s1s3, cor_s2s3, 1
 	), 3, 3
-)*0.02
+)
+
+# Sd
+service1_sd <- 2
+service2_sd <- 5
+service3_sd <- 10
+sdVec <- c(service1_sd, service2_sd, service3_sd)
+varMat <- sdVec %*% t(sdVec)
+varMat
+corMat
+# varcov matrix
+covMat <- varMat * corMat
+covMat
 
 # Confounder service
-serviceU_1 <- 1
-serviceU_2 <- 1
-serviceU_3 <- 1
+serviceU_1 <- 0
+serviceU_2 <- 0
+serviceU_3 <- 0
 
-sim_df <- (working_df
+# Subset data to sumulate
+temp_df <- (working_df
 	%>% group_by(intvwyear, hhid_anon)
 	%>% filter(intvwyear %in% year & runif(n())<=sample_prop & !is.nan(wealthindex))
-	%>% select(hhid_anon, predictors)
 	%>% ungroup()
-#	%>% mutate_at(predictors, scale)
-#	%>% group_by(hhid_anon)
-	%>% mutate(U1 = rnorm(n=n())
-		, U2 = rnorm(n=n())
-		, U3 = rnorm(n=n())
-		, pred1 = serviceU_1*U1 + service1_wealth*wealthindex + service1_int
-		, pred2 = serviceU_2*U2 + service2_wealth*wealthindex + service2_int
-		, pred3 = serviceU_3*U3 + service3_wealth*wealthindex + service3_int
-	)
-#	%>% ungroup()
+	%>% select(hhid_anon, predictors)
+	%>% mutate_at(predictors, scale)
 	%>% droplevels()
 )
+people <- nrow(temp_df)
 
-print(sim_df)
-
-people <- nrow(sim_df)
-
-# Draw from a multivariate distribution
-prednames <- grep("^pred[0-9]", names(sim_df), value = TRUE)
-means <- (sim_df
-	%>% select(prednames)
-	%>% as.matrix()
+# Sumulate Betas from mvnorm
+betas <- mvrnorm(n = people
+	, mu = rep(c(service1_wealth, service2_wealth, service3_wealth), each = 1)
+	, Sigma = covMat
 )
-mvt_samples <- t(apply(means, 1, function(m){
-		rmvnorm(1, mean = scale(m), sigma = covMat)
-	})
+
+# Predictions (XB)
+sim_df <- (temp_df
+	%>% group_by(hhid_anon)
+	%>% mutate(U1 = serviceU_1*rnorm(n = 1)
+		, U2 = serviceU_2*rnorm(n = 1)
+		, U3 = serviceU_3*rnorm(n = 1)
+	)
+	%>% ungroup()
+	%>% mutate(pred1 = service1_int + betas[,1]*wealthindex + U1
+		, pred2 = service2_int + betas[,2]*wealthindex + U2
+		, pred3 = service3_int + betas[,3]*wealthindex + U3
+	)
+	%>% data.frame()
 )
 
 sim_dflist <- list()
-for (s in 1:nsims){
-	dat <- (mvt_samples
-		%>% apply(., 2, function(p){
-			rbinom(people, 1, plogis(p))
-		})
-		%>% data.frame()
-		%>% setnames(names(.), c("service1", "service2", "service3"))
-		%>% bind_cols(select(sim_df, c("hhid_anon", predictors)))
+for (i in 1:nsims){
+	dat <- (sim_df
+		%>% mutate(
+			service1 = rbinom(people, 1, plogis(pred1))
+			, service2 = rbinom(people, 1, plogis(pred2))
+			, service3 = rbinom(people, 1, plogis(pred3))
+		)
 	)
-	sim_dflist[[s]] <- dat
+	sim_dflist[[i]] <- dat
 }
 
-head(sim_dflist[[1]])
+print(people)
+print(head(sim_dflist[[1]]))
 
 # Extract beta values assigned in the simulation
 betas <- sapply(grep("service[1-9]", ls(), value = TRUE), get)
+betas <- betas[!names(betas) %in% grep("_sd", names(betas), value = TRUE)]
 betas_df <- (data.frame(betas) 
 	%>% rownames_to_column("coef")
 	%>% mutate(n = extract_numeric(coef)

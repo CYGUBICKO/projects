@@ -43,7 +43,7 @@ for (s in 1:nsims){
 	tryCatch({
    	glmer_model <- glmer(model_form
       	, data = long_df
-      	, family = binomial
+      	, family = binomial(link = "logit")
 			, control=glmerControl(optimizer="bobyqa")
    	)
    	complexcoef_list[[s]] <- fixef(glmer_model)

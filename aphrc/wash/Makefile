@@ -84,6 +84,9 @@ poissonGlmer.Rout: poissonGlmer.R
 binaryMcmcglmm.Rout: binaryMcmcglmm.R
 multiMcmcglmm.Rout: multiMcmcglmm.R
 
+# Brms models
+brmsModel.Rout: brmsModel.R
+
 # Some experimenting
 oneGlmer.Rout: oneGlmer.R
 oneMcmcglmm.Rout: oneMcmcglmm.R
@@ -91,6 +94,7 @@ oneMcmcglmm.Rout: oneMcmcglmm.R
 # Extract summary stats of complexGlmer
 glmerStats.Rout: glmerStats.R
 mcmcglmmStats.Rout: mcmcglmmStats.R
+brmsStats.Rout: brmsStats.R
 
 # Summary plots
 glmerSummary.Rout: glmerSummary.R
