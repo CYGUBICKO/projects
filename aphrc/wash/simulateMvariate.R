@@ -51,9 +51,9 @@ corMat <- matrix(
 )
 
 # Sd
-service1_sd <- 2
-service2_sd <- 5
-service3_sd <- 10
+service1_sd <- 0.2
+service2_sd <- 0.5
+service3_sd <- 0.1
 sdVec <- c(service1_sd, service2_sd, service3_sd)
 varMat <- sdVec %*% t(sdVec)
 varMat
@@ -115,17 +115,21 @@ print(people)
 print(head(sim_dflist[[1]]))
 
 # Extract beta values assigned in the simulation
-betas <- sapply(grep("service[1-9]", ls(), value = TRUE), get)
-betas <- betas[!names(betas) %in% grep("_sd", names(betas), value = TRUE)]
+betas <- sapply(grep("service[1-9]|cor_s", ls(), value = TRUE), get)
+#betas <- betas[!names(betas) %in% grep("_sd", names(betas), value = TRUE)]
 betas_df <- (data.frame(betas) 
 	%>% rownames_to_column("coef")
 	%>% mutate(n = extract_numeric(coef)
 		, coef = ifelse(grepl("_int$", coef)
 			, paste0("serviceservice", n)
-			, paste0("wealthindex:serviceservice", n)
-		)	
+				, ifelse(grepl("_wealth", coef) 
+					, paste0("wealthindex:serviceservice", n)
+				, coef
+			)
+		)
 	)
 )
+
 print(betas_df)
 
 save(file = "simulateMvariate.rda"

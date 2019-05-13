@@ -15,7 +15,7 @@ options(dplyr.width = Inf)
 theme_set(theme_bw() + theme(panel.spacing=grid::unit(0,"lines")))
 
 load("globalFunctions.rda")
-load("simulateResponse.rda")
+load("simulateMvariate.rda")
 set.seed(7777)
 
 # Objects in
@@ -41,9 +41,9 @@ prior <- c(prior(normal(0.3, 1e-1), class = Intercept, resp = service1)
 	, prior(normal(0.4, 1e-1), class = b, coef = wealthindex, resp = service1)
 	, prior(normal(0.5, 1e-1), class = b, coef = wealthindex, resp = service2)
 	, prior(normal(0.6, 1e-1), class = b, coef = wealthindex, resp = service3)
-	, prior(normal(2, 1e-1), class = sd, coef = Intercept, group = hhid_anon, resp = service1)
-	, prior(normal(5, 1e-1), class = sd, coef = Intercept, group = hhid_anon, resp = service2)
-	, prior(normal(10, 1e-1), class = sd, coef = Intercept, group = hhid_anon, resp = service3)
+	, prior(normal(0.2, 1e-1), class = sd, coef = Intercept, group = hhid_anon, resp = service1)
+	, prior(normal(0.5, 1e-1), class = sd, coef = Intercept, group = hhid_anon, resp = service2)
+	, prior(normal(0.1, 1e-1), class = sd, coef = Intercept, group = hhid_anon, resp = service3)
 )
 
 for (s in 1:nsims){
@@ -67,7 +67,13 @@ brmscoef_df <- Reduce(rbind, brmscoef_list) %>% as_tibble()
 
 # Align Beta df with the estimates
 betas_df <- (betas_df
-	%>% mutate(coef = ifelse(grepl("wealth", coef), paste0("service", n, "_wealthindex"), paste0("service", n, "_intercept")))
+   %>% mutate(coef = ifelse(grepl("wealth", coef), paste0("b_service", n, "_wealthindex")
+         , ifelse(grepl("^services", coef), paste0("b_service", n, "_Intercept")
+            , ifelse(grepl("_sd", coef), paste0("sd_hhid_anon__service", n, "_Intercept")
+            , paste0("cor_hhid_anon__service", substr(n,1,1), "_Intercept__service", substr(n,2,2), "_Intercept"))
+         )
+      )
+   )
 )
 
 save(file = "brmsModel.rda"
