@@ -3,20 +3,24 @@ current: target
 -include target.mk
 
 ## Makestuff setup
-Sources += Makefile 
 msrepo = https://github.com/dushoff
 ms = makestuff
+Ignore += local.mk
+-include local.mk
 -include $(ms)/os.mk
 
+# -include $(ms)/perl.def
+
 Ignore += $(ms)
-Makefile: $(ms)/Makefile
-$(ms)/Makefile:
+## Sources += $(ms)
+Makefile: $(ms) $(ms)/Makefile
+$(ms):
 	git clone $(msrepo)/$(ms)
-	ls $@
+
 
 ######################################################################
 
-Ignore += proviewinfo reproviewinfostudentapplication ../aphrc/*
+Ignore += proviewinfo reproviewinfostudentapplication ../aphrc
 
 ######################################################################
 

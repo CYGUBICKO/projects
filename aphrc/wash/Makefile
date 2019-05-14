@@ -98,9 +98,8 @@ brmsStats.Rout: brmsStats.R
 
 # Summary plots
 glmerSummary.Rout: glmerSummary.R
-poissonSummary.Rout: poissonSummary.R
-mcmcglmmSummary.Rout: mcmcglmmSummary.R
 multimcmcglmmSummary.Rout: multimcmcglmmSummary.R
+brmsSummary.Rout: brmsSummary.R
 
 # Diagnostics
 glmerDiagnostics.Rout: glmerDiagnostics.R
