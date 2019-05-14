@@ -16,10 +16,7 @@ $(ms)/Makefile:
 
 ######################################################################
 
-subdirs += ../aphrc
-Ignore += $(subdirs)
-
-Ignore += proviewinfo reproviewinfostudentapplication
+Ignore += proviewinfo reproviewinfostudentapplication ../aphrc/*
 
 ######################################################################
 
