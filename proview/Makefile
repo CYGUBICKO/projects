@@ -22,9 +22,9 @@ $(ms):
 
 ######################################################################
 
-Ignore += proviewinfo/ reproviewinfostudentapplication/ ../aphrc/
+Ignore += proviewinfo/* reproviewinfostudentapplication/* ../aphrc/*
 
-Ignore += *.aux *.bbl *.blg *.log *.out *.gz
+Ignore += *.aux *.bbl *.blg *.log *.out *.synctex.gz
 ######################################################################
 
 ### Makestuff rules
