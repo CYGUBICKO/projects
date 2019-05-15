@@ -24,6 +24,7 @@ $(ms):
 
 Ignore += proviewinfo/ reproviewinfostudentapplication/ ../aphrc/
 
+Ignore += *.aux *.bbl *.blg *.log *.out *.gz
 ######################################################################
 
 ### Makestuff rules
