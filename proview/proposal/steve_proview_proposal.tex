@@ -1,0 +1,181 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% University Assignment Title Page 
+% LaTeX Template
+% Version 1.0 (27/12/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% WikiBooks (http://en.wikibooks.org/wiki/LaTeX/Title_Creation)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+% 
+% Instructions for using this template:
+% This title page is capable of being compiled as is. This is not useful for 
+% including it in another document. To do this, you have two options: 
+%
+% 1) Copy/paste everything between \begin{document} and \end{document} 
+% starting at \begin{titlepage} and paste this into another LaTeX file where you 
+% want your title page.
+% OR
+% 2) Remove everything outside the \begin{titlepage} and \end{titlepage} and 
+% move this file to the same directory as the LaTeX file you wish to add it to. 
+% Then add \input{./title_page_1.tex} to your LaTeX file where you want your
+% title page.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\title{Title page with logo}
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper, 12pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx,grffile}
+
+
+\usepackage{amssymb}
+
+\usepackage[urlcolor=blue]{hyperref}
+\usepackage{float} % provides H as float placement specifier
+\usepackage{subcaption}
+
+\renewcommand{\baselinestretch}{1}
+\usepackage{float,amsthm,amssymb,amsfonts,cite,setspace}
+\usepackage{cite}
+\usepackage[numbers]{natbib}
+
+% Also achieved with the enumerate package
+\usepackage{enumerate}
+\numberwithin{equation}{subsubsection}
+
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+
+\begin{document}
+
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+
+%----------------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\textsc{\LARGE McMaster University}\\[1.5cm] % Name of your university/college
+\textsc{\Large Research Proposal}\\[0.5cm] % Major heading such as course name
+%\textsc{\large }\\[0.5cm] % Minor heading such as course title
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm]
+{ \Huge \bfseries Using Machine Learning Methods to Predict the Risk of Death of Gastrointestinal Cancer Patients}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+
+%----------------------------------------------------------------------------------------
+%	AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Student:}\\
+Steve \textsc{Cygu}\\
+400164479 % Your name
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Supervisor:} \\
+Prof. Jonathan \textsc{Dushoff}\\[0.1cm]% Supervisor's Name
+\emph{ICES Scientist:}\\
+Dr. Hsien \textsc{SEOW}
+\end{flushright}
+\end{minipage}\\[2cm]
+
+% If you don't want a supervisor, uncomment the two lines below and remove the section above
+%\Large \emph{Author:}\\
+%John \textsc{Smith}\\[3cm] % Your name
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+
+{\large \today}\\[2cm] % Date, change the \today to a set date if you want to be precise
+
+%----------------------------------------------------------------------------------------
+%	LOGO SECTION
+%----------------------------------------------------------------------------------------
+
+\includegraphics{McMasterfull_colour.jpg}\\[1cm] % Include a department/university logo - this will require the graphicx package
+
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+%\linespread{1.25}
+
+
+%\begin{abstract}
+%Your abstract.
+%\end{abstract}
+
+
+\section{Introduction}
+
+Machine learning (ML) techniques allows computers to `learn' and discern patterns from large, noisy or complex datasets. This capability makes ML approaches best-suited to cancer prognosis and prediction. Application of various ML methods in development of cancer predictive models have resulted into improved understanding of cancer patients and better decision making. In addition, clinical management of cancer patients can be improved by early diagnosis and prognosis, especially, when correct information about the prognostic indicators are available. One of the problems which has led to emergence of applications of ML methods in cancer research is the need to classify cancer patients into low and high risk groups using robust techniques \cite{kourou2015machine}. An example of such methods is machine machine learning models. These models can be used to identify important features contributing to tumor growth, diagnosis outcome and prediction \citep{montazeri2016machine}.
+
+Traditional models such Kaplan-Meier test and Cox-Proportional hazard models have been used to predict survival and identify prognostic indicators of cancer patients \citep{ganggayah2019predicting}. As opposed to Cox-Proportional hazard models, initially used, which did not include all the covariates (features), ML method has the potential of including (all) and identifying the most important ones. Traditional models do not predict the event but instead estimate the survival probability \citep{delen2005predicting}.
+
+One of the challenges in accurate prediction of survival in cancer patients emerges from growing complexity of cancer, variant treatment options and heterogeneous patient populations. Therefore, accurate and reliable estimates could assist in designing personalised care and treatment, and improve institutional performance in cancer management. The use of ML methods in predicting risk of death of canter patients from clinical data is not a new one \citep{gupta2014machine}. However, due to wide range of machine learning algorithms and improved validation methods, not only is potential of more accurate predictions but also more data (more variables) can be used.
+
+In this research, we intend to use various machine leaning methods, such as Neural Networks, Classification trees, Bagging, Boosting, Random Forest, $k-$Nearest Neighbours, Naive Bayes, Linear and Quadratic Discriminant Analysis to construct a classification model for Gastrointestinal Cancer Patients using \textit{PROVIEW} datasets. The performance of the resulting models are then evaluated based on AUC and ROC, sensitivity, specificity and accuracy. The result results from these ML methods will also be compared to Cox-Proportional hazard model estimates. We may also use clustering and/or Bayesian methods to jointly model the multiple outcomes.
+
+\section{Methods}
+\subsection{Objectives}
+\begin{itemize}
+\item[1.] Use machine learning methods to predict: i) risk of death; ii) level of pain; iii) performance status and identify important factors for each of the 3 cases.
+\item[2.] Jointly model multiple outcomes.
+\end{itemize}
+
+\subsection{Analysis Plan}
+
+\subsubsection{Predicting death}
+
+To incorporate censoring (presumably past 5 years) in ML approaches, we will follow the approach suggested by \citet{zupan2000machine}. The method involves assigning a distribution to the outcomes based on the Kaplan-Meier estimates. Suppose the censoring time, $T = 5$ years, the death outcome is split into three groups: the first consists of patients who died (outcome known); the second consists of patients who did not die but were followed upto the $5$ years after diagnosis (not dying assumed); and the third consists of patients who did not die but were followed upto more than $5$ years. For the last group, the probability of not dying at a particular followup time, $T_f$, is computed using Kaplan-Meier. 
+
+Patient-specific probability of not dying (the third group), $P_s$, is computed using the Kaplan-Meier estimates from all the three groups, i.e.,
+\begin{align*}
+P_s &= P(\text{not dying in 5 years}|\text{not dying in} (T_f))\\
+ &= \frac{P(\text{not dying in 5 years})}{P(\text{not dying in} (T_f))},
+\end{align*}
+and the probability of dying is thus $P_d = 1 - P_s$. The outcome for the particular patient is then a distribution $(P_s, P_d)$. The entries for the patients in the third group are then modified by creating two copies: one labeled with the death outcome ``yes", weighted by $P_d$; and the other labeled with the death outcome ``no", weighted by $P_s$. This result is then be used for prediction using various machine learning methods.
+
+\subsubsection{Other outcomes}
+Various machine learning methods will be used to directly predict the outcomes.
+
+\subsubsection{Modeling multiple outcomes}
+
+Multiple outcomes are possibly correlated since they are related quantities collected from the same individual and may be useful when evaluating risk factors or characterizing treatment effectiveness, and as such jointly modeling might help in understanding the latent variations. In this research we will apply Bayesian Multivariate approaches to jointly model the multiple outcomes.
+
+\small{
+%\bibliographystyle{unsrt}
+\bibliographystyle{plainnat}
+\bibliography{steve_proview_proposal}
+}
+\end{document}
