@@ -55,7 +55,8 @@ PROVIEW: Research Proposal Summary
 		- Population-based, retrospective study
 		- Adults diagnosed with stage IV GI cancer
 		- Study period: 2008-2015
-	* Data sources
+
+* Data sources
 		- From Ontario Cance Registry datatabases
 	* Index dates
 		- Death outcome, initial index date is the date of diagnosis
