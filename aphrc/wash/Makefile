@@ -104,6 +104,7 @@ brmsSummary.Rout: brmsSummary.R
 # Diagnostics
 glmerDiagnostics.Rout: glmerDiagnostics.R
 multimcmcDiagnostics.Rout: multimcmcDiagnostics.R
+brmsDiagnostics.Rout: brmsDiagnostics.R
 
 # Compare mcmc and glmer
 compareModels.Rout: compareModels.R

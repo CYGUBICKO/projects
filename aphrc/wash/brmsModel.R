@@ -43,7 +43,7 @@ prior <- c(prior(normal(0.3, 1e-1), class = Intercept, resp = service1)
 	, prior(normal(0.6, 1e-1), class = b, coef = wealthindex, resp = service3)
 	, prior(normal(0.2, 1e-1), class = sd, coef = Intercept, group = hhid_anon, resp = service1)
 	, prior(normal(0.5, 1e-1), class = sd, coef = Intercept, group = hhid_anon, resp = service2)
-	, prior(normal(0.1, 1e-1), class = sd, coef = Intercept, group = hhid_anon, resp = service3)
+	, prior(normal(0.4, 1e-1), class = sd, coef = Intercept, group = hhid_anon, resp = service3)
 )
 
 for (s in 1:nsims){

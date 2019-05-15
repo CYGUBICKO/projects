@@ -53,7 +53,7 @@ corMat <- matrix(
 # Sd
 service1_sd <- 0.2
 service2_sd <- 0.5
-service3_sd <- 0.1
+service3_sd <- 0.4
 sdVec <- c(service1_sd, service2_sd, service3_sd)
 varMat <- sdVec %*% t(sdVec)
 varMat
@@ -63,9 +63,9 @@ covMat <- varMat * corMat
 covMat
 
 # Confounder service
-serviceU_1 <- 0
-serviceU_2 <- 0
-serviceU_3 <- 0
+serviceU_1 <- 0.5
+serviceU_2 <- 0.3
+serviceU_3 <- 0.7
 
 # Subset data to sumulate
 temp_df <- (working_df
