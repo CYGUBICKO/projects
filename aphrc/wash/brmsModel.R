@@ -55,7 +55,7 @@ for (s in 1:nsims){
 			, data = df
 			, chains = 2
 			, cores = 8
-			, family = binomial(link = "logit")
+			, family = bernoulli(link = "logit")
 			, prior = prior
 			, seed = 7777
 	)

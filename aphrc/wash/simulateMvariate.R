@@ -63,9 +63,9 @@ covMat <- varMat * corMat
 covMat
 
 # Confounder service
-serviceU_1 <- 0.5
-serviceU_2 <- 0.3
-serviceU_3 <- 0.7
+serviceU_1 <- 0
+serviceU_2 <- 0
+serviceU_3 <- 0
 
 # Subset data to sumulate
 temp_df <- (working_df
