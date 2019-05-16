@@ -24,7 +24,7 @@ theme_set(theme_bw() +
 
 # Simulate multivariate response.
 
-nsims <- 50 # Number of simulations to run
+nsims <- 1 # Number of simulations to run
 sample_prop <- 0.05 # Prop of sample per hh
 year <- 2013
 

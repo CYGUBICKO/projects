@@ -35,15 +35,20 @@ get_prior(
 
 brmsmodel_list <- list()
 brmscoef_list <- list()
-prior <- c(prior(normal(0.3, 1e-1), class = Intercept, resp = service1)
-	, prior(normal(0.2, 1e-1), class = Intercept, resp = service2)
-	, prior(normal(0.1, 1e-1), class = Intercept, resp = service3)
-	, prior(normal(0.4, 1e-1), class = b, coef = wealthindex, resp = service1)
-	, prior(normal(0.5, 1e-1), class = b, coef = wealthindex, resp = service2)
-	, prior(normal(0.6, 1e-1), class = b, coef = wealthindex, resp = service3)
-	, prior(normal(0.2, 1e-1), class = sd, coef = Intercept, group = hhid_anon, resp = service1)
-	, prior(normal(0.5, 1e-1), class = sd, coef = Intercept, group = hhid_anon, resp = service2)
-	, prior(normal(0.4, 1e-1), class = sd, coef = Intercept, group = hhid_anon, resp = service3)
+intScale <- 1
+resScale <- 1
+corScale <- 1
+
+prior <- c(
+	prior(normal(0, 1), class = Intercept, resp = service1)
+	, prior(normal(0, 1), class = Intercept, resp = service2)
+	, prior(normal(0, 1), class = Intercept, resp = service3)
+	, prior(normal(0, 1), class = b, coef = wealthindex, resp = service1)
+	, prior(normal(0, 1), class = b, coef = wealthindex, resp = service2)
+	, prior(normal(0, 1), class = b, coef = wealthindex, resp = service3)
+	, prior(normal(0, 1), class = sd, coef = Intercept, group = hhid_anon, resp = service1)
+	, prior(normal(0, 1), class = sd, coef = Intercept, group = hhid_anon, resp = service2)
+	, prior(normal(0, 1), class = sd, coef = Intercept, group = hhid_anon, resp = service3)
 )
 
 for (s in 1:nsims){
@@ -53,10 +58,9 @@ for (s in 1:nsims){
 	model <- brm(
 		mvbind(service1, service2, service3) ~ wealthindex + (0 + 1|p|hhid_anon)
 			, data = df
-			, chains = 2
 			, cores = 8
 			, family = bernoulli(link = "logit")
-			, prior = prior
+			, iter = 2e4
 			, seed = 7777
 	)
 	brmsmodel_list[[s]] <- model
