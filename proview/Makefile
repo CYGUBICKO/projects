@@ -17,12 +17,9 @@ Ignore += $(ms)
 Makefile: $(ms) $(ms)/Makefile
 $(ms):
 	git clone $(msrepo)/$(ms)
-	ls $@
 
 
 ######################################################################
-
-Sources += proposal
 
 Ignore += proviewinfo/* reproviewinfostudentapplication/* ../aphrc/*
 
