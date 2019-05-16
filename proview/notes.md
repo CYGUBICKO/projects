@@ -1,3 +1,15 @@
+
+2019 May 16 (Thu)
+----------------------------------------------------------------------
+
+Application Querries:
+* ICES start and end date
+* Data Access. RAE?
+* ICES Project Activation Worksheet (PAW)?
+* Provide funding letter
+
+
+
 PROVIEW: Research Proposal Summary
 ----------------------------------------------------------------------
 2019 May 07 (Tue)
