@@ -21,7 +21,8 @@ $(ms):
 
 ######################################################################
 
-Ignore += proviewinfo/* reproviewinfostudentapplication/* ../aphrc/*
+subdirs += ../aphrc
+Ignore += ${subdirs}
 
 ######################################################################
 
