@@ -32,17 +32,17 @@ year <- 2013
 predictors <- "wealthindex"
 
 # Beta values
-service1_int <- 0.3
+service1_int <- 0.2
 service1_wealth <- 0.4 
-service2_int <- 0.2
+service2_int <- 0.3
 service2_wealth <- 0.5
-service3_int <- 0.1
+service3_int <- 0.4
 service3_wealth <- 0.6
 
 # Correlation matrix
-cor_s1s2 <- 0.3
-cor_s1s3 <- 0.2
-cor_s2s3 <- 0.6
+cor_s1s2 <- 0.01
+cor_s1s3 <- 0.03
+cor_s2s3 <- 0.01
 corMat <- matrix(
 	c(1, cor_s1s2, cor_s1s3
 		, cor_s1s2, 1, cor_s2s3
@@ -52,7 +52,7 @@ corMat <- matrix(
 
 # Sd
 service1_sd <- 0.2
-service2_sd <- 0.5
+service2_sd <- 0.3
 service3_sd <- 0.4
 sdVec <- c(service1_sd, service2_sd, service3_sd)
 varMat <- sdVec %*% t(sdVec)

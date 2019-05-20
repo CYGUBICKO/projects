@@ -18,28 +18,23 @@ load("brmsModel.rda")
 # * brmsmodel_list - glmer fits per simulation
 # * brmscoef_df - fixed effect coef per simulation
 # * betas_df & betas - initial beta values for simulations
-# * predictors 
+# * predictors  
 
 brmsmodel <- brmsmodel_list[[1]]
 
 # Coefficient plots
-print(stanplot(brmsmodel) 
+print(stanplot(brmsmodel, type = "areas") 
 	+ geom_point(data = betas_df, aes(x = betas, y = coef), colour = "red")
 	+ scale_y_discrete(breaks = betas_df$coef
-		, labels = gsub("b_|_Intercept|hhid_anon__", "", betas_df$coef)
+		, labels = gsub("b_|_intercept|hhid_anon__", "", betas_df$coef)
 	)
 )
 
 # Trace plots
 plot(brmsmodel)
 
-# Posterior predictive checks
-pp_check(brmsmodel, resp = "service1")
-pp_check(brmsmodel, resp = "service2")
-pp_check(brmsmodel, resp = "service3")
-
 # Marginal effect of predictors
-marginal_effects(brmsmodel, "wealthindex", resp = "service1")
-marginal_effects(brmsmodel, "wealthindex", resp = "service2")
-marginal_effects(brmsmodel, "wealthindex", resp = "service3")
+plot(marginal_effects(brmsmodel, "wealthindex", resp = "service1"), points = TRUE, rug = FALSE)
+plot(marginal_effects(brmsmodel, "wealthindex", resp = "service2"), points = TRUE, rug = FALSE)
+plot(marginal_effects(brmsmodel, "wealthindex", resp = "service3"), points = TRUE, rug = FALSE)
 
