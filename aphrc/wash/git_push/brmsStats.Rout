@@ -39,38 +39,78 @@ Type 'q()' to quit R.
   Links: mu = logit
          mu = logit
          mu = logit 
-Formula: service1 ~ wealthindex + (0 + 1 | p | hhid_anon) 
-         service2 ~ wealthindex + (0 + 1 | p | hhid_anon) 
-         service3 ~ wealthindex + (0 + 1 | p | hhid_anon) 
+Formula: service1 ~ 0 + intercept + wealthindex + (0 + 1 | p | hhid_anon) 
+         service2 ~ 0 + intercept + wealthindex + (0 + 1 | p | hhid_anon) 
+         service3 ~ 0 + intercept + wealthindex + (0 + 1 | p | hhid_anon) 
    Data: df (Number of observations: 1150) 
-Samples: 2 chains, each with iter = 20000; warmup = 10000; thin = 1;
-         total post-warmup samples = 20000
+Samples: 4 chains, each with iter = 20000; warmup = 10000; thin = 1;
+         total post-warmup samples = 40000
 
 Group-Level Effects: 
 ~hhid_anon (Number of levels: 1150) 
                                            Estimate Est.Error l-95% CI u-95% CI
-sd(service1_Intercept)                         0.48      0.38     0.14     1.61
-sd(service2_Intercept)                         0.45      0.32     0.13     1.38
-sd(service3_Intercept)                         0.43      0.28     0.13     1.20
-cor(service1_Intercept,service2_Intercept)    -0.21      0.44    -0.90     0.74
-cor(service1_Intercept,service3_Intercept)    -0.15      0.45    -0.89     0.77
-cor(service2_Intercept,service3_Intercept)    -0.08      0.45    -0.87     0.81
+sd(service1_Intercept)                         0.54      0.59     0.14     2.02
+sd(service2_Intercept)                         0.53      0.47     0.14     1.81
+sd(service3_Intercept)                         0.65      0.66     0.15     2.67
+cor(service1_Intercept,service2_Intercept)    -0.11      0.44    -0.86     0.82
+cor(service1_Intercept,service3_Intercept)    -0.30      0.40    -0.91     0.65
+cor(service2_Intercept,service3_Intercept)    -0.31      0.39    -0.91     0.62
                                            Eff.Sample Rhat
-sd(service1_Intercept)                            367 1.00
-sd(service2_Intercept)                            631 1.00
-sd(service3_Intercept)                            790 1.00
-cor(service1_Intercept,service2_Intercept)       1887 1.00
-cor(service1_Intercept,service3_Intercept)       2076 1.00
-cor(service2_Intercept,service3_Intercept)       2697 1.00
+sd(service1_Intercept)                            435 1.01
+sd(service2_Intercept)                            586 1.01
+sd(service3_Intercept)                            160 1.02
+cor(service1_Intercept,service2_Intercept)       1441 1.01
+cor(service1_Intercept,service3_Intercept)       4942 1.00
+cor(service2_Intercept,service3_Intercept)       6717 1.00
 
 Population-Level Effects: 
                      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-service1_Intercept       0.35      0.08     0.21     0.52       1224 1.00
-service2_Intercept       0.60      0.09     0.46     0.80       1463 1.00
-service3_Intercept       0.60      0.08     0.46     0.76       2354 1.00
-service1_wealthindex     0.57      0.10     0.43     0.80        736 1.00
-service2_wealthindex     0.70      0.09     0.54     0.91       1261 1.00
-service3_wealthindex     0.82      0.09     0.67     1.03       1769 1.00
+service1_intercept       0.04      0.07    -0.09     0.18      31117 1.00
+service1_wealthindex     0.46      0.12     0.31     0.73        624 1.01
+service2_intercept       0.42      0.09     0.28     0.63       1026 1.01
+service2_wealthindex     0.49      0.10     0.34     0.72        950 1.01
+service3_intercept       0.40      0.13     0.24     0.70        156 1.02
+service3_wealthindex     0.65      0.16     0.47     1.13        198 1.02
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+is a crude measure of effective sample size, and Rhat is the potential 
+scale reduction factor on split chains (at convergence, Rhat = 1).
+ Family: MV(bernoulli, bernoulli, bernoulli) 
+  Links: mu = logit
+         mu = logit
+         mu = logit 
+Formula: service1 ~ 0 + intercept + wealthindex + (0 + 1 | p | hhid_anon) 
+         service2 ~ 0 + intercept + wealthindex + (0 + 1 | p | hhid_anon) 
+         service3 ~ 0 + intercept + wealthindex + (0 + 1 | p | hhid_anon) 
+   Data: df (Number of observations: 1150) 
+Samples: 4 chains, each with iter = 20000; warmup = 10000; thin = 1;
+         total post-warmup samples = 40000
+
+Group-Level Effects: 
+~hhid_anon (Number of levels: 1150) 
+                                           Estimate Est.Error l-95% CI u-95% CI
+sd(service1_Intercept)                         0.45      0.35     0.13     1.43
+sd(service2_Intercept)                         0.42      0.32     0.13     1.23
+sd(service3_Intercept)                         0.41      0.30     0.13     1.19
+cor(service1_Intercept,service2_Intercept)     0.09      0.45    -0.81     0.87
+cor(service1_Intercept,service3_Intercept)     0.12      0.46    -0.80     0.88
+cor(service2_Intercept,service3_Intercept)     0.12      0.46    -0.80     0.89
+                                           Eff.Sample Rhat
+sd(service1_Intercept)                            639 1.01
+sd(service2_Intercept)                            772 1.00
+sd(service3_Intercept)                            684 1.00
+cor(service1_Intercept,service2_Intercept)       7652 1.00
+cor(service1_Intercept,service3_Intercept)       6501 1.00
+cor(service2_Intercept,service3_Intercept)       7528 1.00
+
+Population-Level Effects: 
+                     Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+service1_intercept       0.12      0.07    -0.01     0.25       9191 1.00
+service1_wealthindex     0.46      0.08     0.32     0.64       1498 1.01
+service2_intercept       0.17      0.07     0.04     0.30       7003 1.00
+service2_wealthindex     0.43      0.08     0.30     0.59       2045 1.00
+service3_intercept       0.50      0.08     0.36     0.66       1848 1.00
+service3_wealthindex     0.62      0.09     0.48     0.80       1584 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 is a crude measure of effective sample size, and Rhat is the potential 
