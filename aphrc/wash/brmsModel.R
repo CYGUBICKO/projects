@@ -36,7 +36,7 @@ get_prior(
 report <- 2 # Index within nsims to save for summary
 brmsmodel_list <- list() 
 brmscoef_list <- list()
-prior <- c(
+priors <- c(
 	prior(normal(0, 1), class = b, coef = intercept, resp = service1)
 	, prior(normal(0, 1), class = b, coef = intercept, resp = service2)
 	, prior(normal(0, 1), class = b, coef = intercept, resp = service3)
@@ -61,7 +61,7 @@ for (s in 1:nsims){
 			, chains = 4
 			, control = list(adapt_delta = 0.95)
 			, seed = 7777
-			, prior = prior
+			, prior = priors
 	)
 	if (s <= report){
 		brmsmodel_list[[s]] <- model # Model to store
