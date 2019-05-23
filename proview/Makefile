@@ -3,7 +3,7 @@ current: target
 -include target.mk
 
 ## Makestuff setup
-Sources += Makefile
+Sources += Makefile notes.md
 msrepo = https://github.com/dushoff
 ms = makestuff
 Ignore += local.mk
@@ -17,7 +17,6 @@ Ignore += $(ms)
 Makefile: $(ms) $(ms)/Makefile
 $(ms):
 	git clone $(msrepo)/$(ms)
-
 
 ######################################################################
 

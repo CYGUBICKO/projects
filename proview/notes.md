@@ -1,14 +1,23 @@
 
+2019 May 23 (Thu)
+=================
+
+* Reach out to Hsien about PAW and funding
+
+* Cancer prognosis state of the art
+
+* Multivariate predictions and ML
+
+* Proview proposal
+
 2019 May 16 (Thu)
 ----------------------------------------------------------------------
 
-Application Querries:
+Application Queries:
 * ICES start and end date
 * Data Access. RAE?
 * ICES Project Activation Worksheet (PAW)?
 * Provide funding letter
-
-
 
 PROVIEW: Research Proposal Summary
 ----------------------------------------------------------------------
@@ -16,7 +25,7 @@ PROVIEW: Research Proposal Summary
 
 ----------------------------------------------------------------------
 
-* Main object: Developing a Tool to Support Ealier Palliative Care
+* Main object: Developing a Tool to Support Earlier Palliative Care
 	* The focus is in Gastrointestinal (GI) cancer 
 		- Pancrease
 		- Stomach
