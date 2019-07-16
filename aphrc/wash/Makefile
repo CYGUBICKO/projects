@@ -123,6 +123,10 @@ binary_random.Rout: binary_random.R
 integration.out: integration.sage
 	sage $< |tee > $@
 
+## Failed diversity experiment
+summation.out: summation.sage
+	sage $< |tee > $@
+
 
 ## Bottomline test with multivariate normal response
 
